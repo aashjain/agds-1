@@ -37,7 +37,8 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
         if (cs > 0.43) opacity = Math.max(1 - (cs - 0.43) / 0.07, 0);
       }
       container.style.opacity = `${opacity}`;
-      if (opacity <= 0) return;
+      container.style.visibility = opacity > 0.01 ? "visible" : "hidden";
+      if (opacity <= 0.01) return;
 
       const sceneProgress = Math.min(Math.max((cs - 0.18) / 0.32, 0), 1);
       const orbit = sceneProgress * Math.PI * 2;
@@ -66,7 +67,7 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
     <div
       ref={containerRef}
       className="pointer-events-none fixed inset-0 z-[12] opacity-0"
-      style={{ perspective: "1200px" }}
+      style={{ perspective: "1200px", visibility: "hidden" }}
     >
       {cards.map((card, i) => (
         <div

@@ -9,14 +9,15 @@ export const particleVertexShader = /* glsl */ `
     float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453123); }
 
     vec3 palette(float t) {
-      vec3 deep = vec3(0.02, 0.09, 0.22);
-      vec3 cyan = vec3(0.20, 0.86, 1.00);
-      vec3 violet = vec3(0.56, 0.30, 1.00);
-      vec3 gold = vec3(1.00, 0.72, 0.34);
-      vec3 ivory = vec3(0.94, 0.91, 0.82);
-      vec3 a = mix(cyan, violet, smoothstep(0.15, 0.75, t));
-      vec3 b = mix(gold, ivory, smoothstep(0.35, 1.0, t));
-      return mix(deep + a * 0.9, b, smoothstep(0.68, 1.0, t));
+      // Closer to the original point-field character: cool blue/violet dust with
+      // a restrained warm core, never pure white.
+      vec3 blue = vec3(0.18, 0.34, 0.92);
+      vec3 cyan = vec3(0.22, 0.72, 0.95);
+      vec3 violet = vec3(0.50, 0.32, 0.86);
+      vec3 amber = vec3(0.92, 0.56, 0.26);
+      vec3 cool = mix(blue, cyan, smoothstep(0.05, 0.45, t));
+      vec3 cosmic = mix(cool, violet, smoothstep(0.38, 0.82, t));
+      return mix(cosmic, amber, smoothstep(0.84, 1.0, t)) * 0.82;
     }
 
     mat2 rotate2d(float a) {
@@ -111,24 +112,24 @@ export const particleVertexShader = /* glsl */ `
 
       vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
 
-      float planetGlow = 1.0 - orbitalDust * 0.45;
-      float focusGlow = mix(1.0, 1.45, toFocus * (1.0 - toConstellation));
-      float streamGlow = mix(1.0, 0.62, toStream * (1.0 - toGalaxy));
-      float galaxyGlow = mix(1.0, 1.22, toGalaxy);
+      float planetGlow = 0.42 - orbitalDust * 0.16;
+      float focusGlow = mix(1.0, 0.78, toFocus * (1.0 - toConstellation));
+      float streamGlow = mix(1.0, 0.58, toStream * (1.0 - toGalaxy));
+      float galaxyGlow = mix(1.0, 0.72, toGalaxy);
 
       vEdgeFade = smoothstep(0.0, 0.2, uIntro) * planetGlow * focusGlow * streamGlow * galaxyGlow;
-      vEdgeFade *= 0.65 + 0.35 * smoothstep(0.0, 1.0, r6);
+      vEdgeFade *= 0.45 + 0.35 * smoothstep(0.0, 1.0, r6);
 
       float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
       vColor = palette(colorKey);
       vColor += vec3(0.08, 0.16, 0.22) * smoothstep(0.2, 0.9, toStream);
 
-      float pointBase = mix(4.0, 7.0, step(0.88, r5));
-      pointBase = mix(pointBase, 11.0, (1.0 - orbitalDust) * (1.0 - toStream) * 0.45);
-      pointBase = mix(pointBase, 3.2, toStream * (1.0 - toGalaxy));
-      pointBase = mix(pointBase, mix(3.0, 13.0, step(0.985, r6)), toGalaxy);
+      float pointBase = mix(2.2, 4.2, step(0.92, r5));
+      pointBase = mix(pointBase, 5.0, (1.0 - orbitalDust) * (1.0 - toStream) * 0.28);
+      pointBase = mix(pointBase, 2.4, toStream * (1.0 - toGalaxy));
+      pointBase = mix(pointBase, mix(2.2, 6.2, step(0.992, r6)), toGalaxy);
       gl_PointSize = pointBase * (10.0 / max(0.1, -mvPosition.z));
-      gl_PointSize = max(gl_PointSize, 1.1);
+      gl_PointSize = max(gl_PointSize, 0.9);
 
       gl_Position = projectionMatrix * mvPosition;
     }
@@ -142,8 +143,8 @@ export const particleFragmentShader = /* glsl */ `
       vec2 xy = gl_PointCoord.xy - vec2(0.5);
       float d = length(xy);
       if (d > 0.5) discard;
-      float core = smoothstep(0.5, 0.06, d);
-      float halo = smoothstep(0.5, 0.22, d) * 0.35;
-      gl_FragColor = vec4(vColor, vEdgeFade * (core + halo) * 0.82);
+      // Original-style point rendering: crisp soft dots, no extra halo.
+      float pointAlpha = smoothstep(0.5, 0.1, d);
+      gl_FragColor = vec4(vColor, vEdgeFade * pointAlpha * 0.78);
     }
 `;

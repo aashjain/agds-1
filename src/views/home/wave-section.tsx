@@ -39,23 +39,25 @@ export const WaveSection = ({ content }: WaveSectionProps) => {
         )}
       </div>
 
-      <div className="hidden max-w-[420px] rounded-[2rem] border border-white/10 bg-surface-card p-6 backdrop-blur-xl lg:block">
-        <Reveal state={state} tag="p" className="mb-8 text-lead leading-normal text-muted">
-          {content.subtitle}
-        </Reveal>
+      {state !== "before" && (
+        <div className="hidden max-w-[420px] rounded-[2rem] border border-white/10 bg-surface-card p-6 backdrop-blur-xl lg:block">
+          <Reveal state={state} tag="p" className="mb-8 text-lead leading-normal text-muted">
+            {content.subtitle}
+          </Reveal>
 
-        <Reveal state={state} className="pointer-events-auto flex gap-4">
-          {content.buttons.map((button) => (
-            <GlassButton
-              key={button.label}
-              variant={button.withArrow ? "primary" : "secondary"}
-              withArrow={button.withArrow}
-            >
-              {button.label}
-            </GlassButton>
-          ))}
-        </Reveal>
-      </div>
+          <Reveal state={state} className="pointer-events-auto flex gap-4">
+            {content.buttons.map((button) => (
+              <GlassButton
+                key={button.label}
+                variant={button.withArrow ? "primary" : "secondary"}
+                withArrow={button.withArrow}
+              >
+                {button.label}
+              </GlassButton>
+            ))}
+          </Reveal>
+        </div>
+      )}
     </section>
   );
 };

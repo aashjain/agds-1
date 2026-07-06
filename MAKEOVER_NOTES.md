@@ -25,3 +25,10 @@ These pages are intentionally minimal placeholders so the homepage direction can
 
 ## Validation note
 `npm run lint` could not be executed because the submitted ZIP does not include `node_modules`, so `eslint` is not available locally. Run `npm install` or `yarn install`, then run `npm run lint` and `npm run build` in the final development environment.
+
+
+## Revision after preview feedback
+- Reduced bloom strength/radius and increased threshold so the solar orbit reads as individual particles rather than a bright white blur.
+- Restored original-style particle fragments: soft dots without the added halo layer.
+- Lowered point opacity, point size and colour intensity in the opening solar system.
+- Hidden the later section glass cards until their scroll phase begins, so no empty boxes appear in the opening hero.

@@ -71,7 +71,7 @@ export const ParticleCanvas = () => {
     bgScene.add(bgQuad);
 
     // Dense source geometry remapped in the shader into solar, planet, signal and galaxy forms.
-    const geometry = new THREE.SphereGeometry(4.2, 220, 640);
+    const geometry = new THREE.SphereGeometry(4.2, 200, 600);
     const material = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
@@ -103,9 +103,9 @@ export const ParticleCanvas = () => {
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.05, // strength
-      0.42, // radius
-      0.12, // threshold
+      0.42, // strength — restrained so the particles read as points, not a white blur
+      0.22, // radius
+      0.38, // threshold
     );
     composer.addPass(bloomPass);
 
@@ -189,10 +189,10 @@ export const ParticleCanvas = () => {
       camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.02;
 
       const glowScaleProgress = Math.min(Math.max((currentScroll - 0.74) / 0.12, 0), 1);
-      const glowScale = Math.pow(glowScaleProgress, 2.8) * 38.0;
+      const glowScale = Math.pow(glowScaleProgress, 2.8) * 24.0;
       const hideGlow = Math.min(Math.max((currentScroll - 0.88) / 0.08, 0), 1);
       glow.style.transform = `translate(-50%, -50%) scale(${glowScale})`;
-      glow.style.opacity = `${(1.0 - hideGlow) * glowScaleProgress * 0.8}`;
+      glow.style.opacity = `${(1.0 - hideGlow) * glowScaleProgress * 0.28}`;
 
       // Publish progress for overlays (module value for per-frame card motion,
       // store for phase-boundary re-renders).
