@@ -258,3 +258,18 @@ V49 update:
 - Updated the final circular particle background to use the full original-style spectrum from the uploaded reference.
 - Added electric blue, deep blue, violet, soft purple, magenta, warm orange and red-orange across the final energy ring.
 - Kept the approved planet, service cards, ring styling, scroll behaviour and content unchanged.
+
+
+## V52 Particle colour source sync
+- Synced all particle colours back to the uploaded original project shader palette.
+- Removed section-specific particle colour overrides for the service planet, planet ring and final portal.
+- Restored the original particle fragment opacity multiplier.
+- Restored the original background shader file from the uploaded project.
+- Preserved the approved layout, planet framing, service cards and scroll logic.
+
+## V53 visual particle sync
+- Replaced the current particle canvas with the original uploaded project particle rendering setup.
+- Restored the original particle vertex shader and fragment shader.
+- Restored the original aurora background shader.
+- Restored the original particle geometry density, bloom strength, bloom radius, bloom threshold, additive blending, opacity behaviour, point sizing and glow flash treatment.
+- This version prioritises an exact particle/rendering match with the uploaded original project. Layout, routes and content files from the AG Designs Studio version remain in place.
