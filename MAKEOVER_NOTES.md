@@ -92,3 +92,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V11 revision
 - Moved only the service-stage particle planet 40% further left by adjusting its shader X offset.
 - Service card layout and styling were left untouched.
+
+
+## V12 Adjustment
+- Shifted only the service-stage planet 40% further left from the V11 position.
+- Service card layout and styling were left untouched.
