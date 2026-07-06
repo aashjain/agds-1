@@ -83,8 +83,8 @@ export const particleVertexShader = /* glsl */ `
       // Lift the ring so it wraps the planet visually, instead of sitting too low.
       float serviceRingLift = 4.13;
       float ringBandRandom = pow(hash(seed * 27.1 + vec3(3.0, 8.0, 1.0)), 0.72) - 0.5;
-      float serviceRingBand = ringBandRandom * 3.42;
-      float serviceRingRadius = 15.58 + serviceRingBand + (hash(seed * 12.4) - 0.5) * 0.34;
+      float serviceRingBand = ringBandRandom * 6.84;
+      float serviceRingRadius = 15.58 + serviceRingBand + (hash(seed * 12.4) - 0.5) * 0.68;
       float serviceRingX = cos(serviceRingAngle) * serviceRingRadius;
       float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
       float ringPlaneNoise = (hash(seed * 18.9 + vec3(4.0, 7.0, 2.0)) - 0.5) * 0.18;

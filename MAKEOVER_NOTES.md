@@ -227,3 +227,8 @@ V41 update:
 V43 update:
 - Applied the ring lift after the ring slant/rotation so the upward move is visually visible in the browser.
 - Planet position, planet size, service cards and scroll behaviour were not changed.
+
+
+## V44 Revision
+- Increased the Saturn-style ring band width by 2x only.
+- Planet position, cards, scroll behaviour and colour logic were kept unchanged.
