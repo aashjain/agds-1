@@ -273,3 +273,8 @@ V49 update:
 - Kept only the original uploaded-project visual particle look values: geometry density and bloom strength/radius/threshold.
 - Did not copy the original project's animation sequence or scroll behaviour.
 - Planet placement, ring treatment, services layout and approved page flow remain based on the AG Designs Studio version.
+
+## V55 colour proportion update
+- Applied the screenshot-matched particle colour proportion across all particle forms.
+- Ratio used: 45 percent blue/cyan, 44 percent orange/red-orange, 6 percent violet and 5 percent pink/magenta.
+- Kept glow, opacity, bloom, scroll behaviour, planet position, ring position and service cards unchanged.

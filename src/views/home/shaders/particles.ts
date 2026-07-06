@@ -8,12 +8,35 @@ export const particleVertexShader = /* glsl */ `
     float hash(float n) { return fract(sin(n) * 43758.5453123); }
     float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453123); }
 
-    vec3 palette(float t) {
-      // Restored original project particle colour system: pure deep blue
-      // blending into the warm orange used across the uploaded template.
-      vec3 cBottom = vec3(0.2, 0.4, 1.0);
-      vec3 cTop = vec3(1.0, 0.3, 0.2);
-      return mix(cBottom, cTop, clamp(t, 0.0, 1.0));
+    vec3 weightedParticlePalette(vec3 seed, float tone) {
+      // Screenshot matched particle balance used across every form:
+      // 45 percent blue, 44 percent orange, 6 percent violet, 5 percent magenta.
+      float pick = hash(seed * 19.17 + vec3(2.0, 7.0, 11.0));
+      float grain = hash(seed * 31.41 + vec3(5.0, 3.0, 13.0));
+      float t = clamp(tone * 0.58 + grain * 0.42, 0.0, 1.0);
+
+      vec3 blueA = vec3(0.2, 0.4, 1.0);
+      vec3 blueB = vec3(0.18, 0.82, 1.0);
+      vec3 orangeA = vec3(1.0, 0.3, 0.2);
+      vec3 orangeB = vec3(1.0, 0.58, 0.16);
+      vec3 violetA = vec3(0.46, 0.32, 1.0);
+      vec3 violetB = vec3(0.72, 0.48, 1.0);
+      vec3 magentaA = vec3(1.0, 0.32, 0.72);
+      vec3 magentaB = vec3(1.0, 0.46, 0.88);
+
+      if (pick < 0.45) {
+        return mix(blueA, blueB, t);
+      }
+
+      if (pick < 0.89) {
+        return mix(orangeA, orangeB, t);
+      }
+
+      if (pick < 0.95) {
+        return mix(violetA, violetB, t);
+      }
+
+      return mix(magentaA, magentaB, t);
     }
 
     mat2 rotate2d(float a) {
@@ -171,20 +194,17 @@ export const particleVertexShader = /* glsl */ `
         vEdgeFade *= ringDepthMask;
       }
 
-      // --- ORIGINAL PROJECT PARTICLE COLOUR SYSTEM ---
-      // The uploaded source uses one consistent blue-to-orange shader palette
-      // for every particle form. Keep the exact RGB values and remove all
-      // section-specific overrides so the full site matches the source code.
-      vec3 cBottom = vec3(0.2, 0.4, 1.0); // Deep Blue
-      vec3 cTop = vec3(1.0, 0.3, 0.2);    // Blazing Orange
-
+      // --- SCREENSHOT MATCHED PARTICLE COLOUR SYSTEM ---
+      // Use the same weighted colour balance across every particle formation.
+      // Blue/cyan 45 percent, orange/red-orange 44 percent, violet 6 percent,
+      // pink/magenta 5 percent. Glow, opacity and bloom are untouched.
       float baseColorMix = smoothstep(-3.0, 3.0, position.y + position.x * 0.5);
-      vec3 normalColor = mix(cBottom, cTop, clamp(baseColorMix, 0.0, 1.0));
+      vec3 normalColor = weightedParticlePalette(seed, baseColorMix);
 
-      // Keep the final portal/galaxy within the same uploaded-project palette:
-      // warmer particles towards the visual core, blue towards the outer edge.
+      // Keep the final portal in the same family balance, with only the tonal
+      // brightness shifting across the circular energy ring.
       float orangeMix = smoothstep(46.0, 28.0, portalRadius);
-      vec3 galaxyColor = mix(cBottom, cTop, clamp(orangeMix, 0.0, 1.0));
+      vec3 galaxyColor = weightedParticlePalette(seed, orangeMix);
 
       vColor = mix(normalColor, galaxyColor, toGalaxy);
 
