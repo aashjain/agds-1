@@ -92,16 +92,20 @@ export const particleVertexShader = /* glsl */ `
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
-        tiltedRingY + serviceRingLift, // lifted further so the ring surrounds the planet more naturally
+        tiltedRingY + serviceRingLift, // primary lift before the visual slant is applied
         tiltedRingZ - 10.9
       );
       serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
+      // Final screen-space lift applied after the ring slant. This moves the
+      // visible ring upward without changing the approved planet position.
+      float serviceRingPostLift = 5.80;
+      serviceRing.y += serviceRingPostLift;
 
       // Ring depth mask. Segments travelling behind the sphere are softened
       // when they pass across the projected planet body, so the ring feels
       // like it wraps around the planet instead of being pasted over it.
       float ringBehindPlanet = step(0.0, -tiltedRingZ);
-      float projectedRingDistance = length(vec2(serviceRingX, tiltedRingY + serviceRingLift + 0.04));
+      float projectedRingDistance = length(vec2(serviceRingX, tiltedRingY + serviceRingLift + serviceRingPostLift + 0.04));
       float planetMaskArea = 1.0 - smoothstep(11.35, 13.95, projectedRingDistance);
       float ringDepthMask = 1.0 - ringBehindPlanet * planetMaskArea * 0.94;
 

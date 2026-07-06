@@ -222,3 +222,8 @@ V41 update:
 
 ## V42 revision
 - Brought the planet ring upward by roughly 40% while keeping the planet, cards, scroll behaviour and layout unchanged.
+
+
+V43 update:
+- Applied the ring lift after the ring slant/rotation so the upward move is visually visible in the browser.
+- Planet position, planet size, service cards and scroll behaviour were not changed.
