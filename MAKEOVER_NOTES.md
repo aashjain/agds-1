@@ -326,3 +326,9 @@ V49 update:
 - The camera zoom now starts shortly after the last service tile has appeared, using a small scroll buffer equivalent to roughly 100px.
 - The zoom ramp is tighter, so the movement is visible before the service cards begin fading.
 - Service cards, planet position, ring position, colours, layout and scroll behaviour remain unchanged.
+
+
+## V63 transition timing
+- Extended the planet-to-trajectory zoom so it continues after service cards fade.
+- Added a tunnel-hold camera phase from the end of the services section until the trajectory stream begins.
+- Kept cards, planet, ring colours, positions and layout unchanged.

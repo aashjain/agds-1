@@ -187,25 +187,29 @@ export const ParticleCanvas = () => {
       // while keeping the cards, planet and ring composition untouched.
       // Last card reveal completes around 37% progress; the zoom begins after
       // a small buffer, roughly equivalent to 100px on the intended scroll range.
-      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.13, 0), 1));
+      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.24, 0), 1));
+      const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.50) / 0.13, 0), 1));
       const stream = ease(Math.min(Math.max((currentScroll - 0.61) / 0.18, 0), 1));
       const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.18, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -2.75, gapPass);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -3.35, tunnelHold * (1 - stream));
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.65, stream);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
 
       camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, constellation);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.9, gapPass);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 1.16, tunnelHold * (1 - stream));
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, -0.15, stream);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
 
       camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 4.1, gapPass);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 2.25, tunnelHold * (1 - stream));
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 18.0, galaxy);
 
@@ -214,14 +218,14 @@ export const ParticleCanvas = () => {
       camera.position.z += introZoom;
 
       const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 2.0 + stream * 2.0,
-        THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.75,
-        THREE.MathUtils.lerp(-9.5, -18.0, gapPass),
+        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 2.0 - tunnelHold * 0.75 + stream * 2.0,
+        THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.75 + tunnelHold * 0.18,
+        THREE.MathUtils.lerp(-9.5, -20.5, gapPass),
       );
       lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
       camera.lookAt(lookTarget);
 
-      const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));
+      const serviceVisibility = constellation * (1 - Math.min(Math.max((currentScroll - 0.50) / 0.13, 0), 1));
       // Keep particle travel time-led only. Do not add scroll progress into the
       // rotation itself; even a positive scroll offset can visually fight the
       // shader's clockwise time flow and read as a reversal during fast or slow
