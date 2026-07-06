@@ -8,35 +8,44 @@ export const particleVertexShader = /* glsl */ `
     float hash(float n) { return fract(sin(n) * 43758.5453123); }
     float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453123); }
 
-    vec3 weightedParticlePalette(vec3 seed, float tone) {
-      // Screenshot matched particle balance used across every form:
-      // 45 percent blue, 44 percent orange, 6 percent violet, 5 percent magenta.
-      float pick = hash(seed * 19.17 + vec3(2.0, 7.0, 11.0));
-      float grain = hash(seed * 31.41 + vec3(5.0, 3.0, 13.0));
-      float t = clamp(tone * 0.58 + grain * 0.42, 0.0, 1.0);
+    vec3 spatialParticlePalette(float axis, float grain) {
+      // Spatial colour system based on the uploaded reference ring.
+      // The balance is kept directional rather than random: blue/cyan 45%,
+      // violet/purple 6%, pink/magenta 5%, orange/red-orange 44%.
+      float p = clamp(axis, 0.0, 1.0);
+      float shimmer = clamp(grain, 0.0, 1.0);
 
       vec3 blueA = vec3(0.2, 0.4, 1.0);
       vec3 blueB = vec3(0.18, 0.82, 1.0);
-      vec3 orangeA = vec3(1.0, 0.3, 0.2);
-      vec3 orangeB = vec3(1.0, 0.58, 0.16);
       vec3 violetA = vec3(0.46, 0.32, 1.0);
       vec3 violetB = vec3(0.72, 0.48, 1.0);
       vec3 magentaA = vec3(1.0, 0.32, 0.72);
       vec3 magentaB = vec3(1.0, 0.46, 0.88);
+      vec3 orangeA = vec3(1.0, 0.3, 0.2);
+      vec3 orangeB = vec3(1.0, 0.58, 0.16);
 
-      if (pick < 0.45) {
-        return mix(blueA, blueB, t);
+      vec3 blue = mix(blueA, blueB, shimmer);
+      vec3 violet = mix(violetA, violetB, shimmer);
+      vec3 magenta = mix(magentaA, magentaB, shimmer);
+      vec3 orange = mix(orangeA, orangeB, shimmer);
+
+      if (p < 0.45) {
+        float t = smoothstep(0.0, 0.45, p);
+        return mix(blue, mix(blueB, violetA, 0.28), t * 0.18);
       }
 
-      if (pick < 0.89) {
-        return mix(orangeA, orangeB, t);
+      if (p < 0.51) {
+        float t = smoothstep(0.45, 0.51, p);
+        return mix(blueB, violet, t);
       }
 
-      if (pick < 0.95) {
-        return mix(violetA, violetB, t);
+      if (p < 0.56) {
+        float t = smoothstep(0.51, 0.56, p);
+        return mix(violet, magenta, t);
       }
 
-      return mix(magentaA, magentaB, t);
+      float t = smoothstep(0.56, 1.0, p);
+      return mix(magenta, orange, t);
     }
 
     mat2 rotate2d(float a) {
@@ -194,17 +203,20 @@ export const particleVertexShader = /* glsl */ `
         vEdgeFade *= ringDepthMask;
       }
 
-      // --- SCREENSHOT MATCHED PARTICLE COLOUR SYSTEM ---
-      // Use the same weighted colour balance across every particle formation.
-      // Blue/cyan 45 percent, orange/red-orange 44 percent, violet 6 percent,
-      // pink/magenta 5 percent. Glow, opacity and bloom are untouched.
-      float baseColorMix = smoothstep(-3.0, 3.0, position.y + position.x * 0.5);
-      vec3 normalColor = weightedParticlePalette(seed, baseColorMix);
+      // --- SPATIAL PARTICLE COLOUR SYSTEM ---
+      // Colours are assigned by particle position, not random selection. This
+      // keeps the uploaded-reference proportions while creating a directional
+      // energy gradient: blue/cyan on one side, violet and magenta through the
+      // middle, orange/red-orange on the opposite side.
+      float colourGrain = hash(seed * 31.41 + vec3(5.0, 3.0, 13.0));
+      float normalAxis = smoothstep(-18.0, 18.0, finalPos.x * 0.72 + finalPos.y * 0.52);
+      vec3 normalColor = spatialParticlePalette(normalAxis, colourGrain);
 
-      // Keep the final portal in the same family balance, with only the tonal
-      // brightness shifting across the circular energy ring.
-      float orangeMix = smoothstep(46.0, 28.0, portalRadius);
-      vec3 galaxyColor = weightedParticlePalette(seed, orangeMix);
+      // The final portal uses angular position so the circular halo matches the
+      // original reference: cool lower-left energy, transitional violet/pink,
+      // and warm orange/red across the opposing arc.
+      float portalAxis = smoothstep(-1.25, 1.25, cos(portalTheta - 0.72) + sin(portalTheta - 0.72) * 0.22);
+      vec3 galaxyColor = spatialParticlePalette(portalAxis, colourGrain);
 
       vColor = mix(normalColor, galaxyColor, toGalaxy);
 
