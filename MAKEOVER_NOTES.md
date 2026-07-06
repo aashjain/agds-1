@@ -47,3 +47,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Expanded the services grid across the available right-side width.
 - Reduced compact card height and title scale so all six service cards can read as a balanced two-row section.
 - Tightened the sequential card reveal so the services appear in order without random floating movement.
+
+## V5 refinements
+- Advanced the transition into the service planet earlier, so the service scene no longer shows the previous partially visible planet at the same time as the cards.
+- Reduced the service planet radius and moved it further inside the frame, keeping the complete sphere visible instead of clipping at the top edge.
+- Rebalanced the service camera and look target for a cleaner left-planet / right-content composition.
+- Reworked the service cards into a staggered masonry-style grid with varied card heights and offsets while keeping the six service cards readable across the right-side width.

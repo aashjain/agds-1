@@ -69,23 +69,23 @@ export const particleVertexShader = /* glsl */ `
 
       // FORM 03 — focused service planet: a complete sphere anchored inside
       // the viewport while the service cards appear sequentially on the right.
-      vec3 serviceSphere = spherePoint(r2, r3, 2.62 + r4 * 0.12);
+      vec3 serviceSphere = spherePoint(r2, r3, 2.18 + r4 * 0.10);
       serviceSphere.x *= 1.0;
       serviceSphere.y *= 1.0;
       serviceSphere.z *= 1.0;
-      serviceSphere.x -= 1.85;
-      serviceSphere.y -= 0.95;
-      serviceSphere.z -= 12.4;
+      serviceSphere.x -= 0.85;
+      serviceSphere.y -= 0.35;
+      serviceSphere.z -= 12.2;
 
       float serviceRingAngle = r1 * 6.2831853 + uTime * 0.18;
-      float serviceRingRadius = 3.45 + r2 * 0.28;
+      float serviceRingRadius = 2.85 + r2 * 0.22;
       vec3 serviceRing = vec3(
-        cos(serviceRingAngle) * serviceRingRadius - 1.85,
+        cos(serviceRingAngle) * serviceRingRadius - 0.85,
         (r5 - 0.5) * 0.12,
-        sin(serviceRingAngle) * serviceRingRadius - 12.4
+        sin(serviceRingAngle) * serviceRingRadius - 12.2
       );
       serviceRing.xy = rotate2d(-0.22) * serviceRing.xy;
-      serviceRing.y -= 0.95;
+      serviceRing.y -= 0.35;
 
       float serviceRingMix = step(0.78, r5);
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
@@ -107,7 +107,7 @@ export const particleVertexShader = /* glsl */ `
       galaxyPos = mix(galaxyPos, spherePoint(r5, r6, pow(r3, 2.0) * 9.0) + vec3(0.0, 0.0, -82.0), bulge);
 
       float toFocus = smoothstep(0.10, 0.25, scroll);
-      float toConstellation = smoothstep(0.28, 0.48, scroll);
+      float toConstellation = smoothstep(0.18, 0.29, scroll);
       float toStream = smoothstep(0.52, 0.70, scroll);
       float toGalaxy = smoothstep(0.78, 0.94, scroll);
 

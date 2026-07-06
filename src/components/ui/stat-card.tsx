@@ -9,8 +9,8 @@ export const StatCard = ({ content, compact = false }: StatCardProps) => (
   <article
     aria-label={content.title}
     className={[
-      "overflow-hidden rounded-[1.55rem] border border-border-glass-strong bg-surface-card shadow-glass-card backdrop-blur-xl",
-      compact ? "min-h-[178px] p-5" : "w-[var(--width-card)] p-7 max-sm:p-6",
+      "h-full overflow-hidden rounded-[1.55rem] border border-border-glass-strong bg-surface-card shadow-glass-card backdrop-blur-xl",
+      compact ? "p-5" : "w-[var(--width-card)] p-7 max-sm:p-6",
     ].join(" ")}
   >
     <div className="mb-4 flex items-center justify-between gap-4">
@@ -22,7 +22,7 @@ export const StatCard = ({ content, compact = false }: StatCardProps) => (
     <p
       className={[
         "mb-4 block max-w-full whitespace-normal break-words font-display font-semibold leading-[1.04] text-gradient-accent",
-        compact ? "text-[clamp(26px,2.55vw,42px)]" : "text-stat",
+        compact ? "text-[clamp(25px,2.35vw,40px)]" : "text-stat",
       ].join(" ")}
     >
       {content.stat}
