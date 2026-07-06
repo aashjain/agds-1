@@ -103,3 +103,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Increased only the service-stage planet and its ring scale by 40%.
 - Kept the current planet centre/offset values unchanged.
 - Service card layout and styling were not modified.
+
+
+## V14 Revision
+- Increased only the service-stage planet and ring scale by a further 40%.
+- Service card layout and planet positioning values were left unchanged.
