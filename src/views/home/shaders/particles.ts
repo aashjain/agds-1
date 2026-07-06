@@ -76,28 +76,22 @@ export const particleVertexShader = /* glsl */ `
       serviceSphere.z -= 10.9;
 
       float serviceRingAngle = r1 * 6.2831853 - uTime * 0.18;
-      // Saturn-style ring treatment: thicker, layered and pitched to 37 degrees so the
-      // band has visible width while keeping the approved planet position.
+      // Saturn-style ring treatment: now a true, flat inclined annulus. The
+      // band is three times thicker, but all particles remain on one clean
+      // plane so the ring reads straight instead of folded or dented.
       float serviceRingTilt = 0.645772; // 37 degrees
-      float serviceRingBand = (r6 - 0.5) * 1.14;
-      float serviceRingRadius = 15.58 + serviceRingBand + r2 * 0.48;
+      float serviceRingBand = (r6 - 0.5) * 3.42;
+      float serviceRingRadius = 15.58 + serviceRingBand + (r2 - 0.5) * 0.22;
       float serviceRingX = cos(serviceRingAngle) * serviceRingRadius;
       float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
-      float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.52;
+      float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.16;
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
-      // Directional fall across the ring: the rear/back arc is lifted higher
-      // and the time flow is reversed so particles travel clockwise from
-      // the upper rear half of the planet down into the approved front crossing.
-      tiltedRingY += -serviceRingX * 0.20;
-      float rearArcLift = smoothstep(0.05, 0.95, -sin(serviceRingAngle));
-      tiltedRingY += rearArcLift * 2.25;
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
-        tiltedRingY,
+        tiltedRingY - 0.04,
         tiltedRingZ - 10.9
       );
       serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
-      serviceRing.y -= 0.04;
 
       float serviceRingMix = step(0.84, r5);
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
@@ -146,6 +140,16 @@ export const particleVertexShader = /* glsl */ `
 
       float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
       vColor = palette(colorKey);
+      // Ring-specific palette: strictly blue and orange only. The colour is
+      // assigned as a hard particle split, not a gradient, so no violet/pink
+      // transition tones appear anywhere in the Saturn ring.
+      float ringColourSplit = step(0.5, hash(vec3(r1 * 19.0, r2 * 31.0, serviceRingAngle)));
+      vec3 ringBlue = vec3(0.2, 0.4, 1.0);
+      vec3 ringOrange = vec3(1.0, 0.3, 0.2);
+      vec3 ringColour = mix(ringBlue, ringOrange, ringColourSplit);
+      if (serviceRingMix > 0.5 && toConstellation > 0.02 && toStream < 0.98) {
+        vColor = ringColour;
+      }
 
       float pointBase = mix(2.2, 4.2, step(0.92, r5));
       pointBase = mix(pointBase, 5.0, (1.0 - orbitalDust) * (1.0 - toStream) * 0.28);

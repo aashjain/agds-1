@@ -196,3 +196,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Restored the service-planet framing behaviour from V22.
 - The planet now settles into the earlier approved viewport position during formation instead of rotating out of frame.
 - Service cards, card timing, ring angle, density, colours, scroll-linked morphing and ambient particle motion remain unchanged.
+
+## V33 ring refinement
+- Rebuilt the service-stage ring as a flat, inclined annulus to remove the folded/dented look.
+- Increased the ring band thickness by 3x while keeping the approved planet and card placement intact.
+- Applied an even blue-orange particle mix across the full ring, rather than isolated colour sections.
