@@ -197,16 +197,13 @@ export const particleVertexShader = /* glsl */ `
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
       constellationPos += vec3(0.0, sin(uTime * 0.35 + r1 * 6.0) * 0.025, 0.0);
 
-      // FORM 04 - trajectory field restored towards the V22 feel. It forms as
-      // a broad, readable campaign signal field rather than a hard-edged colour block.
+      // FORM 04 - trajectory field restored directly from the V22 structure.
+      // Keep the clean campaign signal lanes, without the later jitter/block treatment
+      // that made the field read as a rectangular colour panel.
       float lane = floor(r1 * 9.0) - 4.0;
       float streamDepth = -18.0 - r2 * 56.0;
-      float laneJitter = (hash(seed * 19.7 + vec3(2.0, 4.0, 8.0)) - 0.5) * 0.62;
-      float streamX = lane * 1.30 + laneJitter
-        + sin(streamDepth * 0.13 + uTime + r3 * 6.0) * 0.38;
-      float streamY = (r4 - 0.5) * 7.2
-        + sin(r1 * 14.0 + uTime * 0.55) * 0.24
-        + cos(streamDepth * 0.09 + r6 * 8.0) * 0.16;
+      float streamX = lane * 1.35 + sin(streamDepth * 0.13 + uTime + r3 * 6.0) * 0.35;
+      float streamY = (r4 - 0.5) * 7.5 + sin(r1 * 14.0 + uTime * 0.55) * 0.22;
       vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
       // Centre resolve: the trajectory field gathers into the middle of the

@@ -359,3 +359,9 @@ V49 update:
 - Restored the trajectory field closer to the V22 form with a broader, readable campaign-signal shape.
 - Re-centred the camera target during the trajectory phase so the particles begin in frame instead of starting mostly outside the viewport.
 - Removed the sharp spatial colour split from the trajectory section and replaced it with a controlled mixed palette, so no hard line pattern forms inside the field.
+
+
+## V69 trajectory shape correction
+- Restored the trajectory particle geometry directly to the V22 lane/depth structure.
+- Removed the later lane jitter and extra cross-axis noise that made the trajectory read as a block instead of the approved V22 signal field.
+- Kept banner, planet, ring, service cards, scroll behaviour and colour treatment unchanged.
