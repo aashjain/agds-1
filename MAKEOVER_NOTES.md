@@ -352,3 +352,10 @@ V49 update:
 - Kept the earlier visible circular reveal, but added a controlled centre-resolve stage before the final ring emerges.
 - Locked the particle group rotation during the trajectory section so the stream remains in frame.
 - The trajectory field now gathers at screen centre before the circular background begins to form.
+
+## V68 trajectory correction
+
+- Slowed the planet-to-trajectory transition by extending the stream morph window.
+- Restored the trajectory field closer to the V22 form with a broader, readable campaign-signal shape.
+- Re-centred the camera target during the trajectory phase so the particles begin in frame instead of starting mostly outside the viewport.
+- Removed the sharp spatial colour split from the trajectory section and replaced it with a controlled mixed palette, so no hard line pattern forms inside the field.

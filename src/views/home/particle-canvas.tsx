@@ -187,14 +187,14 @@ export const ParticleCanvas = () => {
       // while keeping the cards, planet and ring composition untouched.
       // Last card reveal completes around 37% progress; the zoom begins after
       // a small buffer, roughly equivalent to 100px on the intended scroll range.
-      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.15, 0), 1));
-      const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.48) / 0.10, 0), 1));
-      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.035, 0), 1));
-      // After the planet-to-trajectory pass, hold the particle field in the
-      // centre of the viewport. The final circular field then emerges from
-      // that centred point, instead of drifting left or outside the frame.
-      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.555) / 0.165, 0), 1));
-      const galaxy = ease(Math.min(Math.max((currentScroll - 0.735) / 0.18, 0), 1));
+      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.18, 0), 1));
+      const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.50) / 0.16, 0), 1));
+      // V68: slow the planet-to-trajectory conversion back towards the V22 feel.
+      // The trajectory phase now forms over a longer window instead of snapping in.
+      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.18, 0), 1));
+      // Hold the trajectory field in frame before the final circle begins.
+      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.64) / 0.12, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.78) / 0.18, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
@@ -224,14 +224,24 @@ export const ParticleCanvas = () => {
         (1 - introEased) * 4.5 * (1 - Math.min(currentScroll / 0.06, 1));
       camera.position.z += introZoom;
 
-      const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 5.5 - tunnelHold * 7.0 + stream * 3.8,
-        THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.14 + tunnelHold * 0.04,
-        THREE.MathUtils.lerp(-9.5, -18.5, gapPass) - tunnelHold * 2.2 + stream * 2.0,
-      );
+      let lookX = THREE.MathUtils.lerp(0.0, -4.85, constellation);
+      let lookY = THREE.MathUtils.lerp(-0.02, 0.08, gapPass);
+      let lookZ = THREE.MathUtils.lerp(-9.5, -18.5, gapPass);
+
+      // Aim through the orbital gap, then recentre during the trajectory phase.
+      // This prevents the field from starting off-screen while preserving the
+      // approved planet/ring framing before the transition.
+      lookX = THREE.MathUtils.lerp(lookX, -9.6, tunnelHold * (1 - stream));
+      lookY = THREE.MathUtils.lerp(lookY, 0.0, tunnelHold * (1 - stream));
+      lookZ = THREE.MathUtils.lerp(lookZ, -20.5, tunnelHold * (1 - stream));
+      lookX = THREE.MathUtils.lerp(lookX, 0.0, stream);
+      lookY = THREE.MathUtils.lerp(lookY, 0.0, stream);
+      lookZ = THREE.MathUtils.lerp(lookZ, -36.0, stream);
+
+      const lookTarget = new THREE.Vector3(lookX, lookY, lookZ);
       lookTarget.x = THREE.MathUtils.lerp(lookTarget.x, 0.0, trajectorySettle * (1 - galaxy));
       lookTarget.y = THREE.MathUtils.lerp(lookTarget.y, 0.0, trajectorySettle * (1 - galaxy));
-      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -30.0, trajectorySettle * (1 - galaxy));
+      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -36.0, trajectorySettle * (1 - galaxy));
       lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
       camera.lookAt(lookTarget);
 

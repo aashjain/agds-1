@@ -197,11 +197,16 @@ export const particleVertexShader = /* glsl */ `
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
       constellationPos += vec3(0.0, sin(uTime * 0.35 + r1 * 6.0) * 0.025, 0.0);
 
-      // FORM 04 - content/media stream: particles become a clean campaign signal field.
+      // FORM 04 - trajectory field restored towards the V22 feel. It forms as
+      // a broad, readable campaign signal field rather than a hard-edged colour block.
       float lane = floor(r1 * 9.0) - 4.0;
-      float streamDepth = -20.0 - r2 * 14.0;
-      float streamX = lane * 1.05 + sin(streamDepth * 0.16 + uTime + r3 * 6.0) * 0.42;
-      float streamY = (r4 - 0.5) * 5.6 + sin(r1 * 14.0 + uTime * 0.55) * 0.24;
+      float streamDepth = -18.0 - r2 * 56.0;
+      float laneJitter = (hash(seed * 19.7 + vec3(2.0, 4.0, 8.0)) - 0.5) * 0.62;
+      float streamX = lane * 1.30 + laneJitter
+        + sin(streamDepth * 0.13 + uTime + r3 * 6.0) * 0.38;
+      float streamY = (r4 - 0.5) * 7.2
+        + sin(r1 * 14.0 + uTime * 0.55) * 0.24
+        + cos(streamDepth * 0.09 + r6 * 8.0) * 0.16;
       vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
       // Centre resolve: the trajectory field gathers into the middle of the
@@ -237,9 +242,9 @@ export const particleVertexShader = /* glsl */ `
 
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
-      float toStream = smoothstep(0.52, 0.555, scroll);
-      float toTrajectoryCenter = smoothstep(0.66, 0.735, scroll);
-      float toGalaxy = smoothstep(0.735, 0.89, scroll);
+      float toStream = smoothstep(0.52, 0.70, scroll);
+      float toTrajectoryCenter = smoothstep(0.70, 0.78, scroll);
+      float toGalaxy = smoothstep(0.80, 0.94, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
       vec3 p2 = mix(p1, constellationPos, toConstellation);
@@ -305,9 +310,18 @@ export const particleVertexShader = /* glsl */ `
         serviceRingMix
       );
 
-      float streamAngle = atan(streamY, streamX + sin(streamDepth * 0.045) * 2.0);
-      float streamAxis = angularAxis(streamAngle, 2.80);
-      vec3 streamColor = spatialParticlePalette(streamAxis, colourGrain);
+      // Trajectory colour: intentionally mixed, not spatially split. This removes
+      // the hard diagonal boundary while keeping the same blue, violet, pink and
+      // warm reference family in a controlled way.
+      vec3 trajectoryBlue = vec3(0.14, 0.58, 1.0);
+      vec3 trajectoryViolet = vec3(0.48, 0.36, 0.96);
+      vec3 trajectoryPink = vec3(0.96, 0.36, 0.68);
+      vec3 trajectoryWarm = vec3(1.0, 0.34, 0.16);
+      float trajectoryGrain = hash(seed * 23.3 + vec3(11.0, 7.0, 5.0));
+      vec3 mixedCool = mix(trajectoryBlue, trajectoryViolet, smoothstep(0.42, 0.74, trajectoryGrain) * 0.32);
+      vec3 mixedWarm = mix(trajectoryWarm, trajectoryPink, smoothstep(0.76, 1.0, trajectoryGrain) * 0.16);
+      vec3 streamColor = mix(mixedCool, mixedWarm, smoothstep(0.58, 1.0, trajectoryGrain) * 0.52);
+      streamColor = mix(streamColor, vec3(0.42, 0.34, 0.80), 0.08);
 
       // The final portal uses angular position so the circular halo matches the
       // original reference: cool lower-left energy, transitional violet/pink,
