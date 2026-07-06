@@ -190,15 +190,18 @@ export const ParticleCanvas = () => {
       const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.15, 0), 1));
       const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.48) / 0.10, 0), 1));
       const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.035, 0), 1));
-      const trajectoryCentre = ease(Math.min(Math.max((currentScroll - 0.64) / 0.08, 0), 1));
-      const galaxy = ease(Math.min(Math.max((currentScroll - 0.76) / 0.18, 0), 1));
+      // After the planet-to-trajectory pass, hold the particle field in the
+      // centre of the viewport. The final circular field then emerges from
+      // that centred point, instead of drifting left or outside the frame.
+      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.555) / 0.165, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.735) / 0.18, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -4.85, gapPass);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -10.25, tunnelHold * (1 - stream));
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.35, stream);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, trajectoryCentre * (1 - galaxy));
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, trajectorySettle * (1 - galaxy));
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
 
       camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
@@ -206,7 +209,7 @@ export const ParticleCanvas = () => {
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.18, gapPass);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.02, tunnelHold * (1 - stream));
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, -0.15, stream);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, trajectoryCentre * (1 - galaxy));
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, trajectorySettle * (1 - galaxy));
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
 
       camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
@@ -214,7 +217,7 @@ export const ParticleCanvas = () => {
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 2.85, gapPass);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 0.85, tunnelHold * (1 - stream));
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, -15.5, stream);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 13.5, trajectoryCentre * (1 - galaxy));
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 13.2, trajectorySettle * (1 - galaxy));
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 18.0, galaxy);
 
       const introZoom =
@@ -226,9 +229,9 @@ export const ParticleCanvas = () => {
         THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.14 + tunnelHold * 0.04,
         THREE.MathUtils.lerp(-9.5, -18.5, gapPass) - tunnelHold * 2.2 + stream * 2.0,
       );
-      lookTarget.x = THREE.MathUtils.lerp(lookTarget.x, 0.0, trajectoryCentre * (1 - galaxy));
-      lookTarget.y = THREE.MathUtils.lerp(lookTarget.y, 0.0, trajectoryCentre * (1 - galaxy));
-      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -42.0, trajectoryCentre * (1 - galaxy));
+      lookTarget.x = THREE.MathUtils.lerp(lookTarget.x, 0.0, trajectorySettle * (1 - galaxy));
+      lookTarget.y = THREE.MathUtils.lerp(lookTarget.y, 0.0, trajectorySettle * (1 - galaxy));
+      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -30.0, trajectorySettle * (1 - galaxy));
       lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
       camera.lookAt(lookTarget);
 
@@ -244,19 +247,25 @@ export const ParticleCanvas = () => {
       // the sphere stays inside the viewport. The shader still carries subtle
       // ambient motion, and scroll still drives the A → B / B → A morph.
       const serviceRotation = -0.08 + time * 0.012;
-      particles.rotation.y = THREE.MathUtils.lerp(
+      const trajectoryLock = stream * (1 - galaxy);
+      let particleRotationY = THREE.MathUtils.lerp(
         orbitalRotation,
         serviceRotation,
         serviceVisibility,
       );
-      particles.rotation.x = THREE.MathUtils.lerp(
+      particleRotationY = THREE.MathUtils.lerp(particleRotationY, 0.0, trajectoryLock);
+      particles.rotation.y = particleRotationY;
+
+      let particleRotationX = THREE.MathUtils.lerp(
         Math.sin(currentScroll * Math.PI) * 0.08,
         -0.015,
         serviceVisibility,
       );
+      particleRotationX = THREE.MathUtils.lerp(particleRotationX, 0.0, trajectoryLock);
+      particles.rotation.x = particleRotationX;
       camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.012 * (1 - serviceVisibility);
 
-      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.72) / 0.12, 0), 1);
+      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.735) / 0.12, 0), 1);
       const glowScale = Math.pow(glowScaleProgress, 2.8) * 24.0;
       const hideGlow = Math.min(Math.max((currentScroll - 0.88) / 0.08, 0), 1);
       glow.style.transform = `translate(-50%, -50%) scale(${glowScale})`;

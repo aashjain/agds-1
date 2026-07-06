@@ -347,7 +347,8 @@ V49 update:
 - Service cards, planet placement, ring placement, colours and content were not changed.
 
 
-V66 transition update:
-- The trajectory particle field now resolves to the centre of the screen by the end of the trajectory section.
-- The final circular particle background now emerges outward from that central point.
-- Camera framing was centred during the trajectory ending so particles remain in frame until the final background begins.
+## V67 transition correction
+- Reverted the V66 centring approach that pushed the trajectory particles left/outside the viewport.
+- Kept the earlier visible circular reveal, but added a controlled centre-resolve stage before the final ring emerges.
+- Locked the particle group rotation during the trajectory section so the stream remains in frame.
+- The trajectory field now gathers at screen centre before the circular background begins to form.

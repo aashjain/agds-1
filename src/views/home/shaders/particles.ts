@@ -198,27 +198,21 @@ export const particleVertexShader = /* glsl */ `
       constellationPos += vec3(0.0, sin(uTime * 0.35 + r1 * 6.0) * 0.025, 0.0);
 
       // FORM 04 - content/media stream: particles become a clean campaign signal field.
-      // The trajectory now resolves back into the centre of the viewport before
-      // the final circular energy ring emerges. This keeps the end of the
-      // trajectory section composed instead of allowing the particles to drift
-      // out of frame.
       float lane = floor(r1 * 9.0) - 4.0;
       float streamDepth = -20.0 - r2 * 14.0;
       float streamX = lane * 1.05 + sin(streamDepth * 0.16 + uTime + r3 * 6.0) * 0.42;
       float streamY = (r4 - 0.5) * 5.6 + sin(r1 * 14.0 + uTime * 0.55) * 0.24;
-      vec3 streamField = vec3(streamX, streamY, streamDepth);
+      vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
-      float centreTheta = r1 * 6.2831853 + uTime * 0.10;
-      float centreRadius = 0.55 + r2 * 5.2;
-      vec3 centreVortex = vec3(
-        cos(centreTheta) * centreRadius,
-        sin(centreTheta) * centreRadius * 0.58 + (r4 - 0.5) * 0.46,
-        -42.0 + (r5 - 0.5) * 2.2
+      // Centre resolve: the trajectory field gathers into the middle of the
+      // viewport before the final circular energy field emerges. This keeps the
+      // end of the trajectory section in frame and makes the circular reveal
+      // feel like it is born from the same centred particle mass.
+      vec3 trajectoryCenterPos = vec3(
+        (r2 - 0.5) * 3.6 + sin(r1 * 6.2831853 + uTime * 0.18) * 0.34,
+        (r4 - 0.5) * 2.45 + cos(r3 * 6.2831853 + uTime * 0.14) * 0.26,
+        -30.0 + (r5 - 0.5) * 1.6
       );
-      centreVortex.x += sin(centreTheta * 4.0 + r3 * 7.0) * 0.28;
-      centreVortex.y += cos(centreTheta * 5.0 - r6 * 5.0) * 0.18;
-      float trajectoryCentre = smoothstep(0.64, 0.72, scroll);
-      vec3 streamPos = mix(streamField, centreVortex, trajectoryCentre);
 
       // FORM 05 - final original-project energy ring. This recreates the
       // uploaded template's opening circular particle halo with a large hollow
@@ -244,11 +238,13 @@ export const particleVertexShader = /* glsl */ `
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
       float toStream = smoothstep(0.52, 0.555, scroll);
-      float toGalaxy = smoothstep(0.72, 0.89, scroll);
+      float toTrajectoryCenter = smoothstep(0.66, 0.735, scroll);
+      float toGalaxy = smoothstep(0.735, 0.89, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
       vec3 p2 = mix(p1, constellationPos, toConstellation);
       vec3 p3 = mix(p2, streamPos, toStream);
+      p3 = mix(p3, trajectoryCenterPos, toTrajectoryCenter * (1.0 - toGalaxy));
       vec3 finalPos = mix(p3, galaxyPos, toGalaxy);
 
       finalPos += vec3(
