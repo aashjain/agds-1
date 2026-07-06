@@ -238,3 +238,7 @@ V43 update:
 - Delayed the wave/next section start until after the service-card fade-out completes.
 - Added a small scroll buffer so the last service card clears before the next section appears.
 - Kept the planet, cards, ring, particles, colours and layout unchanged.
+
+## V47 Revision
+
+Restored the background shader treatment from the original uploaded project so the final ecosystem section uses the original aurora style background rather than the newer green glow treatment.
