@@ -75,14 +75,14 @@ export const particleVertexShader = /* glsl */ `
       serviceSphere.x *= 1.0;
       serviceSphere.y *= 1.0;
       serviceSphere.z *= 1.0;
-      serviceSphere.x -= 10.5;
+      serviceSphere.x -= 12.6;
       serviceSphere.y -= 0.04;
       serviceSphere.z -= 10.9;
 
       float serviceRingAngle = r1 * 6.2831853 + uTime * 0.18;
       float serviceRingRadius = 7.95 + r2 * 0.34;
       vec3 serviceRing = vec3(
-        cos(serviceRingAngle) * serviceRingRadius - 10.5,
+        cos(serviceRingAngle) * serviceRingRadius - 12.6,
         (r5 - 0.5) * 0.18,
         sin(serviceRingAngle) * serviceRingRadius - 10.9
       );
