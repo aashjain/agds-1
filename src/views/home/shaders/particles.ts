@@ -16,6 +16,28 @@ export const particleVertexShader = /* glsl */ `
       return mix(cBottom, cTop, clamp(t, 0.0, 1.0));
     }
 
+    vec3 originalPortalPalette(float t) {
+      // Full original-style energy ring spectrum from the uploaded project:
+      // electric blue, deep blue, violet, soft purple, magenta, warm orange
+      // and red-orange glow. Used for the final circular background only.
+      t = clamp(t, 0.0, 1.0);
+      vec3 electricBlue = vec3(0.20, 0.40, 1.00);
+      vec3 deepBlue = vec3(0.08, 0.18, 0.85);
+      vec3 violet = vec3(0.45, 0.30, 1.00);
+      vec3 softPurple = vec3(0.70, 0.48, 1.00);
+      vec3 magenta = vec3(1.00, 0.34, 0.82);
+      vec3 warmOrange = vec3(1.00, 0.48, 0.18);
+      vec3 redOrange = vec3(1.00, 0.18, 0.12);
+
+      vec3 c = mix(electricBlue, deepBlue, smoothstep(0.00, 0.16, t));
+      c = mix(c, violet, smoothstep(0.14, 0.32, t));
+      c = mix(c, softPurple, smoothstep(0.30, 0.48, t));
+      c = mix(c, magenta, smoothstep(0.46, 0.64, t));
+      c = mix(c, warmOrange, smoothstep(0.62, 0.82, t));
+      c = mix(c, redOrange, smoothstep(0.80, 1.00, t));
+      return c;
+    }
+
     mat2 rotate2d(float a) {
       float s = sin(a);
       float c = cos(a);
@@ -120,13 +142,22 @@ export const particleVertexShader = /* glsl */ `
       float streamY = (r4 - 0.5) * 7.5 + sin(r1 * 14.0 + uTime * 0.55) * 0.22;
       vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
-      // FORM 05 - final galaxy: the full ecosystem pulls together.
-      float gRadius = pow(r1, 1.8) * 42.0;
-      float arm = floor(r2 * 3.0);
-      float gTheta = arm * 2.0943951 + gRadius * 0.12 + pow(r3 * 2.0 - 1.0, 5.0) * 1.2 + uTime * 0.18;
-      vec3 galaxyPos = vec3(cos(gTheta) * gRadius, pow(r4 * 2.0 - 1.0, 3.0) * 3.0, sin(gTheta) * gRadius - 82.0);
-      float bulge = smoothstep(15.0, 0.0, gRadius);
-      galaxyPos = mix(galaxyPos, spherePoint(r5, r6, pow(r3, 2.0) * 9.0) + vec3(0.0, 0.0, -82.0), bulge);
+      // FORM 05 - final original-project portal: the closing section returns
+      // to the uploaded template's circular energy background, with a hollow
+      // centre for the final headline.
+      float portalTheta = r1 * 6.2831853 + uTime * 0.08;
+      float portalNoise = (hash(seed * 37.0 + vec3(2.0, 8.0, 4.0)) - 0.5) * 2.2;
+      float portalRadius = 24.0 + (r2 - 0.5) * 5.2 + sin(portalTheta * 5.0 + r3 * 8.0 + uTime * 0.22) * 0.85 + portalNoise;
+      float portalThickness = (r4 - 0.5) * 4.8;
+      vec3 galaxyPos = vec3(
+        cos(portalTheta) * (portalRadius + portalThickness),
+        sin(portalTheta) * (portalRadius * 0.74 + portalThickness * 0.55),
+        -82.0 + (r5 - 0.5) * 3.4
+      );
+
+      // Subtle dotted fibre variation, similar to the original circular wave.
+      galaxyPos.x += sin(portalTheta * 13.0 + uTime * 0.35 + r6 * 4.0) * 0.8;
+      galaxyPos.y += cos(portalTheta * 11.0 - uTime * 0.28 + r5 * 5.0) * 0.7;
 
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
@@ -157,8 +188,13 @@ export const particleVertexShader = /* glsl */ `
         vEdgeFade *= ringDepthMask;
       }
 
-      float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
-      vColor = palette(colorKey);
+      float portalColourKey = clamp((sin(portalTheta - 0.65) + 1.0) * 0.5, 0.0, 1.0);
+      // Add a tiny seeded variation so the final ring is richly speckled like
+      // the original reference, without creating harsh bands.
+      float portalSpectrumKey = fract(portalColourKey + (r2 - 0.5) * 0.10 + (r6 - 0.5) * 0.05);
+      vec3 baseParticleColour = palette(r1);
+      vec3 portalParticleColour = originalPortalPalette(portalSpectrumKey);
+      vColor = mix(baseParticleColour, portalParticleColour, toGalaxy);
       // Ring-specific palette: 90% orange and 10% blue only. No violet/pink
       // transition shades are introduced inside the Saturn ring.
       float ringColourSplit = step(0.10, hash(seed * 64.3 + vec3(1.0, 5.0, 9.0)));

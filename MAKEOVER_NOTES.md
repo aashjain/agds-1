@@ -249,3 +249,12 @@ Restored the background shader treatment from the original uploaded project so t
 - Reworked the service-to-trajectory timing so the camera passes through the orbital gap between the planet and the ring before the trajectory content appears.
 - Delayed the trajectory overlay so it starts after the service cards clear and after the gap transition begins.
 - Kept the approved planet, ring, cards, colours, scroll behaviour and content unchanged otherwise.
+
+V49 update:
+- Replaced the final background particle formation with the original uploaded-project circular portal treatment.
+- Kept the approved AG Designs Studio homepage flow, services, planet, ring and scroll behaviour intact.
+
+## V50 Colour Revision
+- Updated the final circular particle background to use the full original-style spectrum from the uploaded reference.
+- Added electric blue, deep blue, violet, soft purple, magenta, warm orange and red-orange across the final energy ring.
+- Kept the approved planet, service cards, ring styling, scroll behaviour and content unchanged.
