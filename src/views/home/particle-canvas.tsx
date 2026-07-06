@@ -182,13 +182,12 @@ export const ParticleCanvas = () => {
       const constellation = ease(
         Math.min(Math.max((currentScroll - 0.18) / 0.12, 0), 1),
       );
-      // The camera now begins its orbital-gap zoom earlier, around 38% scroll,
-      // so the user is gently prepared for the trajectory section while the
-      // service cards complete and fade. It still reaches the gap before revealing
-      // the trajectory
-      // section. This restores the earlier approved V22-style transition while
-      // keeping the current planet, ring and card composition intact.
-      const gapPass = ease(Math.min(Math.max((currentScroll - 0.38) / 0.23, 0), 1));
+      // Start the orbital-gap zoom shortly after the last service card has
+      // appeared. This avoids the dead scroll zone where only the ring moves,
+      // while keeping the cards, planet and ring composition untouched.
+      // Last card reveal completes around 37% progress; the zoom begins after
+      // a small buffer, roughly equivalent to 100px on the intended scroll range.
+      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.13, 0), 1));
       const stream = ease(Math.min(Math.max((currentScroll - 0.61) / 0.18, 0), 1));
       const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.18, 0), 1));
 

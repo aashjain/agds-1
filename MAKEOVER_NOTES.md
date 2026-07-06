@@ -319,3 +319,10 @@ V49 update:
 - Started the camera zoom into the planet/ring gap at 38% orbit progress instead of waiting until the service cards begin to clear.
 - Kept service card layout, fade timing, planet position, ring position, colours and scroll behaviour unchanged.
 - The zoom now develops gradually from 38% to the trajectory transition window, so there is no dead scroll between service reveal and the next section.
+
+
+## V62 Update
+- Adjusted only the trajectory zoom timing.
+- The camera zoom now starts shortly after the last service tile has appeared, using a small scroll buffer equivalent to roughly 100px.
+- The zoom ramp is tighter, so the movement is visible before the service cards begin fading.
+- Service cards, planet position, ring position, colours, layout and scroll behaviour remain unchanged.
