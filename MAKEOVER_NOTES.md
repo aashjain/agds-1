@@ -173,3 +173,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Reworked scroll-linked particle acceleration so raw scroll velocity increases particle speed directly.
 - The speed boost uses absolute scroll movement only, preserving clockwise direction while restoring the faster animated feel from the earlier version.
 - Kept the camera smoothing, planet position, service cards, ring angle, density and colour palette unchanged.
+
+
+## V28 revision
+- Removed the scroll-velocity rotation accumulator that was still causing a visible direction fight.
+- Particle speed still increases while scrolling through the shader time value only.
+- The particle field now keeps a single clockwise travel direction while gaining speed on scroll.

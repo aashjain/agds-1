@@ -110,7 +110,9 @@ export const ParticleCanvas = () => {
     composer.addPass(bloomPass);
 
     let time = 0;
-    let scrollSpin = 0;
+    // Keep the visible particle direction controlled only by shader time.
+    // Do not accumulate a scroll-based rotation offset here, because that can
+    // visually counter the particle travel and read as reversal.
     let lastTargetScroll = 0;
     let scrollVelocityBoost = 0;
 
@@ -180,7 +182,6 @@ export const ParticleCanvas = () => {
         0.18,
       );
       time += 0.005 + scrollVelocityBoost * 0.052;
-      scrollSpin += scrollVelocityBoost * 0.018;
 
       material.uniforms.uTime.value = time;
       material.uniforms.uScroll.value = currentScroll;
@@ -229,7 +230,7 @@ export const ParticleCanvas = () => {
       // shader's clockwise time flow and read as a reversal during fast or slow
       // page movement. Scroll still morphs the forms, but clockwise travel is
       // governed by uTime throughout the experience.
-      const orbitalRotation = time * 0.055 + scrollSpin;
+      const orbitalRotation = time * 0.055;
       const serviceRotation = orbitalRotation + 0.16 + time * 0.008;
       particles.rotation.y = THREE.MathUtils.lerp(
         orbitalRotation,
