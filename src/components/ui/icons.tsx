@@ -1,6 +1,6 @@
 // 📖 Docs: obsidian/frontend/components/ui.md
 /**
- * Inline icon set used by the home experience — ported verbatim from the
+ * Inline icon set used by the home experience - ported verbatim from the
  * `<svg>` glyphs in the source index.html. `currentColor` lets them inherit
  * text colour; decorative by default (`aria-hidden`).
  */

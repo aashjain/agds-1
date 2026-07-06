@@ -3,7 +3,7 @@ import { AnimatedGradientBorder } from "./animated-gradient-border";
 import { LayersIcon } from "./icons";
 
 /**
- * Frosted pill label with the layers glyph and an animated shimmer ring —
+ * Frosted pill label with the layers glyph and an animated shimmer ring -
  * the `.top-label` element from style.css.
  */
 export interface EyebrowProps {

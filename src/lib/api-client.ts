@@ -3,7 +3,7 @@
  *
  * For use in Client Components that need to fetch after mount. It unwraps the
  * `{ data }` / `{ error }` envelope and throws `ApiClientError` on failure.
- * The browser must only ever call same-origin `/api/*` — never a third-party
+ * The browser must only ever call same-origin `/api/*` - never a third-party
  * API directly (that belongs in a route handler).
  */
 

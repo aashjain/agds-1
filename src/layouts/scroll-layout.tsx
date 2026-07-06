@@ -49,7 +49,7 @@ function ScrollController() {
     rafId = requestAnimationFrame(raf);
 
     return () => {
-      // Cancel the loop before destroying Lenis — otherwise it keeps calling
+      // Cancel the loop before destroying Lenis - otherwise it keeps calling
       // `raf` on a destroyed instance after unmount/HMR.
       cancelAnimationFrame(rafId);
       lenis.destroy();

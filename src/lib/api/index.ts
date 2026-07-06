@@ -6,7 +6,7 @@
  * - failure → `{ error: { code, message, issues? } }`
  *
  * Route handlers stay free to hold business logic and secrets (the file is
- * server-only by construction) — these helpers only standardise the I/O shape.
+ * server-only by construction) - these helpers only standardise the I/O shape.
  */
 
 import { NextRequest, NextResponse } from "next/server";

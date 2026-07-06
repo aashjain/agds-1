@@ -6,7 +6,7 @@ import { create } from "zustand";
 const STORAGE_KEY = "cookie-consent-v1";
 
 export type CookieConsent = {
-  /** Strictly necessary — always true, never user-disabled. */
+  /** Strictly necessary - always true, never user-disabled. */
   necessary: true;
   analytics: boolean;
   marketing: boolean;
@@ -41,7 +41,7 @@ const saveConsent = (consent: CookieConsent) => {
 interface CookieStore {
   /** null until the user has decided. After hydration, the banner shows iff this is null. */
   consent: CookieConsent | null;
-  /** True once the client has read localStorage — guards against SSR/CSR mismatch. */
+  /** True once the client has read localStorage - guards against SSR/CSR mismatch. */
   hydrated: boolean;
   modalOpen: boolean;
   hydrate: () => void;

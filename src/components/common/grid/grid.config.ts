@@ -5,7 +5,7 @@
  *
  * The grid keeps a rem-based design proportional across viewports by scaling
  * the root (`<html>`) font-size. Each breakpoint maps a viewport `maxWidth` to
- * the design `baseWidth` it was laid out at — at `baseWidth` the root
+ * the design `baseWidth` it was laid out at - at `baseWidth` the root
  * font-size equals `FONT_BASE` and rem values match the design 1:1.
  *
  * - Scaling DOWN (viewport at or below `GRID_BASE_WIDTH`) is driven by the
@@ -14,7 +14,7 @@
  *   `AdaptiveGrid` component / `useAdaptiveGrid` hook.
  *
  * Changing these values means updating the `html` media queries in
- * `globals.css` to match — the formula is:
+ * `globals.css` to match - the formula is:
  *   font-size: FONT_BASE * 100 / baseWidth  (vw)
  */
 
@@ -36,7 +36,7 @@ export const GRID_BREAKPOINTS: readonly GridBreakpoint[] = [
   { maxWidth: 640, baseWidth: 360 },
 ];
 
-/** Largest breakpoint width — above it the root font-size scales up. */
+/** Largest breakpoint width - above it the root font-size scales up. */
 export const GRID_BASE_WIDTH = Math.max(
   ...GRID_BREAKPOINTS.map((bp) => bp.maxWidth),
 );

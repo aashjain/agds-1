@@ -7,7 +7,7 @@ import { animated, easings, useSpring } from "@react-spring/web";
  * Looping gradient ring drawn as an overlay element.
  *
  * The source used a CSS `@keyframes gradientBorder` animation on a `::before`
- * pseudo-element — both banned here (hard rule #1, ADR-0002). This recreates it
+ * pseudo-element - both banned here (hard rule #1, ADR-0002). This recreates it
  * with a spring loop driving `background-position`, and the standard
  * mask-composite trick to punch out everything but the 1px ring. Purely
  * decorative, so `aria-hidden`.
@@ -16,7 +16,7 @@ import { animated, easings, useSpring } from "@react-spring/web";
 export interface AnimatedGradientBorderProps {
   /** CSS gradient image painted into the ring. */
   gradient: string;
-  /** Loop duration in ms (source used 3000–4000). */
+  /** Loop duration in ms (source used 3000-4000). */
   durationMs?: number;
   /** Ring thickness in px. */
   thickness?: number;

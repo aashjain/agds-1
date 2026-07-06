@@ -103,7 +103,7 @@ export const ParticleCanvas = () => {
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.42, // strength — restrained so the particles read as points, not a white blur
+      0.42, // strength - restrained so the particles read as points, not a white blur
       0.22, // radius
       0.38, // threshold
     );

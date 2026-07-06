@@ -21,7 +21,7 @@ const FONT_BASE = 16;
 export interface UseAdaptiveGridOptions {
   /** Viewport width (px) above which the root font-size scales up. */
   baseWidth: number;
-  /** Damping factor (0–1) for the scale-up; 1 = fully proportional. */
+  /** Damping factor (0-1) for the scale-up; 1 = fully proportional. */
   coef?: number;
 }
 

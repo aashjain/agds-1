@@ -1,13 +1,13 @@
 /**
  * @fileoverview Standardised metadata + viewport generators for pages.
  *
- * `generateMetadata` builds a Next.js `Metadata` object — basic meta tags,
+ * `generateMetadata` builds a Next.js `Metadata` object - basic meta tags,
  * OpenGraph, Twitter cards, canonical URL, icons, robots. `metadataBase` is
  * always set (from `siteConfig`) so relative URLs (OG image, canonical)
- * resolve to absolute — required by social scrapers.
+ * resolve to absolute - required by social scrapers.
  *
  * `generateViewport` builds the `Viewport` export. `themeColor` lives here, not
- * in `Metadata` — Next deprecated it on the metadata object.
+ * in `Metadata` - Next deprecated it on the metadata object.
  */
 
 import { Metadata, Viewport } from "next";
@@ -19,7 +19,7 @@ interface MetadataProps {
   description?: string;
   /** Canonical path (e.g. `/about`) or absolute URL for this page. */
   url?: string;
-  /** Open Graph / Twitter image — path under `public/` or absolute URL. */
+  /** Open Graph / Twitter image - path under `public/` or absolute URL. */
   ogImage?: string;
   twitterHandle?: string;
   author?: string;

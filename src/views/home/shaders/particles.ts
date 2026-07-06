@@ -40,7 +40,7 @@ export const particleVertexShader = /* glsl */ `
 
       float scroll = clamp(uScroll, 0.0, 1.0);
 
-      // FORM 01 — agency solar system: brand core, marketing planets, orbital dust.
+      // FORM 01 - agency solar system: brand core, marketing planets, orbital dust.
       float planetBand = floor(r1 * 7.0);
       float orbitRadius = 4.0 + planetBand * 1.55 + r2 * 0.7;
       float orbitAngle = r3 * 6.2831853 + uTime * (0.13 + planetBand * 0.018);
@@ -55,7 +55,7 @@ export const particleVertexShader = /* glsl */ `
       vec3 solarPos = mix(planetCentre + cluster, ringPoint, orbitalDust);
       solarPos.y += sin(orbitAngle + r2 * 6.2831853) * 0.45;
 
-      // FORM 02 — focus on one planet: the camera appears to select a channel.
+      // FORM 02 - focus on one planet: the camera appears to select a channel.
       vec3 focusCore = spherePoint(r3, r4, 2.75 + r2 * 0.2);
       focusCore += normalize(focusCore) * sin(uTime * 1.25 + r1 * 9.0) * 0.18;
       vec3 focusRing = vec3(cos(r1 * 6.2831853) * (4.2 + r2 * 0.8), (r5 - 0.5) * 0.18, sin(r1 * 6.2831853) * (4.2 + r2 * 0.8));
@@ -63,7 +63,7 @@ export const particleVertexShader = /* glsl */ `
       focusPos.z -= 8.0;
       focusPos.x += 1.2;
 
-      // FORM 03 — focused service planet: a complete sphere anchored inside
+      // FORM 03 - focused service planet: a complete sphere anchored inside
       // the viewport while the service cards appear sequentially on the right.
       // Large service planet: designed to read as a spacious, complete sphere
       // on the left while the service masonry occupies the right.
@@ -99,14 +99,14 @@ export const particleVertexShader = /* glsl */ `
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
       constellationPos += vec3(0.0, sin(uTime * 0.35 + r1 * 6.0) * 0.025, 0.0);
 
-      // FORM 04 — content/media stream: particles become a clean campaign signal field.
+      // FORM 04 - content/media stream: particles become a clean campaign signal field.
       float lane = floor(r1 * 9.0) - 4.0;
       float streamDepth = -18.0 - r2 * 56.0;
       float streamX = lane * 1.35 + sin(streamDepth * 0.13 + uTime + r3 * 6.0) * 0.35;
       float streamY = (r4 - 0.5) * 7.5 + sin(r1 * 14.0 + uTime * 0.55) * 0.22;
       vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
-      // FORM 05 — final galaxy: the full ecosystem pulls together.
+      // FORM 05 - final galaxy: the full ecosystem pulls together.
       float gRadius = pow(r1, 1.8) * 42.0;
       float arm = floor(r2 * 3.0);
       float gTheta = arm * 2.0943951 + gRadius * 0.12 + pow(r3 * 2.0 - 1.0, 5.0) * 1.2 + uTime * 0.18;

@@ -19,7 +19,7 @@ export const CookieBanner = () => {
   // the preferences modal is up so the two surfaces never compete for focus.
   const shouldShow = hydrated && consent === null && !modalOpen;
 
-  // react-spring keeps the node mounted through the leave animation — no
+  // react-spring keeps the node mounted through the leave animation - no
   // manual mount/timeout juggling needed.
   const transitions = useTransition(shouldShow, {
     from: { opacity: 0, y: 24 },

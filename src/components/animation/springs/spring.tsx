@@ -156,7 +156,7 @@ export const Spring = forwardRef<HTMLElement, SpringProps & { tag?: Tags }>(
 
     // Declarative spring: `useSpring` diffs values each render, so animating to
     // `to` (when active) vs `from` happens automatically, and a parent
-    // re-render with the same target is a no-op — no re-animation, no reset.
+    // re-render with the same target is a no-op - no re-animation, no reset.
     // The imperative `useSpring(fn).api.start` form did not reliably drive the
     // values in this project's react-spring build (the start call was a no-op).
     const springs = useSpring({

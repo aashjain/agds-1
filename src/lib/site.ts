@@ -1,5 +1,5 @@
 /**
- * Site-wide configuration — the single source of truth for SEO.
+ * Site-wide configuration - the single source of truth for SEO.
  *
  * Consumed by the metadata generator, `robots.ts`, `sitemap.ts`, and the
  * JSON-LD structured-data helper. Update the placeholder values per project.

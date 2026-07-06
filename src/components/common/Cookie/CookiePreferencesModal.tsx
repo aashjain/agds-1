@@ -23,7 +23,7 @@ const CATEGORIES: Category[] = [
   {
     key: "necessary",
     title: "Strictly necessary",
-    body: "Required for the site to work — sign-in, security, page navigation. These can't be turned off.",
+    body: "Required for the site to work - sign-in, security, page navigation. These can't be turned off.",
     required: true,
   },
   {
@@ -212,7 +212,7 @@ interface ToggleProps {
 }
 
 const Toggle = ({ on, disabled, onChange, label }: ToggleProps) => {
-  // Knob slides on a spring — track colour snaps (a state change, not motion).
+  // Knob slides on a spring - track colour snaps (a state change, not motion).
   const knob = useSpring({ x: on ? 20 : 0, config: { tension: 320, friction: 26 } });
 
   return (

@@ -33,7 +33,7 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Lowered point opacity, point size and colour intensity in the opening solar system.
 - Hidden the later section glass cards until their scroll phase begins, so no empty boxes appear in the opening hero.
 
-## Revision V3 — Service Planet + Sequential Cards
+## Revision V3 - Service Planet + Sequential Cards
 
 - Reworked the service phase so the particle field resolves into a complete, anchored planet instead of a partially clipped shape.
 - Adjusted the camera position and look target so the focused planet stays inside the viewport during the service section.
@@ -181,7 +181,7 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - The particle field now keeps a single clockwise travel direction while gaining speed on scroll.
 
 
-## V29 — Scroll-scrubbed particle system
+## V29 - Scroll-scrubbed particle system
 - Converted the particle animation from time-accumulated motion to scroll-scrubbed motion.
 - Particle positions, orbit travel, ring movement, morph states and camera transitions now derive from the same smoothed scroll progress.
 - Scrolling down moves the scene forward; scrolling up returns it backwards through the same path.

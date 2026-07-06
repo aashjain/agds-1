@@ -12,7 +12,7 @@ import { useCookieStore } from "./cookieStore";
  * user has decided) and the preferences modal (when the user opens it).
  *
  * Hydration runs in a `useEffect` so the SSR pass and the first client render
- * agree on "not yet decided" — the banner only appears after the localStorage
+ * agree on "not yet decided" - the banner only appears after the localStorage
  * read on the second client render.
  */
 export const Cookie = () => {

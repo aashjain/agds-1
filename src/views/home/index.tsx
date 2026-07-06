@@ -20,7 +20,7 @@ export const HomeView = () => {
       <WaveSection content={homeContent.wave} />
       <GalaxySection content={homeContent.galaxy} />
 
-      {/* Scroll driver — 14 screens of height produce the 0→1 progress that
+      {/* Scroll driver - 14 screens of height produce the 0→1 progress that
           morphs the particles and reveals each overlay (source body 1400vh). */}
       <div aria-hidden="true" className="h-[1200vh]" />
     </main>

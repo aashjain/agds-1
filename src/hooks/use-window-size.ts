@@ -7,7 +7,7 @@
  *
  * All three read from a **single shared store**: one debounced `resize`
  * listener is attached for the whole app (on the first mounted consumer) and
- * removed when the last consumer unmounts — instead of one listener + one
+ * removed when the last consumer unmounts - instead of one listener + one
  * debounce timer per hook call. State is delivered through
  * `useSyncExternalStore`, so it is SSR-safe and tear-free.
  */
@@ -44,7 +44,7 @@ let debounceId: ReturnType<typeof setTimeout> | undefined;
 const publish = (): void => {
   const next = measure();
   if (next.width === snapshot.width && next.height === snapshot.height) return;
-  snapshot = next; // new reference only on a real change — keeps snapshots stable
+  snapshot = next; // new reference only on a real change - keeps snapshots stable
   listeners.forEach((listener) => listener());
 };
 

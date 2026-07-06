@@ -64,7 +64,7 @@ export const Handle = memo(
     }));
 
     // Keep the latest animation inputs reachable from the trigger-style effects
-    // below, so their dependency arrays can stay narrow — listing `from`/`to`/
+    // below, so their dependency arrays can stay narrow - listing `from`/`to`/
     // `config`/`delayIn`/`delayOut` would re-fire the transition on every render.
     const dataRef = useRef({ from, to, config, delayIn, delayOut });
     const cachedChildrenRef = useRef<React.ReactNode>(cachedChildren);

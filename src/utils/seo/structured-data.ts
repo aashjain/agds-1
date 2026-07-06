@@ -2,7 +2,7 @@
  * @fileoverview JSON-LD structured data helpers.
  *
  * Structured data lets search engines understand the site as entities
- * (Organization, WebSite) rather than just text — improving rich results.
+ * (Organization, WebSite) rather than just text - improving rich results.
  * Render the output inside a `<script type="application/ld+json">` tag.
  */
 

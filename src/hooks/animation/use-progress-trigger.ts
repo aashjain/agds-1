@@ -132,7 +132,7 @@ export function useProgressTrigger({
 
   return {
     interpolatedProgress,
-    // The ref itself — not `.current` — so reading it isn't a render-time ref
+    // The ref itself - not `.current` - so reading it isn't a render-time ref
     // access. Consumers read `progress.current` for the live 0-1 value.
     progress: savedProgress,
   };

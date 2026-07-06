@@ -93,7 +93,7 @@ export const homeContent: HomeContent = {
     eyebrow: "A complete marketing ecosystem",
     titleLines: ["Strategy, creative, media and growth working as one."],
     subtitle:
-      "For brands that need more than isolated posts, AG Designs Studio builds the full digital architecture — from identity and content to campaigns, SEO, websites and conversion-led marketing.",
+      "For brands that need more than isolated posts, AG Designs Studio builds the full digital architecture, from identity and content to campaigns, SEO, websites and conversion-led marketing.",
     buttons: [
       { label: "Plan a project", withArrow: true },
       { label: "Read insights", withArrow: false },

@@ -8,7 +8,7 @@
  * 2. Observes either an external `trigger` ref or the element attached via the
  *    returned callback ref
  * 3. Re-creates the observer only when the observed element or observer options
- *    actually change — not on every render
+ *    actually change - not on every render
  * 4. Exposes visibility as both reactive state and a synchronous ref
  * 5. Disconnects the observer automatically on cleanup
  *
@@ -21,7 +21,7 @@
  *   - trigger: Optional external ref to observe instead of the attached element
  *
  * @returns {[TargetRefCallback, boolean, RefObject<boolean>]} Tuple of:
- * - targetRef: callback ref — attach it to the element to observe
+ * - targetRef: callback ref - attach it to the element to observe
  * - inView: current visibility state (reactive)
  * - inViewRef: ref mirroring the current visibility state (synchronous reads)
  */

@@ -2,7 +2,7 @@
  * Shared animation ticker.
  *
  * A single, app-wide `requestAnimationFrame` loop. Every animation hook that
- * needs per-frame work subscribes here instead of starting its own rAF — so a
+ * needs per-frame work subscribes here instead of starting its own rAF - so a
  * page with N scroll-driven components runs **one** loop, not N.
  *
  * The loop is reference-counted: it starts on the first subscriber and stops
@@ -34,7 +34,7 @@ const frame = (time: number): void => {
     try {
       sub.callback(time);
     } catch (error) {
-      // Isolate failures — one bad subscriber must not kill the shared loop.
+      // Isolate failures - one bad subscriber must not kill the shared loop.
       console.error("[ticker] subscriber threw:", error);
     }
   }

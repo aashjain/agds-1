@@ -4,14 +4,14 @@ import { getServerEnv } from "@/env";
 import { ApiError, handle } from "@/lib/api";
 
 /**
- * Example `app/api` endpoint — a contact / lead submission.
+ * Example `app/api` endpoint - a contact / lead submission.
  *
- * Demonstrates the convention: the handler owns the work — it validates input,
+ * Demonstrates the convention: the handler owns the work - it validates input,
  * reads a secret env var, and calls an upstream service inline. Secrets are
  * safe here because `route.ts` is never bundled to the browser.
  */
 
-// Request schema — kept in the route since it isn't shared. Lift to a shared
+// Request schema - kept in the route since it isn't shared. Lift to a shared
 // module only once another route needs it.
 const contactSchema = z.object({
   name: z.string().min(1).max(100),
@@ -35,7 +35,7 @@ export const POST = handle(async (req) => {
       throw new ApiError(502, "upstream_error", "Failed to deliver the message.");
     }
   } else {
-    // No upstream configured — log server-side so the starter runs as-is.
+    // No upstream configured - log server-side so the starter runs as-is.
     console.log("[api/contact] submission:", input);
   }
 

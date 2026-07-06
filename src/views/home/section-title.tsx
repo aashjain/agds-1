@@ -8,7 +8,7 @@ import type { Tags } from "@/types/springs";
 /**
  * Heading with the per-letter blur cascade from style.css (`.char` animation):
  * each letter rises from +40px, un-blurs and fades in, staggered by index.
- * Driven by `spring-text-engine` (hard rule — all text animation goes through
+ * Driven by `spring-text-engine` (hard rule - all text animation goes through
  * it). Mounted by the parent when its section becomes visible, so `mode="once"`
  * plays the cascade in on entry.
  */

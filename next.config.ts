@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   // Three.js ships its `examples/jsm` add-ons (EffectComposer, UnrealBloomPass…)
-  // as untranspiled ESM — transpile them through the Next pipeline.
+  // as untranspiled ESM - transpile them through the Next pipeline.
   transpilePackages: ["three"],
 
   compiler: {
@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    // Modern formats — smaller than JPEG/PNG; the browser picks what it supports.
+    // Modern formats - smaller than JPEG/PNG; the browser picks what it supports.
     formats: ["image/avif", "image/webp"],
     // Breakpoints `next/image` uses to build `srcset`. `deviceSizes` covers
     // full-width images (aligned with the adaptive-grid breakpoints + retina);
@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
 
   // React Compiler (automatic memoisation) is an opt-in performance win.
   // It requires the `babel-plugin-react-compiler` dev dependency and routes
-  // the build through Babel — enable once installed:
+  // the build through Babel - enable once installed:
   // reactCompiler: true,
 };
 

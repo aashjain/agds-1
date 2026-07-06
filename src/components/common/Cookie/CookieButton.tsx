@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 /**
  * Cookie-scoped button primitive. Two variants matching the project's
- * white/dark surfaces — replaces the external `SimpleButton` the component
+ * white/dark surfaces - replaces the external `SimpleButton` the component
  * shipped with. Hover states snap (the project bans CSS transitions; real
  * motion goes through @react-spring/web).
  */

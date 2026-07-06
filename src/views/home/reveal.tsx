@@ -7,7 +7,7 @@ import type { Tags } from "@/types/springs";
 import type { SectionState } from "./experience";
 
 /**
- * Phase-driven fade/slide reveal — the `.is-visible` / `.is-leaving` content
+ * Phase-driven fade/slide reveal - the `.is-visible` / `.is-leaving` content
  * states from style.css. Content enters from +30px below and leaves up to
  * -30px, mirroring the source's three resting states. Spring-based (no existing
  * springs/ primitive expresses a 3-state, externally-driven scroll reveal).

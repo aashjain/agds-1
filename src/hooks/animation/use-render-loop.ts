@@ -4,8 +4,8 @@
  * Custom hook that runs a callback on a render loop with a configurable framerate.
  *
  * This hook subscribes the callback to the shared animation ticker
- * (`src/lib/animation/ticker.ts`) — a single app-wide `requestAnimationFrame`
- * loop — instead of starting its own rAF. It:
+ * (`src/lib/animation/ticker.ts`) - a single app-wide `requestAnimationFrame`
+ * loop - instead of starting its own rAF. It:
  * 1. Executes the provided render callback at (most) the specified framerate
  * 2. Allows optional mount/unmount handlers
  * 3. Automatically unsubscribes when the component unmounts

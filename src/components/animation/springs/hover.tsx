@@ -172,7 +172,7 @@ export const Hover = forwardRef<HTMLElement, SpringProps & { tag?: Tags }>(
       return hovered;
     }, [enabled, hovered, disableOnMobile, width]);
 
-    // Declarative spring — `useSpring` diffs values each render, so it
+    // Declarative spring - `useSpring` diffs values each render, so it
     // reliably animates to `to` while hovered and back to `from` otherwise.
     // The imperative `useSpring(fn).api.start` form did not move the values in
     // this project's react-spring build.

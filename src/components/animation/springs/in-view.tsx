@@ -149,7 +149,7 @@ export const Inview = forwardRef<HTMLElement, SpringProps & { tag?: Tags }>(
       return inView;
     }, [inView, mode, enabled, disableOnMobile, width]);
 
-    // Declarative spring — `useSpring` diffs values each render. The imperative
+    // Declarative spring - `useSpring` diffs values each render. The imperative
     // `useSpring(fn).api.start` form did not move the values in this project's
     // react-spring build.
     const springs = useSpring({

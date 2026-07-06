@@ -6,13 +6,13 @@ import { AnimatedGradientBorder } from "./animated-gradient-border";
 import { ArrowIcon } from "./icons";
 
 /**
- * Frosted-glass call-to-action button — the `.btn-primary` / `.btn-secondary`
+ * Frosted-glass call-to-action button - the `.btn-primary` / `.btn-secondary`
  * pair from style.css.
  *
  * The source animated hover with `transition: all 0.2s` (a banned CSS
  * transition, hard rule #1), so the lift + colour shift run through the spring
  * `<Hover>` component instead. Colour literals mirror the tokens in globals.css
- * (spring `from`/`to` take raw animatable values, not class names — see
+ * (spring `from`/`to` take raw animatable values, not class names - see
  * animation-system.md).
  */
 
