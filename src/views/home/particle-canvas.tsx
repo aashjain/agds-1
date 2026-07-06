@@ -216,7 +216,11 @@ export const ParticleCanvas = () => {
       // page movement. Scroll still morphs the forms, but clockwise travel is
       // governed by uTime throughout the experience.
       const orbitalRotation = particleTime * 0.055;
-      const serviceRotation = orbitalRotation + 0.16 + particleTime * 0.008;
+      // Restore the service-planet framing from V22: once the particles become
+      // the planet, the group rotation settles into a fixed viewing angle so
+      // the sphere stays inside the viewport. The shader still carries subtle
+      // ambient motion, and scroll still drives the A → B / B → A morph.
+      const serviceRotation = -0.08 + time * 0.012;
       particles.rotation.y = THREE.MathUtils.lerp(
         orbitalRotation,
         serviceRotation,

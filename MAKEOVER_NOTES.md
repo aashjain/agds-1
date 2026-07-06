@@ -191,3 +191,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V31 revision
 - Removed the lingering WaveSection glass panel after its content leaves the viewport.
 - Preserved scroll-linked particle travel with subtle ambient particle motion.
+
+## V32 revision
+- Restored the service-planet framing behaviour from V22.
+- The planet now settles into the earlier approved viewport position during formation instead of rotating out of frame.
+- Service cards, card timing, ring angle, density, colours, scroll-linked morphing and ambient particle motion remain unchanged.
