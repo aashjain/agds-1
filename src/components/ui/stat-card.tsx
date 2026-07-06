@@ -10,10 +10,10 @@ export const StatCard = ({ content, compact = false }: StatCardProps) => (
     aria-label={content.title}
     className={[
       "overflow-hidden rounded-[1.55rem] border border-border-glass-strong bg-surface-card shadow-glass-card backdrop-blur-xl",
-      compact ? "min-h-[220px] p-6" : "w-[var(--width-card)] p-7 max-sm:p-6",
+      compact ? "min-h-[178px] p-5" : "w-[var(--width-card)] p-7 max-sm:p-6",
     ].join(" ")}
   >
-    <div className="mb-6 flex items-center justify-between gap-4">
+    <div className="mb-4 flex items-center justify-between gap-4">
       <p className="font-display text-kicker font-semibold uppercase tracking-[0.28em] text-accent-cool/80">
         {content.title}
       </p>
@@ -21,13 +21,13 @@ export const StatCard = ({ content, compact = false }: StatCardProps) => (
     </div>
     <p
       className={[
-        "mb-5 inline-block font-display font-semibold leading-none text-gradient-accent",
-        compact ? "text-[clamp(34px,3.4vw,54px)]" : "text-stat",
+        "mb-4 block max-w-full whitespace-normal break-words font-display font-semibold leading-[1.04] text-gradient-accent",
+        compact ? "text-[clamp(26px,2.55vw,42px)]" : "text-stat",
       ].join(" ")}
     >
       {content.stat}
     </p>
-    <p className="font-display text-lead font-normal leading-normal text-muted">
+    <p className="font-display text-[clamp(13px,0.95vw,16px)] font-normal leading-normal text-muted">
       {content.description}
     </p>
   </article>

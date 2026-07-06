@@ -40,3 +40,10 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Replaced the drifting three-card overlay with six service cards arranged in two rows.
 - Service cards now appear one by one in a controlled sequence, with no random orbital movement.
 - Updated the six visible services to: Website Development, Social Media Marketing, SEO, Branding & Designing, Content Writing, and Strategy & Planning.
+
+## V4 refinements
+- Repositioned and resized the service-stage particle planet so the full sphere remains inside the viewport.
+- Adjusted camera/target values for the service stage to prevent the top of the planet from clipping.
+- Expanded the services grid across the available right-side width.
+- Reduced compact card height and title scale so all six service cards can read as a balanced two-row section.
+- Tightened the sequential card reveal so the services appear in order without random floating movement.

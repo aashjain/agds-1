@@ -36,17 +36,17 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
       container.style.visibility = opacity > 0.01 ? "visible" : "hidden";
       if (opacity <= 0.01) return;
 
-      const sceneProgress = clamp((cs - 0.2) / 0.24, 0, 1);
+      const sceneProgress = clamp((cs - 0.19) / 0.2, 0, 1);
 
       cardRefs.current.forEach((el, i) => {
         if (!el) return;
 
-        const stepStart = i * 0.115;
-        const local = clamp((sceneProgress - stepStart) / 0.18, 0, 1);
+        const stepStart = i * 0.085;
+        const local = clamp((sceneProgress - stepStart) / 0.14, 0, 1);
         const eased = 1 - Math.pow(1 - local, 3);
 
         el.style.opacity = `${eased}`;
-        el.style.transform = `translate3d(0, ${(1 - eased) * 28}px, 0) scale(${0.96 + eased * 0.04})`;
+        el.style.transform = `translate3d(0, ${(1 - eased) * 18}px, 0) scale(${0.97 + eased * 0.03})`;
         el.style.filter = `blur(${(1 - eased) * 8}px)`;
       });
     },
@@ -59,7 +59,7 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
       className="pointer-events-none fixed inset-0 z-[12] opacity-0"
       style={{ visibility: "hidden" }}
     >
-      <div className="absolute right-[5vw] top-1/2 grid w-[min(58vw,940px)] -translate-y-1/2 grid-cols-3 gap-5 max-lg:right-6 max-lg:w-[62vw] max-lg:grid-cols-2 max-sm:left-6 max-sm:right-6 max-sm:w-auto max-sm:grid-cols-1">
+      <div className="absolute left-[34vw] right-[4vw] top-1/2 grid -translate-y-1/2 grid-cols-3 gap-5 max-xl:left-[36vw] max-lg:left-[30vw] max-lg:right-6 max-lg:grid-cols-2 max-sm:left-6 max-sm:right-6 max-sm:grid-cols-1">
         {cards.map((card, i) => (
           <div
             key={card.id}
