@@ -179,3 +179,10 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Removed the scroll-velocity rotation accumulator that was still causing a visible direction fight.
 - Particle speed still increases while scrolling through the shader time value only.
 - The particle field now keeps a single clockwise travel direction while gaining speed on scroll.
+
+
+## V29 — Scroll-scrubbed particle system
+- Converted the particle animation from time-accumulated motion to scroll-scrubbed motion.
+- Particle positions, orbit travel, ring movement, morph states and camera transitions now derive from the same smoothed scroll progress.
+- Scrolling down moves the scene forward; scrolling up returns it backwards through the same path.
+- Kept the approved planet placement, planet size, ring angle, service cards and visual layout unchanged.
