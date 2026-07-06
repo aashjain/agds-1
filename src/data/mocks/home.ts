@@ -1,87 +1,102 @@
-/**
- * Homepage copy for AG Designs Studio. Passed into the view via props; never
- * imported directly into a component (see component-conventions.md → Data
- * rules).
- */
-
-import { services, type ServiceEntry } from "./services";
-
 export interface ExperienceButton {
   label: string;
-  href: string;
-  /** Primary buttons render the circular arrow glyph; secondary do not. */
   withArrow: boolean;
 }
 
 export interface ExperienceCopy {
   eyebrow: string;
-  /** Heading split into lines. */
   titleLines: string[];
   subtitle: string;
   buttons: ExperienceButton[];
 }
 
-export interface SignalStep {
-  label: string;
+export interface StatCardContent {
+  id: string;
+  title: string;
+  stat: string;
   description: string;
 }
 
 export interface HomeContent {
   hero: ExperienceCopy;
-  services: Omit<ExperienceCopy, "buttons"> & { items: ServiceEntry[] };
-  signal: ExperienceCopy & { steps: SignalStep[] };
-  ecosystem: ExperienceCopy;
+  cards: StatCardContent[];
+  wave: ExperienceCopy;
+  galaxy: ExperienceCopy;
 }
 
 export const homeContent: HomeContent = {
   hero: {
-    eyebrow: "AG Designs Studio — Digital Marketing",
-    titleLines: ["Marketing built with", "its own gravity"],
+    eyebrow: "AG Designs Studio",
+    titleLines: ["Marketing systems", "built like orbits"],
     subtitle:
-      "We design the systems behind visibility — brand, content, search and paid media working as one connected orbit around your growth.",
+      "A digital marketing studio shaping brands through strategy, design, content, search, media and measurable growth.",
     buttons: [
-      { label: "Start a project", href: "/contact-us", withArrow: true },
-      { label: "Explore our services", href: "/our-services", withArrow: false },
+      { label: "View services", withArrow: true },
+      { label: "Start a brief", withArrow: false },
     ],
   },
-  services: {
-    eyebrow: "What we do",
-    titleLines: ["Every channel,", "one orbit"],
+  cards: [
+    {
+      id: "website-development",
+      title: "Digital Presence",
+      stat: "Website Development",
+      description:
+        "Conversion-focused websites shaped around experience, clarity and business intent.",
+    },
+    {
+      id: "social-media-marketing",
+      title: "Community Orbit",
+      stat: "Social Media Marketing",
+      description:
+        "Platform-ready campaigns, calendars and creative systems built for consistent brand visibility.",
+    },
+    {
+      id: "seo",
+      title: "Search Momentum",
+      stat: "SEO",
+      description:
+        "Technical, on-page and content-led search work designed to improve discovery and qualified traffic.",
+    },
+    {
+      id: "branding-designing",
+      title: "Visual Gravity",
+      stat: "Branding & Designing",
+      description:
+        "Identity, layouts and design language that make every touchpoint feel intentional and recognisable.",
+    },
+    {
+      id: "content-writing",
+      title: "Signal Language",
+      stat: "Content Writing",
+      description:
+        "Clear, persuasive content for websites, campaigns, blogs and social communication.",
+    },
+    {
+      id: "strategy-planning",
+      title: "Growth Architecture",
+      stat: "Strategy & Planning",
+      description:
+        "Marketing direction, campaign planning and channel roadmaps aligned to measurable outcomes.",
+    },
+  ],
+  wave: {
+    eyebrow: "From attention to action",
+    titleLines: ["Every channel", "aligned to one trajectory"],
     subtitle:
-      "Eight disciplines planned and run as a single system — so creative, content and media reinforce each other instead of competing for budget.",
-    items: services,
-  },
-  signal: {
-    eyebrow: "How we work",
-    titleLines: ["Creative direction,", "measured to the click"],
-    subtitle:
-      "Every campaign we run is a signal you can trace — from the first concept to the dashboard. We connect brand work to pipeline with clear attribution, honest reporting and a testing rhythm that never stops.",
-    steps: [
-      {
-        label: "Plan",
-        description: "One strategy across brand, content and media.",
-      },
-      {
-        label: "Launch",
-        description: "Campaigns shipped in coordinated waves, not silos.",
-      },
-      {
-        label: "Prove",
-        description: "Attribution and reporting tied to real revenue.",
-      },
-    ],
+      "We connect creative direction with performance marketing, so campaigns look refined, feel consistent and move the right audience closer to enquiry.",
     buttons: [
-      { label: "Book a consultation", href: "/contact-us", withArrow: true },
+      { label: "Our services", withArrow: true },
+      { label: "Contact us", withArrow: false },
     ],
   },
-  ecosystem: {
-    eyebrow: "The full ecosystem",
-    titleLines: ["Your brand, at the centre of everything we build"],
+  galaxy: {
+    eyebrow: "A complete marketing ecosystem",
+    titleLines: ["Strategy, creative, media and growth working as one."],
     subtitle:
-      "Strategy, creative, content, search and media — run by one team, on one plan, reported in one place. That is AG Designs Studio.",
+      "For brands that need more than isolated posts, AG Designs Studio builds the full digital architecture — from identity and content to campaigns, SEO, websites and conversion-led marketing.",
     buttons: [
-      { label: "Talk to us", href: "/contact-us", withArrow: true },
-      { label: "View all services", href: "/our-services", withArrow: false },
+      { label: "Plan a project", withArrow: true },
+      { label: "Read insights", withArrow: false },
     ],
   },
 };

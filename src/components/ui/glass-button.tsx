@@ -6,10 +6,12 @@ import { AnimatedGradientBorder } from "./animated-gradient-border";
 import { ArrowIcon } from "./icons";
 
 /**
- * Frosted-glass call-to-action button in primary / secondary variants.
+ * Frosted-glass call-to-action button — the `.btn-primary` / `.btn-secondary`
+ * pair from style.css.
  *
- * The lift + colour shift on hover run through the spring `<Hover>` component
- * (no CSS transitions; hard rule #1). Colour literals mirror the tokens in globals.css
+ * The source animated hover with `transition: all 0.2s` (a banned CSS
+ * transition, hard rule #1), so the lift + colour shift run through the spring
+ * `<Hover>` component instead. Colour literals mirror the tokens in globals.css
  * (spring `from`/`to` take raw animatable values, not class names — see
  * animation-system.md).
  */
@@ -32,25 +34,21 @@ export interface GlassButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
   withArrow?: boolean;
-  /** When set, renders as an anchor navigating to this URL. */
-  href?: string;
 }
 
 export const GlassButton = ({
   variant = "primary",
   withArrow = false,
-  href,
   children,
   ...props
 }: GlassButtonProps) => {
-  // `Hover` types its passthrough as HTMLAttributes (no button/anchor-specific
-  // attrs), so forward native props (type, href, onClick…) via a cast.
+  // `Hover` types its passthrough as HTMLAttributes (no button-specific attrs),
+  // so forward native button props (type, onClick, disabled…) via a cast.
   // `suppressHydrationWarning`: react-spring serialises the initial `from` style
   // (backgroundColor/borderColor expand to longhands) differently on server vs
   // client; the values converge on mount, so suppress the cosmetic mismatch.
-  const tag = href ? ("a" as const) : ("button" as const);
   const buttonProps = {
-    ...(href ? { href } : { type: "button" as const }),
+    type: "button" as const,
     suppressHydrationWarning: true,
     ...props,
   } as React.HTMLAttributes<HTMLElement>;
@@ -58,7 +56,7 @@ export const GlassButton = ({
   if (variant === "secondary") {
     return (
       <Hover
-        tag={tag}
+        tag="button"
         from={{
           y: 0,
           backgroundColor: SURFACE_GLASS,
@@ -82,7 +80,7 @@ export const GlassButton = ({
 
   return (
     <Hover
-      tag={tag}
+      tag="button"
       from={{ y: 0, backgroundColor: SURFACE_BUTTON }}
       to={{ y: -2, backgroundColor: SURFACE_BUTTON_HOVER }}
       config={HOVER_CONFIG}
