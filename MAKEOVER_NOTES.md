@@ -201,3 +201,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Rebuilt the service-stage ring as a flat, inclined annulus to remove the folded/dented look.
 - Increased the ring band thickness by 3x while keeping the approved planet and card placement intact.
 - Applied an even blue-orange particle mix across the full ring, rather than isolated colour sections.
+
+
+## V37 Update
+- Flipped only the planet ring along the X axis.
+- Preserved planet position, planet size, service cards, scroll behaviour and overall layout.
+- Kept the latest ring colour logic as orange-dominant with blue accents and no violet/pink particles.

@@ -75,16 +75,18 @@ export const particleVertexShader = /* glsl */ `
       serviceSphere.y -= 0.04;
       serviceSphere.z -= 10.9;
 
-      float serviceRingAngle = r1 * 6.2831853 - uTime * 0.18;
-      // Saturn-style ring treatment: now a true, flat inclined annulus. The
-      // band is three times thicker, but all particles remain on one clean
-      // plane so the ring reads straight instead of folded or dented.
+      // Saturn-style ring treatment: a clean, randomised annulus with no
+      // straight source-geometry striping. The ring is flipped along the X axis
+      // so the upper/lower read is reversed without touching planet/card layout.
+      float serviceRingAngle = hash(seed * 41.7 + vec3(9.0, 2.0, 5.0)) * 6.2831853 - uTime * 0.18;
       float serviceRingTilt = 0.645772; // 37 degrees
-      float serviceRingBand = (r6 - 0.5) * 3.42;
-      float serviceRingRadius = 15.58 + serviceRingBand + (r2 - 0.5) * 0.22;
+      float ringBandRandom = pow(hash(seed * 27.1 + vec3(3.0, 8.0, 1.0)), 0.72) - 0.5;
+      float serviceRingBand = ringBandRandom * 3.42;
+      float serviceRingRadius = 15.58 + serviceRingBand + (hash(seed * 12.4) - 0.5) * 0.34;
       float serviceRingX = cos(serviceRingAngle) * serviceRingRadius;
       float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
-      float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.16;
+      float ringPlaneNoise = (hash(seed * 18.9 + vec3(4.0, 7.0, 2.0)) - 0.5) * 0.18;
+      float tiltedRingY = -(serviceRingZ * sin(serviceRingTilt)) + ringPlaneNoise;
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
@@ -140,10 +142,9 @@ export const particleVertexShader = /* glsl */ `
 
       float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
       vColor = palette(colorKey);
-      // Ring-specific palette: strictly blue and orange only. The colour is
-      // assigned as a hard particle split, not a gradient, so no violet/pink
-      // transition tones appear anywhere in the Saturn ring.
-      float ringColourSplit = step(0.5, hash(vec3(r1 * 19.0, r2 * 31.0, serviceRingAngle)));
+      // Ring-specific palette: 90% orange and 10% blue only. No violet/pink
+      // transition shades are introduced inside the Saturn ring.
+      float ringColourSplit = step(0.10, hash(seed * 64.3 + vec3(1.0, 5.0, 9.0)));
       vec3 ringBlue = vec3(0.2, 0.4, 1.0);
       vec3 ringOrange = vec3(1.0, 0.3, 0.2);
       vec3 ringColour = mix(ringBlue, ringOrange, ringColourSplit);
