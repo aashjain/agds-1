@@ -150,3 +150,11 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Kept the particle field rotating in one consistent clockwise direction during the transition from the opening orbit into the service planet.
 - Delayed the service-card reveal so the planet forms first, then the six service cards appear in sequence through the service section.
 - Preserved the approved planet position, planet density, ring angle, ring direction, particle colours and service-card layout.
+
+
+## V24 uniform scroll update
+
+- Added a capped smooth-scroll driver inside `ParticleCanvas`.
+- Raw page scroll now acts as a target, while the 3D animation advances towards it at a controlled, uniform rate.
+- Fast scrolling no longer forces the particles, planet formation or card reveal to jump forward abruptly.
+- No changes were made to the approved planet position, planet scale, ring angle, particle colours or service card layout.

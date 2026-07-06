@@ -111,6 +111,13 @@ export const ParticleCanvas = () => {
 
     let time = 0;
 
+    // Smooth scroll driver: raw page scroll becomes a target, while the WebGL
+    // experience advances towards it at a capped speed. This keeps the motion
+    // consistent even when a user flicks or drags the page quickly.
+    let smoothScroll = 0;
+    let lastFrameTime = 0;
+    const SCROLL_PROGRESS_PER_MS = 0.00032;
+
     // On-load intro: the orbital field breathes into view before scroll takes over.
     const INTRO_MS = 2600;
     let introStart = 0;
@@ -141,7 +148,20 @@ export const ParticleCanvas = () => {
         document.documentElement.clientHeight;
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
-      const currentScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      const targetScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+
+      if (lastFrameTime === 0) lastFrameTime = now;
+      const deltaMs = Math.min(Math.max(now - lastFrameTime, 16), 50);
+      lastFrameTime = now;
+      const scrollDelta = targetScroll - smoothScroll;
+      const maxScrollStep = deltaMs * SCROLL_PROGRESS_PER_MS;
+      if (Math.abs(scrollDelta) <= maxScrollStep) {
+        smoothScroll = targetScroll;
+      } else {
+        smoothScroll += Math.sign(scrollDelta) * maxScrollStep;
+      }
+
+      const currentScroll = smoothScroll;
 
       material.uniforms.uTime.value = time;
       material.uniforms.uScroll.value = currentScroll;
