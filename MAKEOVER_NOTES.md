@@ -299,3 +299,16 @@ V49 update:
 - Reduced the service planet turning into one flat warm mass.
 - Blue/cyan, violet/purple, pink/magenta and orange/red-orange now follow the local geometry angle of each form.
 - Preserved the approved scroll behaviour, planet framing, service cards and layout.
+
+## V59 Planet and Ring Colour Refinement
+- Kept the approved banner colour treatment unchanged.
+- Added a separate spatial palette for the service planet so it remains mostly blue/cyan with restrained violet, pink and warm edge accents.
+- Added a dedicated orbital-ring palette so the ring reads as a continuous warm orange/red band with blue accents, not random colour scatter.
+- Removed the duplicated service colour declaration in the particle shader.
+- Did not change planet position, ring position, card layout, scroll behaviour or section timing.
+
+
+## V60 revision
+- Updated the service planet ring palette so the ring uses only warm orange/red-orange tones.
+- Removed blue, violet, pink and magenta from the service ring colour function only.
+- Kept planet colours, service cards, layout, scroll behaviour and the approved banner particle treatment unchanged.

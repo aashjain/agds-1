@@ -54,6 +54,48 @@ export const particleVertexShader = /* glsl */ `
       return mix(warm, mix(warm, redOrange, 0.35), t * 0.18);
     }
 
+
+
+    vec3 servicePlanetPalette(float axis, float rim, float grain) {
+      // Service planet: keep the body elegant and cool, with restrained warm
+      // accents only around the far orbital edge. This avoids the heavy orange
+      // block while keeping all reference colours present.
+      vec3 blueDeep = vec3(0.10, 0.22, 0.86);
+      vec3 blueCyan = vec3(0.14, 0.68, 1.0);
+      vec3 violet = vec3(0.46, 0.34, 0.95);
+      vec3 purple = vec3(0.64, 0.36, 0.96);
+      vec3 magenta = vec3(0.94, 0.32, 0.68);
+      vec3 orange = vec3(1.0, 0.34, 0.16);
+      vec3 redOrange = vec3(1.0, 0.22, 0.12);
+
+      vec3 cool = mix(blueDeep, blueCyan, 0.32 + grain * 0.34);
+      vec3 transition = mix(violet, purple, grain);
+      vec3 bridge = mix(magenta, transition, 0.35);
+      vec3 warm = mix(orange, redOrange, 0.25 + grain * 0.25);
+
+      float t = clamp(axis, 0.0, 1.0);
+      vec3 col = cool;
+      col = mix(col, transition, smoothstep(0.50, 0.62, t) * 0.42);
+      col = mix(col, bridge, smoothstep(0.62, 0.70, t) * 0.20);
+      col = mix(col, warm, smoothstep(0.78, 0.96, t) * 0.34);
+      col = mix(col, warm, rim * 0.18);
+      return col;
+    }
+
+    vec3 serviceRingPalette(float axis, float grain) {
+      // Service ring: warm orange/red only. The slight variation comes from
+      // orange-to-red-orange intensity, not from blue, violet, pink or magenta,
+      // so the orbital band reads as one clean warm ring.
+      vec3 orange = vec3(1.0, 0.35, 0.14);
+      vec3 redOrange = vec3(1.0, 0.22, 0.10);
+      vec3 amber = vec3(1.0, 0.46, 0.18);
+
+      float t = clamp(axis, 0.0, 1.0);
+      float warmth = 0.18 + grain * 0.36 + sin(t * 6.2831853) * 0.08;
+      vec3 warm = mix(orange, redOrange, clamp(warmth, 0.0, 1.0));
+      return mix(warm, amber, 0.12 + grain * 0.10);
+    }
+
     float angularAxis(float angle, float offset) {
       return fract((angle + offset) / 6.2831853);
     }
@@ -234,15 +276,20 @@ export const particleVertexShader = /* glsl */ `
       vec3 serviceLocal = serviceSphere - vec3(-24.70, -0.04, -10.9);
       vec3 serviceNormal = normalize(serviceLocal + vec3(0.0001));
       float serviceAngle = atan(serviceNormal.z, serviceNormal.x);
-      // The visible service planet should not turn into a flat orange block.
-      // Keep blue/cyan dominant across the body, with warm colour reserved for
-      // the opposite edge and the ring.
-      float serviceSphereAxis = angularAxis(serviceAngle, 2.62);
-      serviceSphereAxis = mix(serviceSphereAxis, 0.24 + smoothstep(-0.35, 0.95, serviceNormal.x * 0.52 + serviceNormal.y * 0.20) * 0.42, 0.62);
-      float serviceRingAxis = angularAxis(serviceRingAngle, 2.82);
+      // Planet and ring now have their own spatial palettes. The planet stays
+      // mostly cool and dimensional, while the orbital ring is kept strictly
+      // warm orange/red as requested.
+      float serviceSphereAxis = angularAxis(serviceAngle, 2.78);
+      serviceSphereAxis = mix(
+        serviceSphereAxis,
+        0.18 + smoothstep(-0.85, 0.95, serviceNormal.x * 0.62 + serviceNormal.y * 0.26 - serviceNormal.z * 0.10) * 0.58,
+        0.45
+      );
+      float servicePlanetRim = smoothstep(0.46, 0.96, serviceNormal.x * 0.55 + serviceNormal.y * 0.18 + abs(serviceNormal.z) * 0.22);
+      float serviceRingAxis = angularAxis(serviceRingAngle, 2.26);
       vec3 serviceColor = mix(
-        spatialParticlePalette(serviceSphereAxis, colourGrain),
-        spatialParticlePalette(serviceRingAxis, colourGrain),
+        servicePlanetPalette(serviceSphereAxis, servicePlanetRim, colourGrain),
+        serviceRingPalette(serviceRingAxis, colourGrain),
         serviceRingMix
       );
 
