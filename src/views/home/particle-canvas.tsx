@@ -193,8 +193,8 @@ export const ParticleCanvas = () => {
       // measured enough to read clearly before the trajectory section settles.
       const stream = ease(Math.min(Math.max((currentScroll - 0.555) / 0.17, 0), 1));
       // The trajectory field now travels left → right → centre before the loop begins.
-      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.70) / 0.10, 0), 1));
-      const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.16, 0), 1));
+      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.66) / 0.09, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.735) / 0.10, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
@@ -268,7 +268,7 @@ export const ParticleCanvas = () => {
       particles.rotation.x = particleRotationX;
       camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.012 * (1 - serviceVisibility);
 
-      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.735) / 0.12, 0), 1);
+      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.735) / 0.10, 0), 1);
       const glowScale = Math.pow(glowScaleProgress, 2.8) * 24.0;
       const hideGlow = Math.min(Math.max((currentScroll - 0.88) / 0.08, 0), 1);
       glow.style.transform = `translate(-50%, -50%) scale(${glowScale})`;

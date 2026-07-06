@@ -246,10 +246,11 @@ export const particleVertexShader = /* glsl */ `
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
       float toStream = smoothstep(0.52, 0.70, scroll);
-      float toTrajectoryCenter = smoothstep(0.70, 0.78, scroll);
-      // Begin the loop as soon as the field resolves at centre so there is no
-      // hanging dead zone before the final circular formation.
-      float toGalaxy = smoothstep(0.78, 0.92, scroll);
+      float toTrajectoryCenter = smoothstep(0.66, 0.735, scroll);
+      // V71: complete the final loop earlier and from the centre. In V70 the
+      // loop was still half-expanded when the final copy was already visible,
+      // which made it read as a broken ring drifting left.
+      float toGalaxy = smoothstep(0.735, 0.835, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
       vec3 p2 = mix(p1, constellationPos, toConstellation);

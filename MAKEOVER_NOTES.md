@@ -371,3 +371,9 @@ V49 update:
 - Restored the earlier planet-to-trajectory camera pass style.
 - Kept the V22 trajectory lane shape, with scroll-driven left to right to centre motion.
 - Centred the final circular loop reveal so it emerges immediately from the trajectory centre.
+
+
+## V71 revision
+- Fixed the final loop reveal so the circular particle ring completes from the centre instead of appearing broken on the left.
+- Pulled the trajectory centre resolve earlier and tightened the final-loop expansion window.
+- Preserved the approved banner, planet, service cards, warm service ring, and main scroll behaviour.
