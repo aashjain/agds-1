@@ -186,3 +186,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Particle positions, orbit travel, ring movement, morph states and camera transitions now derive from the same smoothed scroll progress.
 - Scrolling down moves the scene forward; scrolling up returns it backwards through the same path.
 - Kept the approved planet placement, planet size, ring angle, service cards and visual layout unchanged.
+
+
+## V31 revision
+- Removed the lingering WaveSection glass panel after its content leaves the viewport.
+- Preserved scroll-linked particle travel with subtle ambient particle motion.

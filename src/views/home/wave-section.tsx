@@ -39,7 +39,7 @@ export const WaveSection = ({ content }: WaveSectionProps) => {
         )}
       </div>
 
-      {state !== "before" && (
+      {state === "visible" && (
         <div className="hidden max-w-[420px] rounded-[2rem] border border-white/10 bg-surface-card p-6 backdrop-blur-xl lg:block">
           <Reveal state={state} tag="p" className="mb-8 text-lead leading-normal text-muted">
             {content.subtitle}

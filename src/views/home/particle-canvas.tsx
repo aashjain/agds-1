@@ -165,7 +165,8 @@ export const ParticleCanvas = () => {
       // scroll progress, so scrolling down moves forms from A → B and scrolling
       // up returns them from B → A with no hidden time accumulator.
       time += 0.005;
-      const particleTime = introEased * 1.2 + currentScroll * 34.0;
+      const ambientDrift = time * 0.42;
+      const particleTime = introEased * 1.2 + currentScroll * 34.0 + ambientDrift;
 
       material.uniforms.uTime.value = particleTime;
       material.uniforms.uScroll.value = currentScroll;
