@@ -114,3 +114,7 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Increased only the service-stage planet ring thickness.
 - Added a 10-degree pitched ring treatment so the band has visible width, closer to the supplied Saturn-style reference.
 - Preserved the approved planet position and service-card layout.
+
+
+## V17 ring angle refinement
+- Raised only the rear arc of the service-stage planet ring so the backside sits higher while the approved front crossing, planet position, planet scale and service cards remain unchanged.

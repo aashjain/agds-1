@@ -89,10 +89,12 @@ export const particleVertexShader = /* glsl */ `
       float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
       float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.52;
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
-      // Directional fall across the ring: the band now enters from the upper
-      // half of the planet and travels towards the lower half, making the
-      // Saturn-style crossing read correctly in the viewport.
+      // Directional fall across the ring: the visible/front crossing keeps
+      // its approved position, while the rear arc is lifted higher so the
+      // ring reads as passing from the planet's upper half into its lower half.
       tiltedRingY += -serviceRingX * 0.20;
+      float rearArcLift = smoothstep(0.05, 0.95, -sin(serviceRingAngle));
+      tiltedRingY += rearArcLift * 2.25;
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
         tiltedRingY,
