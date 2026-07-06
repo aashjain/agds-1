@@ -339,3 +339,9 @@ V49 update:
 - Changed the service-to-trajectory camera move so the zoom continues into the planet rather than drifting outside its edge.
 - Tightened the gap between the service-card fade out and trajectory section to roughly a short 300px-style transition window.
 - Brought the trajectory content in earlier while preserving the approved planet, ring, services and particle colour treatments.
+
+## V65 transition refinement
+- Changed the service-to-trajectory morph so the planet transforms into the trajectory particle field within the short post-service scroll window.
+- Kept the zoom moving through the planet instead of holding while only the ring rotates.
+- Reframed the trajectory particle field with reduced depth spread and tighter x/y bounds so particles remain inside the viewport throughout the trajectory section.
+- Service cards, planet placement, ring placement, colours and content were not changed.

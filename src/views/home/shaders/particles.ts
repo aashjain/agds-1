@@ -199,9 +199,9 @@ export const particleVertexShader = /* glsl */ `
 
       // FORM 04 - content/media stream: particles become a clean campaign signal field.
       float lane = floor(r1 * 9.0) - 4.0;
-      float streamDepth = -18.0 - r2 * 56.0;
-      float streamX = lane * 1.35 + sin(streamDepth * 0.13 + uTime + r3 * 6.0) * 0.35;
-      float streamY = (r4 - 0.5) * 7.5 + sin(r1 * 14.0 + uTime * 0.55) * 0.22;
+      float streamDepth = -20.0 - r2 * 14.0;
+      float streamX = lane * 1.05 + sin(streamDepth * 0.16 + uTime + r3 * 6.0) * 0.42;
+      float streamY = (r4 - 0.5) * 5.6 + sin(r1 * 14.0 + uTime * 0.55) * 0.24;
       vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
       // FORM 05 - final original-project energy ring. This recreates the
@@ -227,7 +227,7 @@ export const particleVertexShader = /* glsl */ `
 
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
-      float toStream = smoothstep(0.555, 0.70, scroll);
+      float toStream = smoothstep(0.52, 0.555, scroll);
       float toGalaxy = smoothstep(0.77, 0.89, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
@@ -310,7 +310,7 @@ export const particleVertexShader = /* glsl */ `
 
       float pointBase = mix(2.2, 4.2, step(0.92, r5));
       pointBase = mix(pointBase, 5.0, (1.0 - orbitalDust) * (1.0 - toStream) * 0.28);
-      pointBase = mix(pointBase, 2.4, toStream * (1.0 - toGalaxy));
+      pointBase = mix(pointBase, 2.15, toStream * (1.0 - toGalaxy));
       pointBase = mix(pointBase, mix(4.8, 9.6, step(0.992, r6)), toGalaxy);
       gl_PointSize = pointBase * (10.0 / max(0.1, -mvPosition.z));
       gl_PointSize = max(gl_PointSize, 1.0);

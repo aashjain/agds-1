@@ -189,14 +189,14 @@ export const ParticleCanvas = () => {
       // a small buffer, roughly equivalent to 100px on the intended scroll range.
       const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.15, 0), 1));
       const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.48) / 0.10, 0), 1));
-      const stream = ease(Math.min(Math.max((currentScroll - 0.555) / 0.14, 0), 1));
+      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.035, 0), 1));
       const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.18, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -4.85, gapPass);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -7.25, tunnelHold * (1 - stream));
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.65, stream);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -10.25, tunnelHold * (1 - stream));
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.35, stream);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
 
       camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
@@ -209,8 +209,8 @@ export const ParticleCanvas = () => {
       camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 2.85, gapPass);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -2.8, tunnelHold * (1 - stream));
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 0.85, tunnelHold * (1 - stream));
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -15.5, stream);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 18.0, galaxy);
 
       const introZoom =
@@ -218,9 +218,9 @@ export const ParticleCanvas = () => {
       camera.position.z += introZoom;
 
       const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 5.5 - tunnelHold * 5.0 + stream * 2.0,
+        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 5.5 - tunnelHold * 7.0 + stream * 3.8,
         THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.14 + tunnelHold * 0.04,
-        THREE.MathUtils.lerp(-9.5, -18.5, gapPass) - tunnelHold * 4.5,
+        THREE.MathUtils.lerp(-9.5, -18.5, gapPass) - tunnelHold * 2.2 + stream * 2.0,
       );
       lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
       camera.lookAt(lookTarget);
