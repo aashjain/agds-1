@@ -108,3 +108,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V14 Revision
 - Increased only the service-stage planet and ring scale by a further 40%.
 - Service card layout and planet positioning values were left unchanged.
+
+
+## V15 ring refinement
+- Increased only the service-stage planet ring thickness.
+- Added a 10-degree pitched ring treatment so the band has visible width, closer to the supplied Saturn-style reference.
+- Preserved the approved planet position and service-card layout.

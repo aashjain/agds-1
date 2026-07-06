@@ -80,11 +80,19 @@ export const particleVertexShader = /* glsl */ `
       serviceSphere.z -= 10.9;
 
       float serviceRingAngle = r1 * 6.2831853 + uTime * 0.18;
-      float serviceRingRadius = 15.58 + r2 * 0.67;
+      // Saturn-style ring treatment: thicker, layered and gently pitched so the
+      // band has visible width while keeping the approved planet position.
+      float serviceRingTilt = 0.174533; // 10 degrees
+      float serviceRingBand = (r6 - 0.5) * 1.14;
+      float serviceRingRadius = 15.58 + serviceRingBand + r2 * 0.48;
+      float serviceRingX = cos(serviceRingAngle) * serviceRingRadius;
+      float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
+      float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.52;
+      float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
       vec3 serviceRing = vec3(
-        cos(serviceRingAngle) * serviceRingRadius - 24.70,
-        (r5 - 0.5) * 0.18,
-        sin(serviceRingAngle) * serviceRingRadius - 10.9
+        serviceRingX - 24.70,
+        tiltedRingY,
+        tiltedRingZ - 10.9
       );
       serviceRing.xy = rotate2d(-0.18) * serviceRing.xy;
       serviceRing.y -= 0.04;
