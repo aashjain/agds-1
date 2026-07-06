@@ -75,7 +75,7 @@ export const particleVertexShader = /* glsl */ `
       serviceSphere.y -= 0.04;
       serviceSphere.z -= 10.9;
 
-      float serviceRingAngle = r1 * 6.2831853 + uTime * 0.18;
+      float serviceRingAngle = r1 * 6.2831853 - uTime * 0.18;
       // Saturn-style ring treatment: thicker, layered and pitched to 37 degrees so the
       // band has visible width while keeping the approved planet position.
       float serviceRingTilt = 0.645772; // 37 degrees
@@ -85,9 +85,9 @@ export const particleVertexShader = /* glsl */ `
       float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
       float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.52;
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
-      // Directional fall across the ring: the visible/front crossing keeps
-      // its approved position, while the rear arc is lifted higher so the
-      // ring reads as passing from the planet's upper half into its lower half.
+      // Directional fall across the ring: the rear/back arc is lifted higher
+      // and the time flow is reversed so particles travel clockwise from
+      // the upper rear half of the planet down into the approved front crossing.
       tiltedRingY += -serviceRingX * 0.20;
       float rearArcLift = smoothstep(0.05, 0.95, -sin(serviceRingAngle));
       tiltedRingY += rearArcLift * 2.25;

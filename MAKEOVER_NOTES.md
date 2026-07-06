@@ -128,3 +128,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V19 Revision
 - Restored the particle colour palette across the full homepage animation to the original uploaded project colours: deep blue blending into warm orange.
 - Kept the approved planet position, planet size, ring angle and service-card layout unchanged.
+
+
+## V20 Revision
+- Reversed only the service-ring particle flow so the ring reads clockwise.
+- Kept the rear arc lifted and the front crossing in its approved position, creating a motion path from the upper backside of the planet towards the lower front side.
+- No changes made to planet size, planet placement, service cards, particle colours or layout.
