@@ -345,3 +345,9 @@ V49 update:
 - Kept the zoom moving through the planet instead of holding while only the ring rotates.
 - Reframed the trajectory particle field with reduced depth spread and tighter x/y bounds so particles remain inside the viewport throughout the trajectory section.
 - Service cards, planet placement, ring placement, colours and content were not changed.
+
+
+V66 transition update:
+- The trajectory particle field now resolves to the centre of the screen by the end of the trajectory section.
+- The final circular particle background now emerges outward from that central point.
+- Camera framing was centred during the trajectory ending so particles remain in frame until the final background begins.
