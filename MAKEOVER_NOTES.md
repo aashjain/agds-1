@@ -97,3 +97,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V12 Adjustment
 - Shifted only the service-stage planet 40% further left from the V11 position.
 - Service card layout and styling were left untouched.
+
+
+## V13 Revision
+- Increased only the service-stage planet and its ring scale by 40%.
+- Kept the current planet centre/offset values unchanged.
+- Service card layout and styling were not modified.
