@@ -78,3 +78,7 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Rebalanced the service camera look target to support the 80% visible / 20% cropped-left composition.
 - Rebuilt the services overlay into a three-column masonry structure with two cards per column, preserving the requested top/bottom service order while avoiding content cropping.
 - Removed negative masonry offsets and fixed card heights so all six cards can expand naturally around their copy.
+
+### V9 refinement
+- Shifted only the service-stage planet 20% further left.
+- Service card layout and masonry positioning were left unchanged.
