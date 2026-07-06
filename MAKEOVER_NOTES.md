@@ -312,3 +312,10 @@ V49 update:
 - Updated the service planet ring palette so the ring uses only warm orange/red-orange tones.
 - Removed blue, violet, pink and magenta from the service ring colour function only.
 - Kept planet colours, service cards, layout, scroll behaviour and the approved banner particle treatment unchanged.
+
+
+## V61 timing adjustment
+
+- Started the camera zoom into the planet/ring gap at 38% orbit progress instead of waiting until the service cards begin to clear.
+- Kept service card layout, fade timing, planet position, ring position, colours and scroll behaviour unchanged.
+- The zoom now develops gradually from 38% to the trajectory transition window, so there is no dead scroll between service reveal and the next section.
