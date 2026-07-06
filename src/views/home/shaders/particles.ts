@@ -80,6 +80,8 @@ export const particleVertexShader = /* glsl */ `
       // so the upper/lower read is reversed without touching planet/card layout.
       float serviceRingAngle = hash(seed * 41.7 + vec3(9.0, 2.0, 5.0)) * 6.2831853 - uTime * 0.18;
       float serviceRingTilt = 0.645772; // 37 degrees
+      // Lift the ring so it wraps the planet visually, instead of sitting too low.
+      float serviceRingLift = 2.95;
       float ringBandRandom = pow(hash(seed * 27.1 + vec3(3.0, 8.0, 1.0)), 0.72) - 0.5;
       float serviceRingBand = ringBandRandom * 3.42;
       float serviceRingRadius = 15.58 + serviceRingBand + (hash(seed * 12.4) - 0.5) * 0.34;
@@ -90,10 +92,18 @@ export const particleVertexShader = /* glsl */ `
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
-        tiltedRingY + 1.20, // ring lifted upward by roughly 20% without moving the planet
+        tiltedRingY + serviceRingLift, // lifted to surround the planet more naturally
         tiltedRingZ - 10.9
       );
       serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
+
+      // Ring depth mask. Segments travelling behind the sphere are softened
+      // when they pass across the projected planet body, so the ring feels
+      // like it wraps around the planet instead of being pasted over it.
+      float ringBehindPlanet = step(0.0, -tiltedRingZ);
+      float projectedRingDistance = length(vec2(serviceRingX, tiltedRingY + serviceRingLift + 0.04));
+      float planetMaskArea = 1.0 - smoothstep(11.35, 13.95, projectedRingDistance);
+      float ringDepthMask = 1.0 - ringBehindPlanet * planetMaskArea * 0.94;
 
       float serviceRingMix = step(0.84, r5);
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
@@ -139,6 +149,9 @@ export const particleVertexShader = /* glsl */ `
 
       vEdgeFade = smoothstep(0.0, 0.2, uIntro) * planetGlow * focusGlow * streamGlow * galaxyGlow;
       vEdgeFade *= 0.50 + 0.38 * smoothstep(0.0, 1.0, r6);
+      if (serviceRingMix > 0.5 && toConstellation > 0.02 && toStream < 0.98) {
+        vEdgeFade *= ringDepthMask;
+      }
 
       float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
       vColor = palette(colorKey);

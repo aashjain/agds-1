@@ -212,3 +212,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V38 refinement
 - Updated the service planet body to use an 85% blue, 10% orange and 5% violet particle mix.
 - Lifted only the Saturn-style ring upward by roughly 20%, keeping the approved planet placement and service card layout untouched.
+
+
+V41 update:
+- Added back ring masking so the rear ring is softened behind the planet.
+- Lifted the full ring upward so it sits around the planet instead of reading too low.
+- Kept planet position, planet size, service cards, scroll behaviour and copy unchanged.
