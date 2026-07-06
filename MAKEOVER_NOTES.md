@@ -284,3 +284,11 @@ V49 update:
 - Kept the approved proportion visually: 45% blue/cyan, 44% orange/red-orange, 6% violet/purple, 5% pink/magenta.
 - The palette now flows directionally across each particle form instead of appearing as scattered multicolour dots.
 - Scroll behaviour, animation flow, planet, ring, services and layout were not changed.
+
+## V57 refinement
+
+- Reworked particle colour mapping from a broad global left-to-right gradient into local, form-aware spatial gradients.
+- Narrowed the violet and magenta transition bands so they appear as a refined bridge, not as large pink colour blocks.
+- Restored stronger orange/red-orange presence on the warm side while preserving blue/cyan dominance on the cool side.
+- Applied separate local colour axes for the hero orbit, focused planet, service planet, ring, stream and final portal so each form keeps the same premium blue-to-violet-to-magenta-to-orange direction without looking like random confetti.
+- Animation flow, scroll behaviour, planet position, ring position, service cards and layout were not changed.
