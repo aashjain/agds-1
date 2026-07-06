@@ -9,15 +9,11 @@ export const particleVertexShader = /* glsl */ `
     float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453123); }
 
     vec3 palette(float t) {
-      // Closer to the original point-field character: cool blue/violet dust with
-      // a restrained warm core, never pure white.
-      vec3 blue = vec3(0.18, 0.34, 0.92);
-      vec3 cyan = vec3(0.22, 0.72, 0.95);
-      vec3 violet = vec3(0.50, 0.32, 0.86);
-      vec3 amber = vec3(0.92, 0.56, 0.26);
-      vec3 cool = mix(blue, cyan, smoothstep(0.05, 0.45, t));
-      vec3 cosmic = mix(cool, violet, smoothstep(0.38, 0.82, t));
-      return mix(cosmic, amber, smoothstep(0.84, 1.0, t)) * 0.82;
+      // Restored original project particle colour system: pure deep blue
+      // blending into the warm orange used across the uploaded template.
+      vec3 cBottom = vec3(0.2, 0.4, 1.0);
+      vec3 cTop = vec3(1.0, 0.3, 0.2);
+      return mix(cBottom, cTop, clamp(t, 0.0, 1.0));
     }
 
     mat2 rotate2d(float a) {
@@ -150,7 +146,6 @@ export const particleVertexShader = /* glsl */ `
 
       float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
       vColor = palette(colorKey);
-      vColor += vec3(0.08, 0.16, 0.22) * smoothstep(0.2, 0.9, toStream);
 
       float pointBase = mix(2.2, 4.2, step(0.92, r5));
       pointBase = mix(pointBase, 5.0, (1.0 - orbitalDust) * (1.0 - toStream) * 0.28);

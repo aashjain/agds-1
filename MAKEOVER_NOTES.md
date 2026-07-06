@@ -123,3 +123,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V18 Ring Angle Revision
 - Adjusted only the service-stage planet ring tilt to 37 degrees.
 - Planet position, planet size and service cards remain unchanged from the approved version.
+
+
+## V19 Revision
+- Restored the particle colour palette across the full homepage animation to the original uploaded project colours: deep blue blending into warm orange.
+- Kept the approved planet position, planet size, ring angle and service-card layout unchanged.
