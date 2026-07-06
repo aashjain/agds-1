@@ -53,3 +53,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Reduced the service planet radius and moved it further inside the frame, keeping the complete sphere visible instead of clipping at the top edge.
 - Rebalanced the service camera and look target for a cleaner left-planet / right-content composition.
 - Reworked the service cards into a staggered masonry-style grid with varied card heights and offsets while keeping the six service cards readable across the right-side width.
+
+## V6 revision
+- Enlarged the left service planet so it reads closer to a full-height sphere while keeping its circular aspect ratio.
+- Repositioned the service planet and ring system further inside the scene so it has more presence without top cropping.
+- Rebuilt the service-card layout as a true auto-height masonry grid instead of fixed row spans.
+- Removed fixed-height clipping from compact cards so all content remains visible.

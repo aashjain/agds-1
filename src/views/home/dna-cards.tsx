@@ -16,12 +16,12 @@ const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
 const masonryClasses = [
-  "col-span-2 row-span-7 translate-y-[-1.2rem]",
-  "col-span-2 row-span-8 translate-y-[1.1rem]",
-  "col-span-2 row-span-6 translate-y-[-0.4rem]",
-  "col-span-2 row-span-8 translate-y-[0.2rem]",
-  "col-span-2 row-span-6 translate-y-[2.0rem]",
-  "col-span-2 row-span-7 translate-y-[0.7rem]",
+  "translate-y-[-2.5rem]",
+  "translate-y-[0.8rem]",
+  "translate-y-[-1.6rem]",
+  "translate-y-[0.4rem]",
+  "translate-y-[2.2rem]",
+  "translate-y-[1.0rem]",
 ];
 
 export const DnaCards = ({ cards }: DnaCardsProps) => {

@@ -69,23 +69,25 @@ export const particleVertexShader = /* glsl */ `
 
       // FORM 03 — focused service planet: a complete sphere anchored inside
       // the viewport while the service cards appear sequentially on the right.
-      vec3 serviceSphere = spherePoint(r2, r3, 2.18 + r4 * 0.10);
+      // Large service planet: designed to read as a spacious, complete sphere
+      // on the left while the service masonry occupies the right.
+      vec3 serviceSphere = spherePoint(r2, r3, 4.05 + r4 * 0.12);
       serviceSphere.x *= 1.0;
       serviceSphere.y *= 1.0;
       serviceSphere.z *= 1.0;
-      serviceSphere.x -= 0.85;
-      serviceSphere.y -= 0.35;
-      serviceSphere.z -= 12.2;
+      serviceSphere.x -= 3.05;
+      serviceSphere.y -= 0.04;
+      serviceSphere.z -= 12.35;
 
       float serviceRingAngle = r1 * 6.2831853 + uTime * 0.18;
-      float serviceRingRadius = 2.85 + r2 * 0.22;
+      float serviceRingRadius = 5.05 + r2 * 0.30;
       vec3 serviceRing = vec3(
-        cos(serviceRingAngle) * serviceRingRadius - 0.85,
-        (r5 - 0.5) * 0.12,
-        sin(serviceRingAngle) * serviceRingRadius - 12.2
+        cos(serviceRingAngle) * serviceRingRadius - 3.05,
+        (r5 - 0.5) * 0.16,
+        sin(serviceRingAngle) * serviceRingRadius - 12.35
       );
-      serviceRing.xy = rotate2d(-0.22) * serviceRing.xy;
-      serviceRing.y -= 0.35;
+      serviceRing.xy = rotate2d(-0.18) * serviceRing.xy;
+      serviceRing.y -= 0.04;
 
       float serviceRingMix = step(0.78, r5);
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
