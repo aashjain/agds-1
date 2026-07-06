@@ -15,14 +15,7 @@ export interface DnaCardsProps {
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
-const masonryClasses = [
-  "translate-y-[-2.5rem]",
-  "translate-y-[0.8rem]",
-  "translate-y-[-1.6rem]",
-  "translate-y-[0.4rem]",
-  "translate-y-[2.2rem]",
-  "translate-y-[1.0rem]",
-];
+const masonryOffsets = [0, 34, 10, 28, -8, 42];
 
 export const DnaCards = ({ cards }: DnaCardsProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,8 +47,10 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
         const local = clamp((sceneProgress - stepStart) / 0.13, 0, 1);
         const eased = 1 - Math.pow(1 - local, 3);
 
+        const masonryOffset = masonryOffsets[i] ?? 0;
+        const revealOffset = (1 - eased) * 18;
         el.style.opacity = `${eased}`;
-        el.style.transform = `translate3d(0, ${(1 - eased) * 14}px, 0) scale(${0.985 + eased * 0.015})`;
+        el.style.transform = `translate3d(0, ${masonryOffset + revealOffset}px, 0) scale(${0.985 + eased * 0.015})`;
         el.style.filter = `blur(${(1 - eased) * 6}px)`;
       });
     },
@@ -68,12 +63,9 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
       className="pointer-events-none fixed inset-0 z-[12] opacity-0"
       style={{ visibility: "hidden" }}
     >
-      <div className="absolute left-[36vw] right-[3.25vw] top-1/2 grid -translate-y-1/2 grid-cols-6 auto-rows-[1rem] gap-4 max-xl:left-[34vw] max-lg:left-[28vw] max-lg:right-5 max-lg:grid-cols-4 max-sm:left-5 max-sm:right-5 max-sm:grid-cols-1 max-sm:auto-rows-auto">
+      <div className="absolute left-[38vw] right-[3.5vw] top-1/2 grid -translate-y-1/2 grid-cols-3 items-start gap-x-5 gap-y-4 max-xl:left-[36vw] max-xl:right-5 max-lg:left-[28vw] max-lg:grid-cols-2 max-sm:left-5 max-sm:right-5 max-sm:grid-cols-1">
         {cards.map((card, i) => (
-          <div
-            key={card.id}
-            className={`max-lg:col-span-2 max-lg:row-span-7 max-lg:translate-y-0 max-sm:col-span-1 max-sm:row-span-1 ${masonryClasses[i] ?? "col-span-2 row-span-7"}`}
-          >
+          <div key={card.id} className="min-w-0 overflow-visible">
             <div
               ref={(node) => {
                 cardRefs.current[i] = node;

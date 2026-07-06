@@ -59,3 +59,16 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Repositioned the service planet and ring system further inside the scene so it has more presence without top cropping.
 - Rebuilt the service-card layout as a true auto-height masonry grid instead of fixed row spans.
 - Removed fixed-height clipping from compact cards so all content remains visible.
+
+
+## V7 revision
+- Moved the service-stage planet further right and enlarged the particle sphere/ring so it has stronger screen presence.
+- Tuned the service camera to keep the planet visible while allowing it to feel close and immersive.
+- Replaced the masonry service layout with a clean two-row, three-column grid as requested.
+- Reduced compact service-card typography slightly and kept cards auto-height so text no longer crops.
+
+## V7 refinement
+- Shifted the service-stage planet further into the viewport and reduced global Y-rotation during the service scene so the planet remains visually present instead of sliding out of frame.
+- Enlarged the service planet while keeping the same spherical aspect ratio.
+- Rebuilt the service cards as a controlled 3-column / 2-row masonry composition with staggered vertical offsets.
+- Removed fixed-height/cropping behaviour from the service cards so each card expands naturally around its content.

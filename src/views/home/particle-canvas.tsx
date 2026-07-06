@@ -169,7 +169,7 @@ export const ParticleCanvas = () => {
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
 
       camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 11.35, constellation);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 36.0, galaxy);
 
@@ -178,15 +178,26 @@ export const ParticleCanvas = () => {
       camera.position.z += introZoom;
 
       const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, -0.4, constellation),
+        THREE.MathUtils.lerp(0.0, -0.75, constellation),
         THREE.MathUtils.lerp(-0.02, -0.5, stream),
         THREE.MathUtils.lerp(-9.5, -82.0, galaxy),
       );
       camera.lookAt(lookTarget);
 
-      particles.rotation.y = currentScroll * Math.PI * 1.35 + time * 0.08;
-      particles.rotation.x = Math.sin(currentScroll * Math.PI) * 0.08;
-      camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.02;
+      const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));
+      const orbitalRotation = currentScroll * Math.PI * 0.72 + time * 0.055;
+      const serviceRotation = -0.08 + time * 0.012;
+      particles.rotation.y = THREE.MathUtils.lerp(
+        orbitalRotation,
+        serviceRotation,
+        serviceVisibility,
+      );
+      particles.rotation.x = THREE.MathUtils.lerp(
+        Math.sin(currentScroll * Math.PI) * 0.08,
+        -0.015,
+        serviceVisibility,
+      );
+      camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.012 * (1 - serviceVisibility);
 
       const glowScaleProgress = Math.min(Math.max((currentScroll - 0.74) / 0.12, 0), 1);
       const glowScale = Math.pow(glowScaleProgress, 2.8) * 24.0;

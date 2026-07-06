@@ -71,20 +71,20 @@ export const particleVertexShader = /* glsl */ `
       // the viewport while the service cards appear sequentially on the right.
       // Large service planet: designed to read as a spacious, complete sphere
       // on the left while the service masonry occupies the right.
-      vec3 serviceSphere = spherePoint(r2, r3, 4.05 + r4 * 0.12);
+      vec3 serviceSphere = spherePoint(r2, r3, 6.85 + r4 * 0.16);
       serviceSphere.x *= 1.0;
       serviceSphere.y *= 1.0;
       serviceSphere.z *= 1.0;
-      serviceSphere.x -= 3.05;
+      serviceSphere.x -= 0.55;
       serviceSphere.y -= 0.04;
-      serviceSphere.z -= 12.35;
+      serviceSphere.z -= 10.6;
 
       float serviceRingAngle = r1 * 6.2831853 + uTime * 0.18;
-      float serviceRingRadius = 5.05 + r2 * 0.30;
+      float serviceRingRadius = 7.95 + r2 * 0.34;
       vec3 serviceRing = vec3(
-        cos(serviceRingAngle) * serviceRingRadius - 3.05,
-        (r5 - 0.5) * 0.16,
-        sin(serviceRingAngle) * serviceRingRadius - 12.35
+        cos(serviceRingAngle) * serviceRingRadius - 0.55,
+        (r5 - 0.5) * 0.18,
+        sin(serviceRingAngle) * serviceRingRadius - 10.6
       );
       serviceRing.xy = rotate2d(-0.18) * serviceRing.xy;
       serviceRing.y -= 0.04;
