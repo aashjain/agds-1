@@ -145,3 +145,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 ## V22 Revision
 - Increased only the particle source resolution by roughly 80% from the V21 density pass so the service-stage planet reads as a fuller, denser sphere.
 - No changes were made to the approved planet position, ring angle, ring direction or service-card layout.
+
+## V23 Motion Timing Revision
+- Kept the particle field rotating in one consistent clockwise direction during the transition from the opening orbit into the service planet.
+- Delayed the service-card reveal so the planet forms first, then the six service cards appear in sequence through the service section.
+- Preserved the approved planet position, planet density, ring angle, ring direction, particle colours and service-card layout.

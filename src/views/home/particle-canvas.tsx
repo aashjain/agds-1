@@ -186,7 +186,11 @@ export const ParticleCanvas = () => {
 
       const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));
       const orbitalRotation = currentScroll * Math.PI * 0.72 + time * 0.055;
-      const serviceRotation = -0.08 + time * 0.012;
+      // Keep the orbital motion moving in one clockwise direction while the
+      // scene transitions into the service planet. Earlier versions blended
+      // into a lower fixed rotation value, which made the field visually reverse
+      // as soon as the user scrolled into the planet section.
+      const serviceRotation = orbitalRotation + 0.16 + time * 0.008;
       particles.rotation.y = THREE.MathUtils.lerp(
         orbitalRotation,
         serviceRotation,

@@ -30,8 +30,11 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
       const cs = experienceProgress.current;
       let opacity = 0;
 
-      if (cs > 0.19 && cs < 0.52) {
-        opacity = Math.min((cs - 0.19) / 0.035, 1);
+      // Let the service planet form first. The cards begin only after the
+      // planet has visibly settled into place, then complete their reveal
+      // through the service section.
+      if (cs > 0.29 && cs < 0.52) {
+        opacity = Math.min((cs - 0.29) / 0.025, 1);
         if (cs > 0.47) opacity = Math.max(1 - (cs - 0.47) / 0.05, 0);
       }
 
@@ -39,12 +42,12 @@ export const DnaCards = ({ cards }: DnaCardsProps) => {
       container.style.visibility = opacity > 0.01 ? "visible" : "hidden";
       if (opacity <= 0.01) return;
 
-      const sceneProgress = clamp((cs - 0.2) / 0.22, 0, 1);
+      const sceneProgress = clamp((cs - 0.305) / 0.165, 0, 1);
 
       cardRefs.current.forEach((el, i) => {
         if (!el) return;
 
-        const stepStart = i * 0.075;
+        const stepStart = i * 0.055;
         const local = clamp((sceneProgress - stepStart) / 0.13, 0, 1);
         const eased = 1 - Math.pow(1 - local, 3);
         const revealOffset = (1 - eased) * 18;
