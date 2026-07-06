@@ -227,8 +227,8 @@ export const particleVertexShader = /* glsl */ `
 
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
-      float toStream = smoothstep(0.60, 0.76, scroll);
-      float toGalaxy = smoothstep(0.79, 0.90, scroll);
+      float toStream = smoothstep(0.555, 0.70, scroll);
+      float toGalaxy = smoothstep(0.77, 0.89, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
       vec3 p2 = mix(p1, constellationPos, toConstellation);

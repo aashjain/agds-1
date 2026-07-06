@@ -332,3 +332,10 @@ V49 update:
 - Extended the planet-to-trajectory zoom so it continues after service cards fade.
 - Added a tunnel-hold camera phase from the end of the services section until the trajectory stream begins.
 - Kept cards, planet, ring colours, positions and layout unchanged.
+
+
+## V64 transition refinement
+
+- Changed the service-to-trajectory camera move so the zoom continues into the planet rather than drifting outside its edge.
+- Tightened the gap between the service-card fade out and trajectory section to roughly a short 300px-style transition window.
+- Brought the trajectory content in earlier while preserving the approved planet, ring, services and particle colour treatments.
