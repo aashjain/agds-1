@@ -89,12 +89,16 @@ export const particleVertexShader = /* glsl */ `
       float serviceRingZ = sin(serviceRingAngle) * serviceRingRadius;
       float tiltedRingY = serviceRingZ * sin(serviceRingTilt) + (r5 - 0.5) * 0.52;
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
+      // Directional fall across the ring: the band now enters from the upper
+      // half of the planet and travels towards the lower half, making the
+      // Saturn-style crossing read correctly in the viewport.
+      tiltedRingY += -serviceRingX * 0.20;
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
         tiltedRingY,
         tiltedRingZ - 10.9
       );
-      serviceRing.xy = rotate2d(-0.18) * serviceRing.xy;
+      serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
       serviceRing.y -= 0.04;
 
       float serviceRingMix = step(0.78, r5);
