@@ -9,8 +9,8 @@ export const PHASE = {
   dna: { in: 0.18, full: 0.24, fadeStart: 0.43, out: 0.5, spanEnd: 0.5 },
   // Wave content now starts only after the service cards have fully cleared.
   // This creates a small scroll buffer between the service section and the next section.
-  wave: { in: 0.555, out: 0.78 },
-  galaxy: { in: 0.82 },
+  wave: { in: 0.635, out: 0.79 },
+  galaxy: { in: 0.835 },
 } as const;
 
 export interface ExperiencePhase {

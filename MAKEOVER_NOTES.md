@@ -242,3 +242,10 @@ V43 update:
 ## V47 Revision
 
 Restored the background shader treatment from the original uploaded project so the final ecosystem section uses the original aurora style background rather than the newer green glow treatment.
+
+
+## V48 corrections
+- Restored the original uploaded-project aurora shader and original blue/orange background uniforms (#3366ff and #ff4c33).
+- Reworked the service-to-trajectory timing so the camera passes through the orbital gap between the planet and the ring before the trajectory content appears.
+- Delayed the trajectory overlay so it starts after the service cards clear and after the gap transition begins.
+- Kept the approved planet, ring, cards, colours, scroll behaviour and content unchanged otherwise.

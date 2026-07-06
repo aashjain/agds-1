@@ -60,8 +60,8 @@ export const ParticleCanvas = () => {
         uResolution: {
           value: new THREE.Vector2(window.innerWidth, window.innerHeight),
         },
-        color1: { value: new THREE.Color("#d6aa63") },
-        color2: { value: new THREE.Color("#26d8ff") },
+        color1: { value: new THREE.Color("#ff4c33") },
+        color2: { value: new THREE.Color("#3366ff") },
       },
       vertexShader: backgroundVertexShader,
       fragmentShader: backgroundFragmentShader,
@@ -182,19 +182,29 @@ export const ParticleCanvas = () => {
       const constellation = ease(
         Math.min(Math.max((currentScroll - 0.18) / 0.12, 0), 1),
       );
-      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.2, 0), 1));
-      const galaxy = ease(Math.min(Math.max((currentScroll - 0.78) / 0.2, 0), 1));
+      // After the service cards clear, the camera travels through the orbital
+      // gap between the planet body and ring before revealing the trajectory
+      // section. This restores the earlier approved V22-style transition while
+      // keeping the current planet, ring and card composition intact.
+      const gapPass = ease(Math.min(Math.max((currentScroll - 0.505) / 0.105, 0), 1));
+      const stream = ease(Math.min(Math.max((currentScroll - 0.61) / 0.18, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.18, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -2.75, gapPass);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.65, stream);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
 
       camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, constellation);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.9, gapPass);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, -0.15, stream);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
 
       camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 4.1, gapPass);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 36.0, galaxy);
 
@@ -203,10 +213,11 @@ export const ParticleCanvas = () => {
       camera.position.z += introZoom;
 
       const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, -4.85, constellation),
-        THREE.MathUtils.lerp(-0.02, -0.5, stream),
-        THREE.MathUtils.lerp(-9.5, -82.0, galaxy),
+        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 2.0 + stream * 2.0,
+        THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.75,
+        THREE.MathUtils.lerp(-9.5, -18.0, gapPass),
       );
+      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -82.0, galaxy);
       camera.lookAt(lookTarget);
 
       const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));
