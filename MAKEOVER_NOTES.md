@@ -140,3 +140,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Increased the particle source resolution to make the service planet visibly denser.
 - Shifted a larger percentage of the service-stage particles into the planet body while preserving the approved ring direction, size and angle.
 - Slightly strengthened point opacity and minimum point size so the planet reads as a fuller sphere without changing the service-card layout.
+
+
+## V22 Revision
+- Increased only the particle source resolution by roughly 80% from the V21 density pass so the service-stage planet reads as a fuller, denser sphere.
+- No changes were made to the approved planet position, ring angle, ring direction or service-card layout.
