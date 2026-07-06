@@ -232,3 +232,9 @@ V43 update:
 ## V44 Revision
 - Increased the Saturn-style ring band width by 2x only.
 - Planet position, cards, scroll behaviour and colour logic were kept unchanged.
+
+
+## V45 overlap timing fix
+- Delayed the wave/next section start until after the service-card fade-out completes.
+- Added a small scroll buffer so the last service card clears before the next section appears.
+- Kept the planet, cards, ring, particles, colours and layout unchanged.

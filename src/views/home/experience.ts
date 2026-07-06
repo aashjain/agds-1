@@ -7,7 +7,9 @@ export type SectionState = "before" | "visible" | "after";
 export const PHASE = {
   hero: { leave: 0.12 },
   dna: { in: 0.18, full: 0.24, fadeStart: 0.43, out: 0.5, spanEnd: 0.5 },
-  wave: { in: 0.48, out: 0.72 },
+  // Wave content now starts only after the service cards have fully cleared.
+  // This creates a small scroll buffer between the service section and the next section.
+  wave: { in: 0.555, out: 0.78 },
   galaxy: { in: 0.82 },
 } as const;
 
