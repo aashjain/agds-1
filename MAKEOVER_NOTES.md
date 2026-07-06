@@ -118,3 +118,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 
 ## V17 ring angle refinement
 - Raised only the rear arc of the service-stage planet ring so the backside sits higher while the approved front crossing, planet position, planet scale and service cards remain unchanged.
+
+
+## V18 Ring Angle Revision
+- Adjusted only the service-stage planet ring tilt to 37 degrees.
+- Planet position, planet size and service cards remain unchanged from the approved version.
