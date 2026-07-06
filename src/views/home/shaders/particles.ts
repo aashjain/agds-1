@@ -204,16 +204,22 @@ export const particleVertexShader = /* glsl */ `
       float streamDepth = -18.0 - r2 * 56.0;
       float streamX = lane * 1.35 + sin(streamDepth * 0.13 + uTime + r3 * 6.0) * 0.35;
       float streamY = (r4 - 0.5) * 7.5 + sin(r1 * 14.0 + uTime * 0.55) * 0.22;
-      vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
-      // Centre resolve: the trajectory field gathers into the middle of the
-      // viewport before the final circular energy field emerges. This keeps the
-      // end of the trajectory section in frame and makes the circular reveal
-      // feel like it is born from the same centred particle mass.
+      // V70 trajectory travel: keep the V22 lane shape, then move the entire
+      // field left → right → centre. The offsets are driven by scroll so the
+      // motion reverses cleanly on scroll-up and stays in frame.
+      float trajectoryTravel = smoothstep(0.56, 0.68, scroll);
+      float trajectoryReturn = smoothstep(0.68, 0.78, scroll);
+      float trajectoryOffsetX = mix(-7.2, 7.2, trajectoryTravel);
+      trajectoryOffsetX = mix(trajectoryOffsetX, 0.0, trajectoryReturn);
+      vec3 streamPos = vec3(streamX + trajectoryOffsetX, streamY, streamDepth);
+
+      // Centre resolve: the trajectory lanes contract into the middle of the
+      // viewport, and the circular loop begins immediately from this point.
       vec3 trajectoryCenterPos = vec3(
-        (r2 - 0.5) * 3.6 + sin(r1 * 6.2831853 + uTime * 0.18) * 0.34,
-        (r4 - 0.5) * 2.45 + cos(r3 * 6.2831853 + uTime * 0.14) * 0.26,
-        -30.0 + (r5 - 0.5) * 1.6
+        (r2 - 0.5) * 2.6 + sin(r1 * 6.2831853 + uTime * 0.18) * 0.22,
+        (r4 - 0.5) * 1.65 + cos(r3 * 6.2831853 + uTime * 0.14) * 0.18,
+        -42.0 + (r5 - 0.5) * 1.2
       );
 
       // FORM 05 - final original-project energy ring. This recreates the
@@ -224,12 +230,12 @@ export const particleVertexShader = /* glsl */ `
       float portalBand = (portalThread - 0.5) * 7.8;
       float portalWave = sin(portalTheta * 7.0 + r3 * 8.0 + uTime * 0.24) * 1.0
         + sin(portalTheta * 17.0 - r6 * 5.0 + uTime * 0.16) * 0.45;
-      float portalRadius = 39.0 + portalBand + portalWave;
+      float portalRadius = 26.0 + portalBand * 0.72 + portalWave * 0.75;
       float portalEllipseY = 0.70;
       vec3 galaxyPos = vec3(
         cos(portalTheta) * portalRadius,
         sin(portalTheta) * portalRadius * portalEllipseY,
-        -58.0 + (r5 - 0.5) * 2.6
+        -58.0 + (r5 - 0.5) * 2.2
       );
 
       // Threaded micro movement from the original ring, kept random enough to
@@ -241,7 +247,9 @@ export const particleVertexShader = /* glsl */ `
       float toConstellation = smoothstep(0.18, 0.29, scroll);
       float toStream = smoothstep(0.52, 0.70, scroll);
       float toTrajectoryCenter = smoothstep(0.70, 0.78, scroll);
-      float toGalaxy = smoothstep(0.80, 0.94, scroll);
+      // Begin the loop as soon as the field resolves at centre so there is no
+      // hanging dead zone before the final circular formation.
+      float toGalaxy = smoothstep(0.78, 0.92, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
       vec3 p2 = mix(p1, constellationPos, toConstellation);

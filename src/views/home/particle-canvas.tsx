@@ -187,21 +187,21 @@ export const ParticleCanvas = () => {
       // while keeping the cards, planet and ring composition untouched.
       // Last card reveal completes around 37% progress; the zoom begins after
       // a small buffer, roughly equivalent to 100px on the intended scroll range.
-      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.18, 0), 1));
-      const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.50) / 0.16, 0), 1));
-      // V68: slow the planet-to-trajectory conversion back towards the V22 feel.
-      // The trajectory phase now forms over a longer window instead of snapping in.
-      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.18, 0), 1));
-      // Hold the trajectory field in frame before the final circle begins.
-      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.64) / 0.12, 0), 1));
-      const galaxy = ease(Math.min(Math.max((currentScroll - 0.78) / 0.18, 0), 1));
+      const gapPass = ease(Math.min(Math.max((currentScroll - 0.39) / 0.15, 0), 1));
+      const tunnelHold = ease(Math.min(Math.max((currentScroll - 0.48) / 0.10, 0), 1));
+      // V70: restore the earlier planet-to-trajectory camera pass, but keep it
+      // measured enough to read clearly before the trajectory section settles.
+      const stream = ease(Math.min(Math.max((currentScroll - 0.555) / 0.17, 0), 1));
+      // The trajectory field now travels left → right → centre before the loop begins.
+      const trajectorySettle = ease(Math.min(Math.max((currentScroll - 0.70) / 0.10, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.16, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, -4.85, gapPass);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -10.25, tunnelHold * (1 - stream));
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.35, stream);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, trajectorySettle * (1 - galaxy));
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -7.25, tunnelHold * (1 - stream));
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.65, stream);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, trajectorySettle);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
 
       camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
@@ -209,39 +209,32 @@ export const ParticleCanvas = () => {
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.18, gapPass);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.02, tunnelHold * (1 - stream));
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, -0.15, stream);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, trajectorySettle * (1 - galaxy));
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, trajectorySettle);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, galaxy);
 
       camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 2.85, gapPass);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 0.85, tunnelHold * (1 - stream));
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -15.5, stream);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 13.2, trajectorySettle * (1 - galaxy));
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 18.0, galaxy);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -2.8, tunnelHold * (1 - stream));
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 24.0, trajectorySettle);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 24.0, galaxy);
 
       const introZoom =
         (1 - introEased) * 4.5 * (1 - Math.min(currentScroll / 0.06, 1));
       camera.position.z += introZoom;
 
-      let lookX = THREE.MathUtils.lerp(0.0, -4.85, constellation);
-      let lookY = THREE.MathUtils.lerp(-0.02, 0.08, gapPass);
-      let lookZ = THREE.MathUtils.lerp(-9.5, -18.5, gapPass);
-
-      // Aim through the orbital gap, then recentre during the trajectory phase.
-      // This prevents the field from starting off-screen while preserving the
-      // approved planet/ring framing before the transition.
-      lookX = THREE.MathUtils.lerp(lookX, -9.6, tunnelHold * (1 - stream));
-      lookY = THREE.MathUtils.lerp(lookY, 0.0, tunnelHold * (1 - stream));
-      lookZ = THREE.MathUtils.lerp(lookZ, -20.5, tunnelHold * (1 - stream));
-      lookX = THREE.MathUtils.lerp(lookX, 0.0, stream);
-      lookY = THREE.MathUtils.lerp(lookY, 0.0, stream);
-      lookZ = THREE.MathUtils.lerp(lookZ, -36.0, stream);
-
-      const lookTarget = new THREE.Vector3(lookX, lookY, lookZ);
-      lookTarget.x = THREE.MathUtils.lerp(lookTarget.x, 0.0, trajectorySettle * (1 - galaxy));
-      lookTarget.y = THREE.MathUtils.lerp(lookTarget.y, 0.0, trajectorySettle * (1 - galaxy));
-      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -36.0, trajectorySettle * (1 - galaxy));
+      const lookTarget = new THREE.Vector3(
+        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 5.5 - tunnelHold * 5.0 + stream * 2.0,
+        THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.14 + tunnelHold * 0.04,
+        THREE.MathUtils.lerp(-9.5, -18.5, gapPass) - tunnelHold * 4.5,
+      );
+      // Keep the trajectory and final loop centred. The particle form itself
+      // travels left → right → centre in the shader, while the camera holds the
+      // centre as the anchor so the loop does not drift left.
+      lookTarget.x = THREE.MathUtils.lerp(lookTarget.x, 0.0, trajectorySettle);
+      lookTarget.y = THREE.MathUtils.lerp(lookTarget.y, 0.0, trajectorySettle);
+      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -42.0, trajectorySettle);
       lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
       camera.lookAt(lookTarget);
 

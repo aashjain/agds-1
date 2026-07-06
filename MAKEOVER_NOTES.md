@@ -365,3 +365,9 @@ V49 update:
 - Restored the trajectory particle geometry directly to the V22 lane/depth structure.
 - Removed the later lane jitter and extra cross-axis noise that made the trajectory read as a block instead of the approved V22 signal field.
 - Kept banner, planet, ring, service cards, scroll behaviour and colour treatment unchanged.
+
+
+## V70 transition update
+- Restored the earlier planet-to-trajectory camera pass style.
+- Kept the V22 trajectory lane shape, with scroll-driven left to right to centre motion.
+- Centred the final circular loop reveal so it emerges immediately from the trajectory centre.
