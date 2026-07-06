@@ -206,7 +206,7 @@ export const ParticleCanvas = () => {
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, 4.1, gapPass);
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 36.0, galaxy);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 18.0, galaxy);
 
       const introZoom =
         (1 - introEased) * 4.5 * (1 - Math.min(currentScroll / 0.06, 1));
@@ -217,7 +217,7 @@ export const ParticleCanvas = () => {
         THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.75,
         THREE.MathUtils.lerp(-9.5, -18.0, gapPass),
       );
-      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -82.0, galaxy);
+      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
       camera.lookAt(lookTarget);
 
       const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));

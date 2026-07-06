@@ -142,27 +142,32 @@ export const particleVertexShader = /* glsl */ `
       float streamY = (r4 - 0.5) * 7.5 + sin(r1 * 14.0 + uTime * 0.55) * 0.22;
       vec3 streamPos = vec3(streamX, streamY, streamDepth);
 
-      // FORM 05 - final original-project portal: the closing section returns
-      // to the uploaded template's circular energy background, with a hollow
-      // centre for the final headline.
+      // FORM 05 - final original-project energy ring. This recreates the
+      // uploaded template's opening circular particle halo: a large hollow
+      // centre, wavy threaded edges, and the full blue, violet, magenta,
+      // orange and red-orange spectrum wrapped around the ring.
       float portalTheta = r1 * 6.2831853 + uTime * 0.08;
-      float portalNoise = (hash(seed * 37.0 + vec3(2.0, 8.0, 4.0)) - 0.5) * 2.2;
-      float portalRadius = 24.0 + (r2 - 0.5) * 5.2 + sin(portalTheta * 5.0 + r3 * 8.0 + uTime * 0.22) * 0.85 + portalNoise;
-      float portalThickness = (r4 - 0.5) * 4.8;
+      float portalThread = hash(seed * 43.7 + vec3(6.0, 1.0, 8.0));
+      float portalBand = (portalThread - 0.5) * 7.8;
+      float portalWave = sin(portalTheta * 7.0 + r3 * 8.0 + uTime * 0.24) * 1.0
+        + sin(portalTheta * 17.0 - r6 * 5.0 + uTime * 0.16) * 0.45;
+      float portalRadius = 39.0 + portalBand + portalWave;
+      float portalEllipseY = 0.70;
       vec3 galaxyPos = vec3(
-        cos(portalTheta) * (portalRadius + portalThickness),
-        sin(portalTheta) * (portalRadius * 0.74 + portalThickness * 0.55),
-        -82.0 + (r5 - 0.5) * 3.4
+        cos(portalTheta) * portalRadius,
+        sin(portalTheta) * portalRadius * portalEllipseY,
+        -58.0 + (r5 - 0.5) * 2.6
       );
 
-      // Subtle dotted fibre variation, similar to the original circular wave.
-      galaxyPos.x += sin(portalTheta * 13.0 + uTime * 0.35 + r6 * 4.0) * 0.8;
-      galaxyPos.y += cos(portalTheta * 11.0 - uTime * 0.28 + r5 * 5.0) * 0.7;
+      // Threaded micro movement from the original ring, kept random enough to
+      // avoid visible straight-line bands while preserving the circular form.
+      galaxyPos.x += sin(portalTheta * 23.0 + r2 * 9.0 + uTime * 0.32) * 0.65;
+      galaxyPos.y += cos(portalTheta * 19.0 - r4 * 7.0 + uTime * 0.26) * 0.55;
 
       float toFocus = smoothstep(0.10, 0.25, scroll);
       float toConstellation = smoothstep(0.18, 0.29, scroll);
       float toStream = smoothstep(0.60, 0.76, scroll);
-      float toGalaxy = smoothstep(0.80, 0.94, scroll);
+      float toGalaxy = smoothstep(0.79, 0.90, scroll);
 
       vec3 p1 = mix(solarPos, focusPos, toFocus);
       vec3 p2 = mix(p1, constellationPos, toConstellation);
@@ -184,14 +189,16 @@ export const particleVertexShader = /* glsl */ `
 
       vEdgeFade = smoothstep(0.0, 0.2, uIntro) * planetGlow * focusGlow * streamGlow * galaxyGlow;
       vEdgeFade *= 0.50 + 0.38 * smoothstep(0.0, 1.0, r6);
+      vEdgeFade = mix(vEdgeFade, 0.86 * (0.72 + 0.28 * smoothstep(0.0, 1.0, r6)), toGalaxy);
       if (serviceRingMix > 0.5 && toConstellation > 0.02 && toStream < 0.98) {
         vEdgeFade *= ringDepthMask;
       }
 
-      float portalColourKey = clamp((sin(portalTheta - 0.65) + 1.0) * 0.5, 0.0, 1.0);
-      // Add a tiny seeded variation so the final ring is richly speckled like
-      // the original reference, without creating harsh bands.
-      float portalSpectrumKey = fract(portalColourKey + (r2 - 0.5) * 0.10 + (r6 - 0.5) * 0.05);
+      float portalColourKey = clamp((atan(sin(portalTheta), cos(portalTheta)) + 3.14159265) / 6.2831853, 0.0, 1.0);
+      // Angle-led colour placement, matching the original reference: blue on
+      // the lower-left arc, violet and magenta through the middle, then warm
+      // orange and red-orange across the upper/right arc.
+      float portalSpectrumKey = fract(portalColourKey + 0.62 + (r2 - 0.5) * 0.055);
       vec3 baseParticleColour = palette(r1);
       vec3 portalParticleColour = originalPortalPalette(portalSpectrumKey);
       vColor = mix(baseParticleColour, portalParticleColour, toGalaxy);
@@ -221,7 +228,7 @@ export const particleVertexShader = /* glsl */ `
       float pointBase = mix(2.2, 4.2, step(0.92, r5));
       pointBase = mix(pointBase, 5.0, (1.0 - orbitalDust) * (1.0 - toStream) * 0.28);
       pointBase = mix(pointBase, 2.4, toStream * (1.0 - toGalaxy));
-      pointBase = mix(pointBase, mix(2.2, 6.2, step(0.992, r6)), toGalaxy);
+      pointBase = mix(pointBase, mix(4.8, 9.6, step(0.992, r6)), toGalaxy);
       gl_PointSize = pointBase * (10.0 / max(0.1, -mvPosition.z));
       gl_PointSize = max(gl_PointSize, 1.0);
 
