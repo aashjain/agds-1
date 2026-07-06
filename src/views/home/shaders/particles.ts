@@ -90,7 +90,7 @@ export const particleVertexShader = /* glsl */ `
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
-        tiltedRingY - 0.04,
+        tiltedRingY + 1.20, // ring lifted upward by roughly 20% without moving the planet
         tiltedRingZ - 10.9
       );
       serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
@@ -150,6 +150,19 @@ export const particleVertexShader = /* glsl */ `
       vec3 ringColour = mix(ringBlue, ringOrange, ringColourSplit);
       if (serviceRingMix > 0.5 && toConstellation > 0.02 && toStream < 0.98) {
         vColor = ringColour;
+      }
+
+      // Service planet-specific palette: 85% blue, 10% orange and 5% violet.
+      // This affects the planet body only; the ring keeps its approved orange/blue split.
+      float planetColourPick = hash(seed * 91.7 + vec3(7.0, 2.0, 11.0));
+      vec3 serviceBlue = vec3(0.2, 0.4, 1.0);
+      vec3 serviceOrange = vec3(1.0, 0.3, 0.2);
+      vec3 serviceViolet = vec3(0.55, 0.34, 1.0);
+      vec3 servicePlanetColour = serviceBlue;
+      servicePlanetColour = mix(servicePlanetColour, serviceOrange, step(0.85, planetColourPick) * (1.0 - step(0.95, planetColourPick)));
+      servicePlanetColour = mix(servicePlanetColour, serviceViolet, step(0.95, planetColourPick));
+      if (serviceRingMix < 0.5 && toConstellation > 0.02 && toStream < 0.98) {
+        vColor = servicePlanetColour;
       }
 
       float pointBase = mix(2.2, 4.2, step(0.92, r5));

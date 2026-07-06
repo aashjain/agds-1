@@ -207,3 +207,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Flipped only the planet ring along the X axis.
 - Preserved planet position, planet size, service cards, scroll behaviour and overall layout.
 - Kept the latest ring colour logic as orange-dominant with blue accents and no violet/pink particles.
+
+
+## V38 refinement
+- Updated the service planet body to use an 85% blue, 10% orange and 5% violet particle mix.
+- Lifted only the Saturn-style ring upward by roughly 20%, keeping the approved planet placement and service card layout untouched.
