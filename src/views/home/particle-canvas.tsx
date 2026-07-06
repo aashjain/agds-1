@@ -19,14 +19,9 @@ import {
 import { experienceProgress, useExperiencePhase } from "./experience";
 
 /**
- * The fixed WebGL backdrop: an aurora shader + the scroll-driven particle morph
- * + UnrealBloom, ported from script.js.
- *
- * Smoothing lives in Lenis (the shared scroll layer), so reading `scrollY` each
- * frame already yields a smoothed value — this is the single source of scroll
- * progress that also feeds the overlay phases, keeping morph and UI locked
- * together. The render loop runs on the shared ticker (the supported extension
- * point for loop-based animation; see animation-system.md).
+ * Fixed WebGL backdrop for the AG Designs Studio homepage.
+ * The particle field remaps one dense source mesh into a solar system, focused
+ * planet, service constellation, campaign signal field and final galaxy.
  */
 export const ParticleCanvas = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,7 +70,7 @@ export const ParticleCanvas = () => {
     const bgQuad = new THREE.Mesh(bgGeometry, bgMaterial);
     bgScene.add(bgQuad);
 
-    // Dense SphereGeometry rendered as Points — the moiré rings come for free.
+    // Dense source geometry remapped in the shader into solar, planet, signal and galaxy forms.
     const geometry = new THREE.SphereGeometry(4.2, 200, 600);
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -108,17 +103,22 @@ export const ParticleCanvas = () => {
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.5, // strength
-      0.5, // radius
-      0.05, // threshold
+      1.5, // strength - original uploaded-project glow
+      0.5, // radius - original uploaded-project bloom spread
+      0.05, // threshold - original uploaded-project particle bloom
     );
     composer.addPass(bloomPass);
 
     let time = 0;
 
-    // On-load intro: the sphere appears filled and close, then dollies back to
-    // its resting position while the centre hollows into the ring. Time-driven
-    // (not scroll), starting on the first rendered frame.
+    // Smooth scroll driver: raw page scroll becomes a target, while the WebGL
+    // experience advances towards it at a capped speed. This keeps the motion
+    // consistent even when a user flicks or drags the page quickly.
+    let smoothScroll = 0;
+    let lastFrameTime = 0;
+    const SCROLL_PROGRESS_PER_MS = 0.00032;
+
+    // On-load intro: the orbital field breathes into view before scroll takes over.
     const INTRO_MS = 2600;
     let introStart = 0;
 
@@ -135,8 +135,6 @@ export const ParticleCanvas = () => {
     window.addEventListener("resize", handleResize);
 
     const render = (now: number) => {
-      time += 0.005;
-
       // Intro progress (eased), driven by wall-clock since the first frame.
       if (introStart === 0) introStart = now;
       const introRaw = Math.min((now - introStart) / INTRO_MS, 1);
@@ -148,82 +146,109 @@ export const ParticleCanvas = () => {
         document.documentElement.clientHeight;
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
-      const currentScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      const targetScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      if (lastFrameTime === 0) lastFrameTime = now;
+      const deltaMs = Math.min(Math.max(now - lastFrameTime, 16), 50);
+      lastFrameTime = now;
+      const scrollDelta = targetScroll - smoothScroll;
+      const maxScrollStep = deltaMs * SCROLL_PROGRESS_PER_MS;
+      if (Math.abs(scrollDelta) <= maxScrollStep) {
+        smoothScroll = targetScroll;
+      } else {
+        smoothScroll += Math.sign(scrollDelta) * maxScrollStep;
+      }
 
-      material.uniforms.uTime.value = time;
+      const currentScroll = smoothScroll;
+
+      // Background ambience may continue gently, but the particle system itself
+      // is now scroll-scrubbed. Every particle state is derived from smoothed
+      // scroll progress, so scrolling down moves forms from A → B and scrolling
+      // up returns them from B → A with no hidden time accumulator.
+      time += 0.005;
+      const ambientDrift = time * 0.42;
+      const particleTime = introEased * 1.2 + currentScroll * 34.0 + ambientDrift;
+
+      material.uniforms.uTime.value = particleTime;
       material.uniforms.uScroll.value = currentScroll;
       bgMaterial.uniforms.uTime.value = time;
       bgMaterial.uniforms.uScroll.value = currentScroll;
 
       // --- CAMERA & ROTATION LOGIC ---
-      const panProgress = Math.min(currentScroll / 0.5, 1.0);
-      const smoothPan = panProgress * panProgress * (3.0 - 2.0 * panProgress);
-
-      const flyPhase =
-        currentScroll < 0.5
-          ? 0.0
-          : Math.min((currentScroll - 0.5) / 0.35, 1.0);
-
-      const blackHoleDive =
-        currentScroll < 0.8
-          ? 0.0
-          : Math.min((currentScroll - 0.8) / 0.12, 1.0);
-
-      camera.position.y = -38.0 * smoothPan + 5.0 * Math.pow(blackHoleDive, 2.0);
-      camera.position.z = 8.0 - 4.0 * smoothPan - 55.0 * flyPhase;
-
-      const galaxyPullback =
-        currentScroll < 0.93
-          ? 0.0
-          : Math.min((currentScroll - 0.93) / 0.07, 1.0);
-      const smoothPullback =
-        galaxyPullback * galaxyPullback * (3.0 - 2.0 * galaxyPullback);
-
-      camera.position.z += 75.0 * smoothPullback;
-      camera.position.y += 35.0 * smoothPullback;
-
-      const lookX = 0.0;
-      let waveTilt = 0.0;
-      if (currentScroll > 0.3 && currentScroll < 0.7) {
-        const tiltProgress = (currentScroll - 0.3) / 0.4;
-        waveTilt = Math.sin(tiltProgress * Math.PI) * 15.0;
-      }
-
-      const lookY = THREE.MathUtils.lerp(
-        camera.position.y + waveTilt,
-        -33.0,
-        smoothPullback,
+      // New flow: begin outside a living solar system, push into a selected
+      // planet, then pass through service constellations, campaign streams and
+      // the final marketing ecosystem.
+      const ease = (x: number) => x * x * (3 - 2 * x);
+      const focus = ease(Math.min(Math.max((currentScroll - 0.08) / 0.22, 0), 1));
+      const constellation = ease(
+        Math.min(Math.max((currentScroll - 0.18) / 0.12, 0), 1),
       );
-      const lookZ = THREE.MathUtils.lerp(
-        camera.position.z - 100.0,
-        -120.0,
-        smoothPullback,
-      );
+      // After the service cards clear, the camera travels through the orbital
+      // gap between the planet body and ring before revealing the trajectory
+      // section. This restores the earlier approved V22-style transition while
+      // keeping the current planet, ring and card composition intact.
+      const gapPass = ease(Math.min(Math.max((currentScroll - 0.505) / 0.105, 0), 1));
+      const stream = ease(Math.min(Math.max((currentScroll - 0.61) / 0.18, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.80) / 0.18, 0), 1));
 
-      // Intro dolly — start ~3 units closer (sphere fills the view) and ease
-      // back to the resting z. Faded out past the top so scrolling mid-intro
-      // doesn't fight the scroll-driven camera. Applied after lookZ is derived,
-      // so the focal point stays put and the eye simply dollies in.
+      camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -2.75, gapPass);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.65, stream);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
+
+      camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.0, constellation);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0.9, gapPass);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, -0.15, stream);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
+
+      camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 9.6, constellation);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 4.1, gapPass);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 18.0, galaxy);
+
       const introZoom =
-        (1 - introEased) * -3.0 * (1 - Math.min(currentScroll / 0.05, 1));
+        (1 - introEased) * 4.5 * (1 - Math.min(currentScroll / 0.06, 1));
       camera.position.z += introZoom;
 
-      camera.lookAt(new THREE.Vector3(lookX, lookY, lookZ));
+      const lookTarget = new THREE.Vector3(
+        THREE.MathUtils.lerp(0.0, -4.85, constellation) - gapPass * 2.0 + stream * 2.0,
+        THREE.MathUtils.lerp(-0.02, -0.5, stream) + gapPass * 0.75,
+        THREE.MathUtils.lerp(-9.5, -18.0, gapPass),
+      );
+      lookTarget.z = THREE.MathUtils.lerp(lookTarget.z, -58.0, galaxy);
+      camera.lookAt(lookTarget);
 
-      particles.rotation.y = smoothPan * Math.PI * 2.0;
-      particles.rotation.x = Math.sin(smoothPan * Math.PI) * 0.15;
-      camera.rotation.z = 0.0;
+      const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));
+      // Keep particle travel time-led only. Do not add scroll progress into the
+      // rotation itself; even a positive scroll offset can visually fight the
+      // shader's clockwise time flow and read as a reversal during fast or slow
+      // page movement. Scroll still morphs the forms, but clockwise travel is
+      // governed by uTime throughout the experience.
+      const orbitalRotation = particleTime * 0.055;
+      // Restore the service-planet framing from V22: once the particles become
+      // the planet, the group rotation settles into a fixed viewing angle so
+      // the sphere stays inside the viewport. The shader still carries subtle
+      // ambient motion, and scroll still drives the A → B / B → A morph.
+      const serviceRotation = -0.08 + time * 0.012;
+      particles.rotation.y = THREE.MathUtils.lerp(
+        orbitalRotation,
+        serviceRotation,
+        serviceVisibility,
+      );
+      particles.rotation.x = THREE.MathUtils.lerp(
+        Math.sin(currentScroll * Math.PI) * 0.08,
+        -0.015,
+        serviceVisibility,
+      );
+      camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.012 * (1 - serviceVisibility);
 
-      // --- BIG BANG FLASH (0.90 → 0.95) ---
-      const glowScaleProgress =
-        currentScroll < 0.9 ? 0.0 : Math.min((currentScroll - 0.9) / 0.03, 1.0);
-      const glowScale = Math.pow(glowScaleProgress, 4.0) * 400.0;
-      const hideGlow =
-        currentScroll < 0.93
-          ? 0.0
-          : Math.min((currentScroll - 0.93) / 0.02, 1.0);
+      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.74) / 0.12, 0), 1);
+      const glowScale = Math.pow(glowScaleProgress, 2.8) * 24.0;
+      const hideGlow = Math.min(Math.max((currentScroll - 0.88) / 0.08, 0), 1);
       glow.style.transform = `translate(-50%, -50%) scale(${glowScale})`;
-      glow.style.opacity = `${1.0 - hideGlow}`;
+      glow.style.opacity = `${(1.0 - hideGlow) * glowScaleProgress * 0.28}`;
 
       // Publish progress for overlays (module value for per-frame card motion,
       // store for phase-boundary re-renders).
@@ -256,14 +281,14 @@ export const ParticleCanvas = () => {
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
       />
-      {/* Big-bang white flash that scales out of the singularity. */}
+      {/* Soft system flare used during the transition into the final ecosystem. */}
       <div
         ref={glowRef}
         aria-hidden="true"
         className="pointer-events-none fixed left-1/2 top-1/2 z-10 size-25 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,255,255,1) 40%, rgba(255,255,255,0) 80%)",
+            "radial-gradient(circle, rgba(214,170,99,0.72) 0%, rgba(38,216,255,0.28) 38%, rgba(255,255,255,0) 72%)",
         }}
       />
     </>

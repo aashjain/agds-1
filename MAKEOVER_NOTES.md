@@ -267,9 +267,9 @@ V49 update:
 - Restored the original background shader file from the uploaded project.
 - Preserved the approved layout, planet framing, service cards and scroll logic.
 
-## V53 visual particle sync
-- Replaced the current particle canvas with the original uploaded project particle rendering setup.
-- Restored the original particle vertex shader and fragment shader.
-- Restored the original aurora background shader.
-- Restored the original particle geometry density, bloom strength, bloom radius, bloom threshold, additive blending, opacity behaviour, point sizing and glow flash treatment.
-- This version prioritises an exact particle/rendering match with the uploaded original project. Layout, routes and content files from the AG Designs Studio version remain in place.
+
+## V54 correction
+- Reverted the animation, scroll logic, camera movement, service timing and particle morph system back to the V52 project behaviour.
+- Kept only the original uploaded-project visual particle look values: geometry density and bloom strength/radius/threshold.
+- Did not copy the original project's animation sequence or scroll behaviour.
+- Planet placement, ring treatment, services layout and approved page flow remain based on the AG Designs Studio version.
