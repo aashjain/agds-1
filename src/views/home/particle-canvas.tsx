@@ -110,6 +110,9 @@ export const ParticleCanvas = () => {
     composer.addPass(bloomPass);
 
     let time = 0;
+    let scrollSpin = 0;
+    let lastTargetScroll = 0;
+    let scrollVelocityBoost = 0;
 
     // Smooth scroll driver: raw page scroll becomes a target, while the WebGL
     // experience advances towards it at a capped speed. This keeps the motion
@@ -147,6 +150,8 @@ export const ParticleCanvas = () => {
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
       const targetScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      const rawTargetDelta = targetScroll - lastTargetScroll;
+      lastTargetScroll = targetScroll;
 
       if (lastFrameTime === 0) lastFrameTime = now;
       const deltaMs = Math.min(Math.max(now - lastFrameTime, 16), 50);
@@ -161,12 +166,21 @@ export const ParticleCanvas = () => {
 
       const currentScroll = smoothScroll;
 
-      // Particle travel stays clockwise, but scroll activity now increases its
-      // time velocity. The boost is direction-agnostic, so scrolling cannot
-      // reverse the field; it only makes the existing clockwise motion feel
-      // more alive while the user is moving through the page.
-      const scrollActivity = Math.min(Math.abs(scrollDelta) * 18.0, 1.0);
-      time += 0.005 + scrollActivity * 0.028;
+      // Particle travel stays clockwise, while scroll velocity now creates a
+      // real speed boost. We read the raw target-scroll movement before the
+      // smoothed camera catches up, then use only the absolute value so the
+      // boost can never reverse the particle field.
+      const targetVelocity = Math.min(
+        Math.abs(rawTargetDelta) * 220.0 + Math.abs(scrollDelta) * 8.0,
+        1.45,
+      );
+      scrollVelocityBoost = THREE.MathUtils.lerp(
+        scrollVelocityBoost,
+        targetVelocity,
+        0.18,
+      );
+      time += 0.005 + scrollVelocityBoost * 0.052;
+      scrollSpin += scrollVelocityBoost * 0.018;
 
       material.uniforms.uTime.value = time;
       material.uniforms.uScroll.value = currentScroll;
@@ -215,7 +229,7 @@ export const ParticleCanvas = () => {
       // shader's clockwise time flow and read as a reversal during fast or slow
       // page movement. Scroll still morphs the forms, but clockwise travel is
       // governed by uTime throughout the experience.
-      const orbitalRotation = time * 0.055;
+      const orbitalRotation = time * 0.055 + scrollSpin;
       const serviceRotation = orbitalRotation + 0.16 + time * 0.008;
       particles.rotation.y = THREE.MathUtils.lerp(
         orbitalRotation,

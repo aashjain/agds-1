@@ -168,3 +168,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Increased particle motion speed during scroll activity while preserving the approved clockwise direction.
 - The boost is based on absolute scroll activity, not scroll direction, so the particles do not reverse when the user scrolls.
 - Service cards, planet position, planet size, ring angle, ring direction and particle colours were not changed.
+
+## V27 update
+- Reworked scroll-linked particle acceleration so raw scroll velocity increases particle speed directly.
+- The speed boost uses absolute scroll movement only, preserving clockwise direction while restoring the faster animated feel from the earlier version.
+- Kept the camera smoothing, planet position, service cards, ring angle, density and colour palette unchanged.
