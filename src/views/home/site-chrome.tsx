@@ -1,72 +1,56 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { experienceProgress } from "./experience";
-
-const CHAPTERS = ["Origin", "Orbit", "Wave", "Singularity"];
+const navItems = [
+  ["About", "/about-us"],
+  ["Services", "/our-services"],
+  ["Blogs", "/blogs"],
+  ["Contact", "/contact-us"],
+] as const;
 
 export const SiteChrome = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let raf = 0;
-
-    const tick = () => {
-      setProgress(experienceProgress.current);
-      raf = requestAnimationFrame(tick);
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? window.scrollY / max : 0);
     };
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const activeIndex = Math.min(
-    CHAPTERS.length - 1,
-    Math.floor(progress * CHAPTERS.length),
-  );
 
   return (
     <>
-      <header className="pointer-events-none fixed left-0 right-0 top-0 z-30 flex items-center justify-between px-8 py-7 max-md:px-5">
-        <div className="pointer-events-auto flex items-center gap-3 rounded-full border border-border-glass bg-surface-glass px-4 py-2 backdrop-blur-xl">
-          <span className="size-2 rounded-full bg-accent-cool shadow-[0_0_18px_var(--accent-cool)]" />
-          <span className="text-[0.78rem] font-semibold uppercase tracking-[0.28em] text-foreground/90">
-            New Era
+      <header className="pointer-events-auto fixed left-0 right-0 top-0 z-30 flex items-center justify-between px-6 py-5 text-[12px] uppercase tracking-[0.28em] text-foreground/80 md:px-10">
+        <Link href="/" className="group flex items-center gap-3">
+          <span className="grid size-8 place-items-center rounded-full border border-accent-warm/40 bg-surface-glass text-[11px] font-semibold text-accent-warm backdrop-blur-md">
+            AG
           </span>
-        </div>
-
-        <nav className="pointer-events-auto hidden items-center gap-2 rounded-full border border-border-glass bg-surface-glass px-2 py-2 backdrop-blur-xl md:flex">
-          {CHAPTERS.map((chapter, index) => (
-            <span
-              key={chapter}
-              className={`rounded-full px-4 py-2 text-[0.72rem] uppercase tracking-[0.18em] transition-colors ${
-                index === activeIndex
-                  ? "bg-foreground text-background"
-                  : "text-foreground/55"
-              }`}
-            >
-              {chapter}
-            </span>
+          <span className="hidden text-foreground/85 sm:block">Designs Studio</span>
+        </Link>
+        <nav className="hidden items-center gap-7 md:flex">
+          {navItems.map(([label, href]) => (
+            <Link key={href} href={href} className="transition hover:text-accent-cool">
+              {label}
+            </Link>
           ))}
         </nav>
       </header>
 
-      <aside className="pointer-events-none fixed bottom-8 left-8 z-30 hidden w-52 md:block">
-        <div className="mb-3 flex items-center justify-between text-[0.68rem] uppercase tracking-[0.22em] text-foreground/45">
-          <span>Scroll depth</span>
-          <span>{Math.round(progress * 100)}%</span>
-        </div>
-        <div className="h-px w-full overflow-hidden bg-foreground/15">
+      <div className="pointer-events-none fixed bottom-7 left-6 right-6 z-30 hidden items-center gap-4 text-[11px] uppercase tracking-[0.24em] text-foreground/45 md:flex">
+        <span>Orbit</span>
+        <div className="h-px flex-1 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full bg-gradient-to-r from-accent-cool via-accent-violet to-accent-warm"
-            style={{ width: `${progress * 100}%` }}
+            className="h-full bg-gradient-to-r from-accent-cool via-[#b79cff] to-accent-warm"
+            style={{ width: `${Math.round(progress * 100)}%` }}
           />
         </div>
-      </aside>
-
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-40 bg-gradient-to-t from-background via-background/55 to-transparent" />
-      <div className="pointer-events-none fixed inset-0 z-20 border border-white/[0.03]" />
+        <span>{String(Math.round(progress * 100)).padStart(2, "0")}%</span>
+      </div>
     </>
   );
 };

@@ -19,14 +19,9 @@ import {
 import { experienceProgress, useExperiencePhase } from "./experience";
 
 /**
- * The fixed WebGL backdrop: an aurora shader + the scroll-driven particle morph
- * + UnrealBloom, ported from script.js.
- *
- * Smoothing lives in Lenis (the shared scroll layer), so reading `scrollY` each
- * frame already yields a smoothed value — this is the single source of scroll
- * progress that also feeds the overlay phases, keeping morph and UI locked
- * together. The render loop runs on the shared ticker (the supported extension
- * point for loop-based animation; see animation-system.md).
+ * Fixed WebGL backdrop for the AG Designs Studio homepage.
+ * The particle field remaps one dense source mesh into a solar system, focused
+ * planet, service constellation, campaign signal field and final galaxy.
  */
 export const ParticleCanvas = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +33,7 @@ export const ParticleCanvas = () => {
     if (!container || !glow) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x02030a);
+    scene.background = new THREE.Color(0x000000);
 
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -65,8 +60,8 @@ export const ParticleCanvas = () => {
         uResolution: {
           value: new THREE.Vector2(window.innerWidth, window.innerHeight),
         },
-        color1: { value: new THREE.Color("#d7a657") },
-        color2: { value: new THREE.Color("#78e6ff") },
+        color1: { value: new THREE.Color("#d6aa63") },
+        color2: { value: new THREE.Color("#26d8ff") },
       },
       vertexShader: backgroundVertexShader,
       fragmentShader: backgroundFragmentShader,
@@ -75,8 +70,8 @@ export const ParticleCanvas = () => {
     const bgQuad = new THREE.Mesh(bgGeometry, bgMaterial);
     bgScene.add(bgQuad);
 
-    // Dense SphereGeometry rendered as Points — the moiré rings come for free.
-    const geometry = new THREE.SphereGeometry(4.2, 220, 620);
+    // Dense source geometry remapped in the shader into solar, planet, signal and galaxy forms.
+    const geometry = new THREE.SphereGeometry(4.2, 220, 640);
     const material = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
@@ -108,17 +103,15 @@ export const ParticleCanvas = () => {
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.18, // strength
-      0.64, // radius
-      0.08, // threshold
+      1.05, // strength
+      0.42, // radius
+      0.12, // threshold
     );
     composer.addPass(bloomPass);
 
     let time = 0;
 
-    // On-load intro: the sphere appears filled and close, then dollies back to
-    // its resting position while the centre hollows into the ring. Time-driven
-    // (not scroll), starting on the first rendered frame.
+    // On-load intro: the orbital field breathes into view before scroll takes over.
     const INTRO_MS = 2600;
     let introStart = 0;
 
@@ -135,7 +128,7 @@ export const ParticleCanvas = () => {
     window.addEventListener("resize", handleResize);
 
     const render = (now: number) => {
-      time += 0.0042;
+      time += 0.005;
 
       // Intro progress (eased), driven by wall-clock since the first frame.
       if (introStart === 0) introStart = now;
@@ -156,74 +149,50 @@ export const ParticleCanvas = () => {
       bgMaterial.uniforms.uScroll.value = currentScroll;
 
       // --- CAMERA & ROTATION LOGIC ---
-      const panProgress = Math.min(currentScroll / 0.5, 1.0);
-      const smoothPan = panProgress * panProgress * (3.0 - 2.0 * panProgress);
-
-      const flyPhase =
-        currentScroll < 0.5
-          ? 0.0
-          : Math.min((currentScroll - 0.5) / 0.35, 1.0);
-
-      const blackHoleDive =
-        currentScroll < 0.8
-          ? 0.0
-          : Math.min((currentScroll - 0.8) / 0.12, 1.0);
-
-      camera.position.y = -38.0 * smoothPan + 5.0 * Math.pow(blackHoleDive, 2.0);
-      camera.position.z = 8.0 - 4.0 * smoothPan - 55.0 * flyPhase;
-
-      const galaxyPullback =
-        currentScroll < 0.93
-          ? 0.0
-          : Math.min((currentScroll - 0.93) / 0.07, 1.0);
-      const smoothPullback =
-        galaxyPullback * galaxyPullback * (3.0 - 2.0 * galaxyPullback);
-
-      camera.position.z += 75.0 * smoothPullback;
-      camera.position.y += 35.0 * smoothPullback;
-
-      const lookX = 0.0;
-      let waveTilt = 0.0;
-      if (currentScroll > 0.3 && currentScroll < 0.7) {
-        const tiltProgress = (currentScroll - 0.3) / 0.4;
-        waveTilt = Math.sin(tiltProgress * Math.PI) * 15.0;
-      }
-
-      const lookY = THREE.MathUtils.lerp(
-        camera.position.y + waveTilt,
-        -33.0,
-        smoothPullback,
+      // New flow: begin outside a living solar system, push into a selected
+      // planet, then pass through service constellations, campaign streams and
+      // the final marketing ecosystem.
+      const ease = (x: number) => x * x * (3 - 2 * x);
+      const focus = ease(Math.min(Math.max((currentScroll - 0.08) / 0.22, 0), 1));
+      const constellation = ease(
+        Math.min(Math.max((currentScroll - 0.28) / 0.2, 0), 1),
       );
-      const lookZ = THREE.MathUtils.lerp(
-        camera.position.z - 100.0,
-        -120.0,
-        smoothPullback,
-      );
+      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.2, 0), 1));
+      const galaxy = ease(Math.min(Math.max((currentScroll - 0.78) / 0.2, 0), 1));
 
-      // Intro dolly — start ~3 units closer (sphere fills the view) and ease
-      // back to the resting z. Faded out past the top so scrolling mid-intro
-      // doesn't fight the scroll-driven camera. Applied after lookZ is derived,
-      // so the focal point stays put and the eye simply dollies in.
+      camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -1.2, constellation);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
+
+      camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, -1.0, constellation);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
+
+      camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 2.6, constellation);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 36.0, galaxy);
+
       const introZoom =
-        (1 - introEased) * -4.6 * (1 - Math.min(currentScroll / 0.05, 1));
+        (1 - introEased) * 4.5 * (1 - Math.min(currentScroll / 0.06, 1));
       camera.position.z += introZoom;
 
-      camera.lookAt(new THREE.Vector3(lookX, lookY, lookZ));
+      const lookTarget = new THREE.Vector3(
+        THREE.MathUtils.lerp(0.0, 1.2, focus),
+        THREE.MathUtils.lerp(0.0, -0.5, stream),
+        THREE.MathUtils.lerp(-8.0, -82.0, galaxy),
+      );
+      camera.lookAt(lookTarget);
 
-      particles.rotation.y = smoothPan * Math.PI * 2.0;
-      particles.rotation.x = Math.sin(smoothPan * Math.PI) * 0.15;
-      camera.rotation.z = 0.0;
+      particles.rotation.y = currentScroll * Math.PI * 1.35 + time * 0.08;
+      particles.rotation.x = Math.sin(currentScroll * Math.PI) * 0.08;
+      camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.02;
 
-      // --- BIG BANG FLASH (0.90 → 0.95) ---
-      const glowScaleProgress =
-        currentScroll < 0.9 ? 0.0 : Math.min((currentScroll - 0.9) / 0.03, 1.0);
-      const glowScale = Math.pow(glowScaleProgress, 4.0) * 400.0;
-      const hideGlow =
-        currentScroll < 0.93
-          ? 0.0
-          : Math.min((currentScroll - 0.93) / 0.02, 1.0);
+      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.74) / 0.12, 0), 1);
+      const glowScale = Math.pow(glowScaleProgress, 2.8) * 38.0;
+      const hideGlow = Math.min(Math.max((currentScroll - 0.88) / 0.08, 0), 1);
       glow.style.transform = `translate(-50%, -50%) scale(${glowScale})`;
-      glow.style.opacity = `${1.0 - hideGlow}`;
+      glow.style.opacity = `${(1.0 - hideGlow) * glowScaleProgress * 0.8}`;
 
       // Publish progress for overlays (module value for per-frame card motion,
       // store for phase-boundary re-renders).
@@ -256,14 +225,14 @@ export const ParticleCanvas = () => {
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10"
       />
-      {/* Big-bang white flash that scales out of the singularity. */}
+      {/* Soft system flare used during the transition into the final ecosystem. */}
       <div
         ref={glowRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-1/2 top-1/2 z-10 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
+        className="pointer-events-none fixed left-1/2 top-1/2 z-10 size-25 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
         style={{
           background:
-            "radial-gradient(circle, rgba(247,244,234,1) 32%, rgba(120,230,255,0.65) 54%, rgba(255,255,255,0) 82%)",
+            "radial-gradient(circle, rgba(214,170,99,0.72) 0%, rgba(38,216,255,0.28) 38%, rgba(255,255,255,0) 72%)",
         }}
       />
     </>

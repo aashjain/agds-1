@@ -1,45 +1,27 @@
-# New Era — Makeover Notes
+# AG Designs Studio Makeover Notes
 
-## What changed
+## Direction
+The homepage has been reframed for AG Designs Studio, a digital marketing agency. The experience now begins with a particle-based solar system, then moves into a focused planet, service constellation, campaign signal field and final marketing ecosystem.
 
-- Repositioned the experience away from a generic centred template into an editorial, premium spatial interface.
-- Added a fixed brand/navigation chrome with scroll-depth feedback and chapter states.
-- Added an orbital live-system dossier on desktop to make the hero feel designed rather than templated.
-- Added a capability ribbon during the wave section to connect the 3D particles with clear business outcomes.
-- Rewrote the homepage copy into a sharper immersive web-studio narrative.
-- Refined the colour system from stock orange/blue into a deeper cosmic palette: deep navy, ion cyan, soft violet and antique gold.
-- Tuned the Three.js particle system: denser sphere geometry, slower premium motion, softened bloom, richer galaxy colouring and a more distinctive wave drift.
-- Updated global typography, spacing and glass surfaces for a more premium, client-presentable finish.
+## Key changes
+- Rewrote homepage content for a digital marketing agency.
+- Rebuilt the WebGL particle shader flow so it is no longer the original circle/DNA/wave/black-hole sequence.
+- Updated particle colours to a refined cosmic palette: deep navy, ion cyan, violet and antique gold.
+- Changed camera movement to support the new journey: solar system → planet focus → service constellation → campaign streams → galaxy.
+- Added fixed AG Designs Studio navigation chrome and scroll progress indicator.
+- Redesigned hero layout with an editorial left-aligned composition and a desktop Live Orbit Map panel.
+- Reworked floating cards as marketing capability dossiers.
+- Added placeholder routes for future website pages.
 
-## Files changed / added
+## New routes added
+- `/about-us`
+- `/contact-us`
+- `/our-services`
+- `/services/[slug]`
+- `/blogs`
+- `/blogs/[slug]`
 
-- `src/data/mocks/home.ts`
-- `src/app/globals.css`
-- `src/views/home/index.tsx`
-- `src/views/home/hero-section.tsx`
-- `src/views/home/wave-section.tsx`
-- `src/views/home/galaxy-section.tsx`
-- `src/views/home/particle-canvas.tsx`
-- `src/views/home/shaders/background.ts`
-- `src/views/home/shaders/particles.ts`
-- `src/views/home/site-chrome.tsx`
-- `src/views/home/orbital-dossier.tsx`
-- `src/views/home/capability-ribbon.tsx`
+These pages are intentionally minimal placeholders so the homepage direction can be approved first.
 
-## Notes before presenting
-
-Run locally with:
-
-```bash
-yarn install
-yarn dev
-```
-
-or:
-
-```bash
-npm install
-npm run dev
-```
-
-Then review on desktop and mobile. The project package dependencies were not installed inside this handoff environment, so final visual QA should be done locally.
+## Validation note
+`npm run lint` could not be executed because the submitted ZIP does not include `node_modules`, so `eslint` is not available locally. Run `npm install` or `yarn install`, then run `npm run lint` and `npm run build` in the final development environment.

@@ -2,29 +2,29 @@
 
 :root {
   /* Deep space backdrop — from style.css `body { background-color: #030305 }`. */
-  --background: #02030a;
-  --foreground: #f7f4ea;
-  --muted: #a9acbb;
+  --background: #020612;
+  --foreground: #f7f2e8;
+  /* Muted body copy — style.css `.hero-subtitle { color: #a0a0a0 }`. */
+  --muted: #b9bdc7;
 
   /* Brand accent gradient stops — the orange/blue used on every gradient
      (button border, stat numbers, particle colours). From style.css. */
-  --accent-warm: #d7a657;
-  --accent-cool: #78e6ff;
-  --accent-violet: #a989ff;
+  --accent-warm: #d6aa63;
+  --accent-cool: #26d8ff;
 
   /* Frosted-glass surfaces — the rgba(255,255,255,…) fills in style.css. */
   --surface-glass: rgba(255, 255, 255, 0.055);
   --surface-glass-strong: rgba(255, 255, 255, 0.075);
-  --surface-glass-hover: rgba(255, 255, 255, 0.11);
-  --surface-icon: rgba(255, 255, 255, 0.035);
-  --surface-button: rgba(14, 22, 36, 0.58);
-  --surface-button-hover: rgba(28, 39, 61, 0.66);
+  --surface-glass-hover: rgba(255, 255, 255, 0.12);
+  --surface-icon: rgba(255, 255, 255, 0.02);
+  --surface-button: rgba(7, 14, 31, 0.58);
+  --surface-button-hover: rgba(15, 30, 58, 0.72);
   /* Darker frosted fill for the stat cards so they stay legible as they orbit
      in front of the bright, bloomed DNA particles. */
-  --surface-card: rgba(8, 12, 24, 0.68);
+  --surface-card: rgba(3, 8, 20, 0.68);
 
-  --border-glass: rgba(255, 255, 255, 0.105);
-  --border-glass-strong: rgba(255, 255, 255, 0.18);
+  --border-glass: rgba(255, 255, 255, 0.11);
+  --border-glass-strong: rgba(214, 170, 99, 0.26);
 
   /* Stat-card width — fluid so it widens on desktop yet fits a phone. */
   --width-card: clamp(220px, 74vw, 400px);
@@ -36,7 +36,6 @@
   --color-muted: var(--muted);
   --color-accent-warm: var(--accent-warm);
   --color-accent-cool: var(--accent-cool);
-  --color-accent-violet: var(--accent-violet);
 
   --color-surface-glass: var(--surface-glass);
   --color-surface-glass-strong: var(--surface-glass-strong);
@@ -51,13 +50,13 @@
   /* Body uses Inter, display headings use Assistant — both loaded in layout.tsx,
      mirroring the Google Fonts links in index.html. */
   --font-sans: var(--font-inter);
-  --font-display: var(--font-onest);
+  --font-display: var(--font-assistant);
 
   /* Type scale — viewport-fluid `clamp()` (min, vw, max) so the large display
      type stays readable on tablet/mobile without overflowing. Max values are the
      source px sizes. clamp is viewport-absolute, independent of the rem grid. */
-  --text-display: clamp(42px, 6.2vw, 108px);
-  --text-display-sm: clamp(34px, 4.8vw, 76px);
+  --text-display: clamp(42px, 6.4vw, 96px); /* .hero-title */
+  --text-display-sm: clamp(34px, 5.2vw, 76px); /* .wave-title */
   --text-stat: clamp(44px, 4.8vw, 72px); /* .card-stat */
   --text-lead: clamp(15px, 1.25vw, 18px); /* .hero-subtitle / .card-desc */
   --text-eyebrow: clamp(13px, 0.95vw, 14px); /* .top-label */
@@ -67,7 +66,7 @@
   /* Heading line-height / tracking — .hero-title in style.css. Slightly looser
      than the source 1.1 so tall glyphs / the blur cascade aren't clipped. */
   --leading-title: 1.2;
-  --tracking-title: -0.065em;
+  --tracking-title: -0.055em;
 
   /* Max-widths for headings / copy — from style.css max-width values. */
   --container-title: 62.5rem; /* 1000px — .hero-title */
@@ -77,15 +76,10 @@
 }
 
 body {
-  background:
-    radial-gradient(circle at 20% 10%, rgba(120, 230, 255, 0.12), transparent 28rem),
-    radial-gradient(circle at 85% 18%, rgba(169, 137, 255, 0.12), transparent 30rem),
-    radial-gradient(circle at 50% 100%, rgba(215, 166, 87, 0.08), transparent 34rem),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  text-rendering: geometricPrecision;
 }
 
 @layer base {
@@ -134,9 +128,9 @@ body {
    style.css. A genuine CSS exception (background-clip + transparent fill). */
 @utility text-gradient-accent {
   background-image: linear-gradient(
-    90deg,
+    95deg,
     var(--accent-cool),
-    var(--accent-violet),
+    #b79cff 48%,
     var(--accent-warm)
   );
   -webkit-background-clip: text;
@@ -149,17 +143,15 @@ body {
 @utility text-fade-trailing {
   -webkit-mask-image: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.74) 0%,
-    rgba(0, 0, 0, 1) 20%,
-    rgba(0, 0, 0, 1) 78%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0.2) 100%
   );
   mask-image: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.74) 0%,
-    rgba(0, 0, 0, 1) 20%,
-    rgba(0, 0, 0, 1) 78%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0.2) 100%
   );
 }
 
@@ -196,11 +188,27 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
-@utility text-balance {
-  text-wrap: balance;
-}
 
 ::selection {
-  background: rgba(120, 230, 255, 0.22);
+  background: rgba(38, 216, 255, 0.24);
   color: var(--foreground);
+}
+
+.ag-orbital-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 20%, black 0%, transparent 72%);
+}
+
+.ag-scanline {
+  background: linear-gradient(90deg, transparent, rgba(38,216,255,0.6), transparent);
+  animation: agScan 6s ease-in-out infinite;
+}
+
+@keyframes agScan {
+  0%, 100% { transform: translateX(-120%); opacity: 0; }
+  35%, 65% { opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
 }

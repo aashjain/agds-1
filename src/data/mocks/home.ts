@@ -1,12 +1,10 @@
 export interface ExperienceButton {
   label: string;
-  /** Primary buttons render the circular arrow glyph; secondary do not. */
   withArrow: boolean;
 }
 
 export interface ExperienceCopy {
   eyebrow: string;
-  /** Heading split into lines — each entry was a `<br>`-separated row. */
   titleLines: string[];
   subtitle: string;
   buttons: ExperienceButton[];
@@ -28,56 +26,56 @@ export interface HomeContent {
 
 export const homeContent: HomeContent = {
   hero: {
-    eyebrow: "Spatial digital studio",
-    titleLines: ["Websites designed like", "living celestial systems"],
+    eyebrow: "AG Designs Studio",
+    titleLines: ["Marketing systems", "built like orbits"],
     subtitle:
-      "We build immersive digital environments where motion, narrative and engineering work as one polished experience.",
+      "A digital marketing studio shaping brands through strategy, design, content, search, media and measurable growth.",
     buttons: [
-      { label: "Enter the system", withArrow: true },
-      { label: "View capabilities", withArrow: false },
+      { label: "View services", withArrow: true },
+      { label: "Start a brief", withArrow: false },
     ],
   },
   cards: [
     {
-      id: "interface",
-      title: "Interface",
-      stat: "3D Web",
+      id: "strategy",
+      title: "Brand Gravity",
+      stat: "Strategy",
       description:
-        "Scroll-led particle systems, atmospheric depth and refined micro-interactions built for modern brands.",
+        "Positioning, campaign thinking and digital direction that give every brand a clear centre of pull.",
     },
     {
-      id: "identity",
-      title: "Identity",
-      stat: "Brand OS",
+      id: "content",
+      title: "Signal System",
+      stat: "Content",
       description:
-        "A visual language that extends beyond a template — typography, motion, spacing and digital behaviour aligned.",
+        "Social-first storytelling, design language and platform-ready assets built to move with intent.",
     },
     {
       id: "performance",
-      title: "Performance",
-      stat: "Fast Core",
+      title: "Growth Orbit",
+      stat: "SEO + Ads",
       description:
-        "Premium visuals engineered with responsive rendering, lean components and production-grade structure.",
+        "Search, paid media and optimisation loops designed around visibility, conversion and sustained momentum.",
     },
   ],
   wave: {
-    eyebrow: "Built beyond the first impression",
-    titleLines: ["Every scroll becomes", "a guided cinematic reveal"],
+    eyebrow: "From attention to action",
+    titleLines: ["Every channel", "aligned to one trajectory"],
     subtitle:
-      "The experience is shaped as a journey: arrival, orbit, expansion and conversion. Each section earns attention instead of asking for it.",
+      "We connect creative direction with performance marketing, so campaigns look refined, feel consistent and move the right audience closer to enquiry.",
     buttons: [
-      { label: "Plan a build", withArrow: true },
-      { label: "See the system", withArrow: false },
+      { label: "Our services", withArrow: true },
+      { label: "Contact us", withArrow: false },
     ],
   },
   galaxy: {
-    eyebrow: "A website with its own gravity",
-    titleLines: ["Distinct, immersive and ready to be remembered."],
+    eyebrow: "A complete marketing ecosystem",
+    titleLines: ["Strategy, creative, media and growth working as one."],
     subtitle:
-      "A richer space-led interface with atmospheric particles, editorial hierarchy, premium glass surfaces and enough restraint to feel credible — not decorative.",
+      "For brands that need more than isolated posts, AG Designs Studio builds the full digital architecture — from identity and content to campaigns, SEO, websites and conversion-led marketing.",
     buttons: [
-      { label: "Start the conversation", withArrow: true },
-      { label: "Explore the orbit", withArrow: false },
+      { label: "Plan a project", withArrow: true },
+      { label: "Read insights", withArrow: false },
     ],
   },
 };

@@ -7,8 +7,8 @@
 import { publicEnv } from "@/env";
 
 export const siteConfig = {
-  name: "New Project",
-  description: "New Project",
+  name: "AG Designs Studio",
+  description: "AG Designs Studio is a digital marketing agency for strategy, creative, content, SEO, paid media and website-led growth.",
   /**
    * Public origin, no trailing slash. Drives canonical URLs, OG tags, the
    * sitemap, and JSON-LD. Set `NEXT_PUBLIC_SITE_URL` in production.
@@ -16,8 +16,8 @@ export const siteConfig = {
   url: publicEnv.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   /** Default Open Graph / Twitter share image (path under `public/`). */
   ogImage: "/open-graph.png",
-  twitterHandle: "@newproject",
-  author: "New Project",
+  twitterHandle: "@agdesignsstudio",
+  author: "AG Designs Studio",
   /** Browser theme-color (address bar / PWA). */
-  themeColor: "#000000",
+  themeColor: "#020612",
 } as const;
