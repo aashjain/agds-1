@@ -3,8 +3,7 @@ import { AnimatedGradientBorder } from "./animated-gradient-border";
 import { LayersIcon } from "./icons";
 
 /**
- * Frosted pill label with the layers glyph and an animated shimmer ring —
- * the `.top-label` element from style.css.
+ * Frosted pill label with the layers glyph and an animated shimmer ring.
  */
 export interface EyebrowProps {
   children: React.ReactNode;

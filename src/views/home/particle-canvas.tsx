@@ -19,21 +19,35 @@ import {
 import { experienceProgress, useExperiencePhase } from "./experience";
 
 /**
- * Fixed WebGL backdrop for the AG Designs Studio homepage.
- * The particle field remaps one dense source mesh into a solar system, focused
- * planet, service constellation, campaign signal field and final galaxy.
+ * The fixed WebGL backdrop for the AG Designs Studio journey: a nebula quad,
+ * the four-form particle morph, and a restrained bloom pass.
+ *
+ * Camera choreography (all forms are centred at the origin, so the camera
+ * carries the narrative):
+ *   1. Hero      — high, tilted orbit around the marketing system.
+ *   2. Approach  — spiral descent toward the focused brand planet.
+ *   3. Signal    — settle low and level while campaign lanes flow past.
+ *   4. Ecosystem — rise to an overhead view of the full orrery.
+ *
+ * Smoothing lives in Lenis (the shared scroll layer), so reading scroll each
+ * frame already yields a smoothed value — the single source of progress that
+ * also feeds the overlay phases. The render loop runs on the shared ticker.
  */
+
+const smooth = (a: number, b: number, x: number) => {
+  const t = Math.min(Math.max((x - a) / (b - a), 0), 1);
+  return t * t * (3 - 2 * t);
+};
+
 export const ParticleCanvas = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
-    const glow = glowRef.current;
-    if (!container || !glow) return;
+    if (!container) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+    scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -41,7 +55,7 @@ export const ParticleCanvas = () => {
       0.1,
       1000,
     );
-    camera.position.z = 8;
+    camera.position.set(0, 13, 24);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -49,7 +63,7 @@ export const ParticleCanvas = () => {
     renderer.autoClear = false;
     container.appendChild(renderer.domElement);
 
-    // --- AURORA BACKGROUND SETUP ---
+    // --- NEBULA BACKGROUND ---
     const bgScene = new THREE.Scene();
     const bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
     const bgGeometry = new THREE.PlaneGeometry(2, 2);
@@ -60,8 +74,8 @@ export const ParticleCanvas = () => {
         uResolution: {
           value: new THREE.Vector2(window.innerWidth, window.innerHeight),
         },
-        color1: { value: new THREE.Color("#d6aa63") },
-        color2: { value: new THREE.Color("#26d8ff") },
+        color1: { value: new THREE.Color("#6f5fd8") }, // soft violet
+        color2: { value: new THREE.Color("#1f8ba6") }, // deep teal
       },
       vertexShader: backgroundVertexShader,
       fragmentShader: backgroundFragmentShader,
@@ -70,7 +84,8 @@ export const ParticleCanvas = () => {
     const bgQuad = new THREE.Mesh(bgGeometry, bgMaterial);
     bgScene.add(bgQuad);
 
-    // Dense source geometry remapped in the shader into solar, planet, signal and galaxy forms.
+    // Dense SphereGeometry rendered as Points — a stable vertex pool whose
+    // positions only seed per-particle randoms in the shader.
     const geometry = new THREE.SphereGeometry(4.2, 200, 600);
     const material = new THREE.ShaderMaterial({
       uniforms: {
@@ -86,7 +101,7 @@ export const ParticleCanvas = () => {
     });
 
     const particles = new THREE.Points(geometry, material);
-    // Keep visible when stretched far below the original bounding sphere.
+    // Forms extend far beyond the seed sphere's bounding volume.
     particles.frustumCulled = false;
     scene.add(particles);
 
@@ -103,16 +118,17 @@ export const ParticleCanvas = () => {
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.42, // strength — restrained so the particles read as points, not a white blur
-      0.22, // radius
-      0.38, // threshold
+      0.85, // strength — restrained, premium glow
+      0.45, // radius
+      0.2, // threshold
     );
     composer.addPass(bloomPass);
 
     let time = 0;
 
-    // On-load intro: the orbital field breathes into view before scroll takes over.
-    const INTRO_MS = 2600;
+    // On-load intro: the orbital system gathers from a tighter cloud and
+    // fades up. Time-driven, starting on the first rendered frame.
+    const INTRO_MS = 2400;
     let introStart = 0;
 
     const handleResize = () => {
@@ -127,13 +143,17 @@ export const ParticleCanvas = () => {
     };
     window.addEventListener("resize", handleResize);
 
+    const camPos = new THREE.Vector3();
+    const lookTarget = new THREE.Vector3();
+    const tmpPos = new THREE.Vector3();
+    const tmpLook = new THREE.Vector3();
+
     const render = (now: number) => {
       time += 0.005;
 
-      // Intro progress (eased), driven by wall-clock since the first frame.
       if (introStart === 0) introStart = now;
       const introRaw = Math.min((now - introStart) / INTRO_MS, 1);
-      const introEased = 1 - Math.pow(1 - introRaw, 3); // easeOutCubic
+      const introEased = 1 - Math.pow(1 - introRaw, 3);
       material.uniforms.uIntro.value = introEased;
 
       const maxScroll =
@@ -141,63 +161,57 @@ export const ParticleCanvas = () => {
         document.documentElement.clientHeight;
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
-      const currentScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      const p = maxScroll > 0 ? scrollTop / maxScroll : 0;
 
       material.uniforms.uTime.value = time;
-      material.uniforms.uScroll.value = currentScroll;
+      material.uniforms.uScroll.value = p;
       bgMaterial.uniforms.uTime.value = time;
-      bgMaterial.uniforms.uScroll.value = currentScroll;
+      bgMaterial.uniforms.uScroll.value = p;
 
-      // --- CAMERA & ROTATION LOGIC ---
-      // New flow: begin outside a living solar system, push into a selected
-      // planet, then pass through service constellations, campaign streams and
-      // the final marketing ecosystem.
-      const ease = (x: number) => x * x * (3 - 2 * x);
-      const focus = ease(Math.min(Math.max((currentScroll - 0.08) / 0.22, 0), 1));
-      const constellation = ease(
-        Math.min(Math.max((currentScroll - 0.28) / 0.2, 0), 1),
+      // --- CAMERA CHOREOGRAPHY ---
+
+      // Pose 1 → 2: orbital overview spiralling down into the planet.
+      const dive = smooth(0.14, 0.38, p);
+      const radius = THREE.MathUtils.lerp(27, 9.5, dive);
+      const elevation = THREE.MathUtils.lerp(1.02, 1.32, dive); // from Y axis
+      const azimuth = 0.6 + time * 0.06 + dive * 2.6;
+      camPos.set(
+        radius * Math.sin(elevation) * Math.cos(azimuth),
+        radius * Math.cos(elevation),
+        radius * Math.sin(elevation) * Math.sin(azimuth),
       );
-      const stream = ease(Math.min(Math.max((currentScroll - 0.52) / 0.2, 0), 1));
-      const galaxy = ease(Math.min(Math.max((currentScroll - 0.78) / 0.2, 0), 1));
+      lookTarget.set(0, 0, 0);
 
-      camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -1.2, constellation);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
+      // Pose 3: low, level flight while the signal field streams past.
+      const toSignal = smooth(0.4, 0.56, p);
+      if (toSignal > 0) {
+        tmpPos.set(Math.sin(time * 0.5) * 0.7, 0.6, 14);
+        tmpLook.set(Math.sin(time * 0.35) * 1.2, -0.6, -50);
+        camPos.lerp(tmpPos, toSignal);
+        lookTarget.lerp(tmpLook, toSignal);
+      }
 
-      camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, -1.0, constellation);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 2.0, galaxy);
+      // Pose 4: rise to the overhead ecosystem view, with a final pullback.
+      const toEco = smooth(0.62, 0.88, p);
+      if (toEco > 0) {
+        const pullback = smooth(0.9, 1.0, p) * 9;
+        tmpPos.set(
+          Math.sin(time * 0.05) * 2.5,
+          30 + pullback,
+          26 + pullback,
+        );
+        tmpLook.set(0, 0, 0);
+        camPos.lerp(tmpPos, toEco);
+        lookTarget.lerp(tmpLook, toEco);
+      }
 
-      camera.position.z = THREE.MathUtils.lerp(18.0, 7.4, focus);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 2.6, constellation);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, -18.0, stream);
-      camera.position.z = THREE.MathUtils.lerp(camera.position.z, 36.0, galaxy);
-
-      const introZoom =
-        (1 - introEased) * 4.5 * (1 - Math.min(currentScroll / 0.06, 1));
-      camera.position.z += introZoom;
-
-      const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, 1.2, focus),
-        THREE.MathUtils.lerp(0.0, -0.5, stream),
-        THREE.MathUtils.lerp(-8.0, -82.0, galaxy),
-      );
+      camera.position.copy(camPos);
       camera.lookAt(lookTarget);
 
-      particles.rotation.y = currentScroll * Math.PI * 1.35 + time * 0.08;
-      particles.rotation.x = Math.sin(currentScroll * Math.PI) * 0.08;
-      camera.rotation.z = Math.sin(currentScroll * Math.PI * 2.0) * 0.02;
-
-      const glowScaleProgress = Math.min(Math.max((currentScroll - 0.74) / 0.12, 0), 1);
-      const glowScale = Math.pow(glowScaleProgress, 2.8) * 24.0;
-      const hideGlow = Math.min(Math.max((currentScroll - 0.88) / 0.08, 0), 1);
-      glow.style.transform = `translate(-50%, -50%) scale(${glowScale})`;
-      glow.style.opacity = `${(1.0 - hideGlow) * glowScaleProgress * 0.28}`;
-
-      // Publish progress for overlays (module value for per-frame card motion,
+      // Publish progress for overlays (module value for per-frame motion,
       // store for phase-boundary re-renders).
-      experienceProgress.current = currentScroll;
-      useExperiencePhase.getState().sync(currentScroll);
+      experienceProgress.current = p;
+      useExperiencePhase.getState().sync(p);
 
       composer.render();
     };
@@ -219,22 +233,10 @@ export const ParticleCanvas = () => {
   }, []);
 
   return (
-    <>
-      <div
-        ref={containerRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10"
-      />
-      {/* Soft system flare used during the transition into the final ecosystem. */}
-      <div
-        ref={glowRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed left-1/2 top-1/2 z-10 size-25 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(214,170,99,0.72) 0%, rgba(38,216,255,0.28) 38%, rgba(255,255,255,0) 72%)",
-        }}
-      />
-    </>
+    <div
+      ref={containerRef}
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 -z-10"
+    />
   );
 };

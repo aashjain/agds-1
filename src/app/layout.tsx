@@ -10,6 +10,7 @@ import { getSiteStructuredData } from "@/utils/seo/structured-data";
 import { LazyCookie } from "@/components/common/Cookie";
 import { AdaptiveGrid } from "@/components/common/grid";
 import { ReducedMotion } from "@/components/common/reduced-motion";
+import { SiteHeader } from "@/components/layout/site-header";
 import { ScrollLayout } from "@/layouts/scroll-layout";
 
 import "@/app/globals.css";
@@ -20,8 +21,8 @@ const onest = Onest({
   display: "swap",
 });
 
-// Inter (body) + Assistant (display) mirror the Google Fonts links in the
-// source index.html. Bound to --font-inter / --font-assistant in globals.css.
+// Inter (body) + Assistant (display) — bound to --font-inter /
+// --font-assistant in globals.css.
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -57,6 +58,7 @@ export default function RootLayout({
           <AdaptiveGrid />
           <ReducedMotion />
           <LazyCookie />
+          <SiteHeader />
           {children}
         </ScrollLayout>
       </body>

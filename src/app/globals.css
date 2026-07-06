@@ -1,32 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  /* Deep space backdrop — from style.css `body { background-color: #030305 }`. */
-  --background: #020612;
-  --foreground: #f7f2e8;
-  /* Muted body copy — style.css `.hero-subtitle { color: #a0a0a0 }`. */
-  --muted: #b9bdc7;
+  /* Deep navy backdrop — matches the WebGL nebula base. */
+  --background: #05070f;
+  --foreground: #f4efe4;
+  /* Muted body copy — warm grey against the navy field. */
+  --muted: #a8abb8;
 
-  /* Brand accent gradient stops — the orange/blue used on every gradient
-     (button border, stat numbers, particle colours). From style.css. */
-  --accent-warm: #d6aa63;
-  --accent-cool: #26d8ff;
+  /* Brand accent gradient stops — antique gold / ion cyan, used on every
+     gradient (button border, accent text, section markers). */
+  --accent-warm: #d9b36c;
+  --accent-cool: #6fd6e8;
 
-  /* Frosted-glass surfaces — the rgba(255,255,255,…) fills in style.css. */
-  --surface-glass: rgba(255, 255, 255, 0.055);
-  --surface-glass-strong: rgba(255, 255, 255, 0.075);
-  --surface-glass-hover: rgba(255, 255, 255, 0.12);
+  /* Frosted-glass surfaces. */
+  --surface-glass: rgba(255, 255, 255, 0.04);
+  --surface-glass-strong: rgba(255, 255, 255, 0.05);
+  --surface-glass-hover: rgba(255, 255, 255, 0.08);
   --surface-icon: rgba(255, 255, 255, 0.02);
-  --surface-button: rgba(7, 14, 31, 0.58);
-  --surface-button-hover: rgba(15, 30, 58, 0.72);
-  /* Darker frosted fill for the stat cards so they stay legible as they orbit
-     in front of the bright, bloomed DNA particles. */
-  --surface-card: rgba(3, 8, 20, 0.68);
+  --surface-button: rgba(20, 25, 35, 0.4);
+  --surface-button-hover: rgba(30, 35, 50, 0.5);
+  /* Darker frosted fill for cards so they stay legible in front of the
+     bright, bloomed particle field. */
+  --surface-card: rgba(9, 12, 22, 0.55);
 
-  --border-glass: rgba(255, 255, 255, 0.11);
-  --border-glass-strong: rgba(214, 170, 99, 0.26);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-strong: rgba(255, 255, 255, 0.15);
 
-  /* Stat-card width — fluid so it widens on desktop yet fits a phone. */
+  /* Card width — fluid so it widens on desktop yet fits a phone. */
   --width-card: clamp(220px, 74vw, 400px);
 }
 
@@ -47,32 +47,32 @@
   --color-border-glass: var(--border-glass);
   --color-border-glass-strong: var(--border-glass-strong);
 
-  /* Body uses Inter, display headings use Assistant — both loaded in layout.tsx,
-     mirroring the Google Fonts links in index.html. */
+  /* Body uses Inter, display headings use Assistant — both loaded in
+     layout.tsx. */
   --font-sans: var(--font-inter);
   --font-display: var(--font-assistant);
 
   /* Type scale — viewport-fluid `clamp()` (min, vw, max) so the large display
      type stays readable on tablet/mobile without overflowing. Max values are the
      source px sizes. clamp is viewport-absolute, independent of the rem grid. */
-  --text-display: clamp(42px, 6.4vw, 96px); /* .hero-title */
-  --text-display-sm: clamp(34px, 5.2vw, 76px); /* .wave-title */
-  --text-stat: clamp(44px, 4.8vw, 72px); /* .card-stat */
-  --text-lead: clamp(15px, 1.25vw, 18px); /* .hero-subtitle / .card-desc */
-  --text-eyebrow: clamp(13px, 0.95vw, 14px); /* .top-label */
-  --text-kicker: clamp(12px, 0.9vw, 13px); /* .card-title */
+  --text-display: clamp(34px, 5.4vw, 80px); 
+  --text-display-sm: clamp(30px, 4.6vw, 64px); 
+  --text-stat: clamp(44px, 4.8vw, 72px); 
+  --text-lead: clamp(15px, 1.25vw, 18px); 
+  --text-eyebrow: clamp(13px, 0.95vw, 14px); 
+  --text-kicker: clamp(12px, 0.9vw, 13px); 
   --text-button: clamp(15px, 1.1vw, 16px); /* buttons */
 
-  /* Heading line-height / tracking — .hero-title in style.css. Slightly looser
-     than the source 1.1 so tall glyphs / the blur cascade aren't clipped. */
+  /* Heading line-height / tracking — slightly loose so tall glyphs and the
+     blur cascade aren't clipped. */
   --leading-title: 1.2;
-  --tracking-title: -0.055em;
+  --tracking-title: -0.03em;
 
-  /* Max-widths for headings / copy — from style.css max-width values. */
-  --container-title: 62.5rem; /* 1000px — .hero-title */
-  --container-title-sm: 50rem; /* 800px — .wave-col-left */
-  --container-lead: 37.5rem; /* 600px — .hero-subtitle */
-  --container-lead-sm: 31.25rem; /* 500px — .wave-col-right */
+  /* Max-widths for headings / copy. */
+  --container-title: 62.5rem; /* 1000px */
+  --container-title-sm: 50rem; /* 800px */
+  --container-lead: 37.5rem; /* 600px */
+  --container-lead-sm: 31.25rem; /* 500px */
 }
 
 body {
@@ -125,13 +125,12 @@ body {
 }
 
 /* Accent gradient fill clipped to text — .card-stat / .gradient-text in
-   style.css. A genuine CSS exception (background-clip + transparent fill). */
+   A genuine CSS exception (background-clip + transparent fill). */
 @utility text-gradient-accent {
   background-image: linear-gradient(
-    95deg,
-    var(--accent-cool),
-    #b79cff 48%,
-    var(--accent-warm)
+    90deg,
+    var(--accent-warm),
+    var(--accent-cool)
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -139,7 +138,7 @@ body {
 }
 
 /* Horizontal trailing-edge fade on hero titles — .gradient-text mask in
-   style.css. Mask alpha is algorithmic, not a design colour. */
+   Mask alpha is algorithmic, not a design colour. */
 @utility text-fade-trailing {
   -webkit-mask-image: linear-gradient(
     90deg,
@@ -186,29 +185,4 @@ body {
 
 @utility shadow-glass-card {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-
-::selection {
-  background: rgba(38, 216, 255, 0.24);
-  color: var(--foreground);
-}
-
-.ag-orbital-grid {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at 50% 20%, black 0%, transparent 72%);
-}
-
-.ag-scanline {
-  background: linear-gradient(90deg, transparent, rgba(38,216,255,0.6), transparent);
-  animation: agScan 6s ease-in-out infinite;
-}
-
-@keyframes agScan {
-  0%, 100% { transform: translateX(-120%); opacity: 0; }
-  35%, 65% { opacity: 1; }
-  100% { transform: translateX(120%); opacity: 0; }
 }

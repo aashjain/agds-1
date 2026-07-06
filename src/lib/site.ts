@@ -2,13 +2,14 @@
  * Site-wide configuration — the single source of truth for SEO.
  *
  * Consumed by the metadata generator, `robots.ts`, `sitemap.ts`, and the
- * JSON-LD structured-data helper. Update the placeholder values per project.
+ * JSON-LD structured-data helper.
  */
 import { publicEnv } from "@/env";
 
 export const siteConfig = {
   name: "AG Designs Studio",
-  description: "AG Designs Studio is a digital marketing agency for strategy, creative, content, SEO, paid media and website-led growth.",
+  description:
+    "AG Designs Studio is a digital marketing agency building brand visibility, content systems, campaigns, websites, SEO, paid media and growth-led digital experiences.",
   /**
    * Public origin, no trailing slash. Drives canonical URLs, OG tags, the
    * sitemap, and JSON-LD. Set `NEXT_PUBLIC_SITE_URL` in production.
@@ -19,5 +20,5 @@ export const siteConfig = {
   twitterHandle: "@agdesignsstudio",
   author: "AG Designs Studio",
   /** Browser theme-color (address bar / PWA). */
-  themeColor: "#020612",
+  themeColor: "#05070f",
 } as const;
