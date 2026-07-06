@@ -135,8 +135,6 @@ export const ParticleCanvas = () => {
     window.addEventListener("resize", handleResize);
 
     const render = (now: number) => {
-      time += 0.005;
-
       // Intro progress (eased), driven by wall-clock since the first frame.
       if (introStart === 0) introStart = now;
       const introRaw = Math.min((now - introStart) / INTRO_MS, 1);
@@ -162,6 +160,13 @@ export const ParticleCanvas = () => {
       }
 
       const currentScroll = smoothScroll;
+
+      // Particle travel stays clockwise, but scroll activity now increases its
+      // time velocity. The boost is direction-agnostic, so scrolling cannot
+      // reverse the field; it only makes the existing clockwise motion feel
+      // more alive while the user is moving through the page.
+      const scrollActivity = Math.min(Math.abs(scrollDelta) * 18.0, 1.0);
+      time += 0.005 + scrollActivity * 0.028;
 
       material.uniforms.uTime.value = time;
       material.uniforms.uScroll.value = currentScroll;

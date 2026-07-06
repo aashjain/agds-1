@@ -163,3 +163,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Removed scroll-progress driven particle rotation from the WebGL object.
 - Particle travel is now governed by time only, so the opening field does not reverse direction when the user scrolls.
 - Preserved all approved planet, ring, service-card, colour and layout settings.
+
+## V26 revision
+- Increased particle motion speed during scroll activity while preserving the approved clockwise direction.
+- The boost is based on absolute scroll activity, not scroll direction, so the particles do not reverse when the user scrolls.
+- Service cards, planet position, planet size, ring angle, ring direction and particle colours were not changed.
