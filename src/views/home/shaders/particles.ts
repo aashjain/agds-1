@@ -9,48 +9,53 @@ export const particleVertexShader = /* glsl */ `
     float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453123); }
 
     vec3 spatialParticlePalette(float axis, float grain) {
-      // Spatial colour system based on the uploaded reference ring.
-      // The balance is kept directional rather than random: blue/cyan 45%,
-      // violet/purple 6%, pink/magenta 5%, orange/red-orange 44%.
+      // Directional reference palette, not random colour assignment.
+      // The palette is intentionally softer than pure channel colours so the
+      // particles read like the uploaded original: blue and orange arcs with
+      // narrow violet/magenta transition bands.
       float p = clamp(axis, 0.0, 1.0);
       float shimmer = clamp(grain, 0.0, 1.0);
 
-      vec3 blueA = vec3(0.2, 0.4, 1.0);
-      vec3 blueB = vec3(0.18, 0.82, 1.0);
-      vec3 violetA = vec3(0.46, 0.32, 1.0);
-      vec3 violetB = vec3(0.72, 0.48, 1.0);
-      vec3 magentaA = vec3(1.0, 0.32, 0.72);
-      vec3 magentaB = vec3(1.0, 0.46, 0.88);
-      vec3 orangeA = vec3(1.0, 0.3, 0.2);
-      vec3 orangeB = vec3(1.0, 0.58, 0.16);
+      vec3 blueDeep = vec3(0.12, 0.26, 0.92);
+      vec3 blueCyan = vec3(0.16, 0.72, 1.0);
+      vec3 violet = vec3(0.50, 0.36, 1.0);
+      vec3 purple = vec3(0.72, 0.42, 1.0);
+      vec3 magenta = vec3(1.0, 0.34, 0.72);
+      vec3 pink = vec3(1.0, 0.42, 0.62);
+      vec3 orange = vec3(1.0, 0.36, 0.18);
+      vec3 redOrange = vec3(1.0, 0.22, 0.16);
 
-      vec3 blue = mix(blueA, blueB, shimmer);
-      vec3 violet = mix(violetA, violetB, shimmer);
-      vec3 magenta = mix(magentaA, magentaB, shimmer);
-      vec3 orange = mix(orangeA, orangeB, shimmer);
+      vec3 cool = mix(blueDeep, blueCyan, 0.42 + shimmer * 0.38);
+      vec3 midViolet = mix(violet, purple, shimmer);
+      vec3 bridge = mix(magenta, pink, shimmer);
+      vec3 warm = mix(orange, redOrange, 0.25 + shimmer * 0.35);
 
-      if (p < 0.45) {
-        float t = smoothstep(0.0, 0.45, p);
-        return mix(blue, mix(blueB, violetA, 0.18), t * 0.12);
+      if (p < 0.445) {
+        float t = smoothstep(0.0, 0.445, p);
+        return mix(cool, mix(blueCyan, midViolet, 0.22), t * 0.18);
       }
 
-      if (p < 0.51) {
-        float t = smoothstep(0.45, 0.51, p);
-        return mix(blueB, violet, t);
+      if (p < 0.505) {
+        float t = smoothstep(0.445, 0.505, p);
+        return mix(cool, midViolet, t);
       }
 
-      if (p < 0.56) {
-        float t = smoothstep(0.51, 0.56, p);
-        return mix(violet, magenta, t);
+      if (p < 0.555) {
+        float t = smoothstep(0.505, 0.555, p);
+        return mix(midViolet, bridge, t);
       }
 
-      if (p < 0.60) {
-        float t = smoothstep(0.56, 0.60, p);
-        return mix(magenta, orange, t);
+      if (p < 0.595) {
+        float t = smoothstep(0.555, 0.595, p);
+        return mix(bridge, warm, t);
       }
 
-      float t = smoothstep(0.60, 1.0, p);
-      return mix(orange, mix(orangeA, orangeB, 0.55), t * 0.22);
+      float t = smoothstep(0.595, 1.0, p);
+      return mix(warm, mix(warm, redOrange, 0.35), t * 0.18);
+    }
+
+    float angularAxis(float angle, float offset) {
+      return fract((angle + offset) / 6.2831853);
     }
 
     mat2 rotate2d(float a) {
@@ -215,28 +220,40 @@ export const particleVertexShader = /* glsl */ `
       // warm opposing side.
       float colourGrain = hash(seed * 31.41 + vec3(5.0, 3.0, 13.0));
 
-      float solarAxis = smoothstep(-1.12, 1.12, cos(orbitAngle - 0.78) * 0.82 + sin(orbitAngle - 0.78) * 0.32);
+      // Solar/hero form: use orbital angle, not screen-wide random scatter.
+      // This keeps one continuous cool arc, a narrow violet/pink bridge, and
+      // a warm opposing arc like the uploaded original reference.
+      float solarAxis = angularAxis(orbitAngle, 2.72);
+      solarAxis = mix(solarAxis, smoothstep(-6.8, 6.8, solarPos.x * 0.18 + solarPos.z * 0.08), 0.14);
       vec3 solarColor = spatialParticlePalette(solarAxis, colourGrain);
 
-      float focusAxis = smoothstep(-2.85, 2.85, focusCore.x * 0.70 + focusCore.y * 0.28 + focusCore.z * 0.18);
+      float focusAngle = atan(focusCore.z, focusCore.x);
+      float focusAxis = angularAxis(focusAngle, 2.86);
       vec3 focusColor = spatialParticlePalette(focusAxis, colourGrain);
 
       vec3 serviceLocal = serviceSphere - vec3(-24.70, -0.04, -10.9);
-      float serviceSphereAxis = smoothstep(-12.2, 12.2, serviceLocal.x * 0.58 + serviceLocal.y * 0.26 + serviceLocal.z * 0.18);
-      float serviceRingAxis = smoothstep(-1.12, 1.12, cos(serviceRingAngle - 0.52) * 0.86 + sin(serviceRingAngle - 0.52) * 0.24);
+      vec3 serviceNormal = normalize(serviceLocal + vec3(0.0001));
+      float serviceAngle = atan(serviceNormal.z, serviceNormal.x);
+      // The visible service planet should not turn into a flat orange block.
+      // Keep blue/cyan dominant across the body, with warm colour reserved for
+      // the opposite edge and the ring.
+      float serviceSphereAxis = angularAxis(serviceAngle, 2.62);
+      serviceSphereAxis = mix(serviceSphereAxis, 0.24 + smoothstep(-0.35, 0.95, serviceNormal.x * 0.52 + serviceNormal.y * 0.20) * 0.42, 0.62);
+      float serviceRingAxis = angularAxis(serviceRingAngle, 2.82);
       vec3 serviceColor = mix(
         spatialParticlePalette(serviceSphereAxis, colourGrain),
         spatialParticlePalette(serviceRingAxis, colourGrain),
         serviceRingMix
       );
 
-      float streamAxis = smoothstep(-8.8, 8.8, streamX * 0.78 + streamY * 0.26 + sin(streamDepth * 0.045) * 1.15);
+      float streamAngle = atan(streamY, streamX + sin(streamDepth * 0.045) * 2.0);
+      float streamAxis = angularAxis(streamAngle, 2.80);
       vec3 streamColor = spatialParticlePalette(streamAxis, colourGrain);
 
       // The final portal uses angular position so the circular halo matches the
       // original reference: cool lower-left energy, transitional violet/pink,
       // and warm orange/red across the opposing arc.
-      float portalAxis = smoothstep(-1.14, 1.14, cos(portalTheta - 0.72) * 0.88 + sin(portalTheta - 0.72) * 0.24);
+      float portalAxis = angularAxis(portalTheta, 2.64);
       vec3 galaxyColor = spatialParticlePalette(portalAxis, colourGrain);
 
       vec3 c1 = mix(solarColor, focusColor, toFocus);

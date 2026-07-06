@@ -292,3 +292,10 @@ V49 update:
 - Restored stronger orange/red-orange presence on the warm side while preserving blue/cyan dominance on the cool side.
 - Applied separate local colour axes for the hero orbit, focused planet, service planet, ring, stream and final portal so each form keeps the same premium blue-to-violet-to-magenta-to-orange direction without looking like random confetti.
 - Animation flow, scroll behaviour, planet position, ring position, service cards and layout were not changed.
+
+## V58 Colour Refinement
+- Reworked the particle colour logic again so the colour distribution is spatial and directional, not random.
+- Reduced the orange-heavy wash in the hero section.
+- Reduced the service planet turning into one flat warm mass.
+- Blue/cyan, violet/purple, pink/magenta and orange/red-orange now follow the local geometry angle of each form.
+- Preserved the approved scroll behaviour, planet framing, service cards and layout.
