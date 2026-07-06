@@ -205,11 +205,12 @@ export const ParticleCanvas = () => {
       camera.lookAt(lookTarget);
 
       const serviceVisibility = constellation * (1 - Math.min(stream * 1.35, 1));
-      const orbitalRotation = currentScroll * Math.PI * 0.72 + time * 0.055;
-      // Keep the orbital motion moving in one clockwise direction while the
-      // scene transitions into the service planet. Earlier versions blended
-      // into a lower fixed rotation value, which made the field visually reverse
-      // as soon as the user scrolled into the planet section.
+      // Keep particle travel time-led only. Do not add scroll progress into the
+      // rotation itself; even a positive scroll offset can visually fight the
+      // shader's clockwise time flow and read as a reversal during fast or slow
+      // page movement. Scroll still morphs the forms, but clockwise travel is
+      // governed by uTime throughout the experience.
+      const orbitalRotation = time * 0.055;
       const serviceRotation = orbitalRotation + 0.16 + time * 0.008;
       particles.rotation.y = THREE.MathUtils.lerp(
         orbitalRotation,

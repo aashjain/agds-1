@@ -158,3 +158,8 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Raw page scroll now acts as a target, while the 3D animation advances towards it at a controlled, uniform rate.
 - Fast scrolling no longer forces the particles, planet formation or card reveal to jump forward abruptly.
 - No changes were made to the approved planet position, planet scale, ring angle, particle colours or service card layout.
+
+## V25 Motion Correction
+- Removed scroll-progress driven particle rotation from the WebGL object.
+- Particle travel is now governed by time only, so the opening field does not reverse direction when the user scrolls.
+- Preserved all approved planet, ring, service-card, colour and layout settings.
