@@ -218,3 +218,7 @@ V41 update:
 - Added back ring masking so the rear ring is softened behind the planet.
 - Lifted the full ring upward so it sits around the planet instead of reading too low.
 - Kept planet position, planet size, service cards, scroll behaviour and copy unchanged.
+
+
+## V42 revision
+- Brought the planet ring upward by roughly 40% while keeping the planet, cards, scroll behaviour and layout unchanged.

@@ -81,7 +81,7 @@ export const particleVertexShader = /* glsl */ `
       float serviceRingAngle = hash(seed * 41.7 + vec3(9.0, 2.0, 5.0)) * 6.2831853 - uTime * 0.18;
       float serviceRingTilt = 0.645772; // 37 degrees
       // Lift the ring so it wraps the planet visually, instead of sitting too low.
-      float serviceRingLift = 2.95;
+      float serviceRingLift = 4.13;
       float ringBandRandom = pow(hash(seed * 27.1 + vec3(3.0, 8.0, 1.0)), 0.72) - 0.5;
       float serviceRingBand = ringBandRandom * 3.42;
       float serviceRingRadius = 15.58 + serviceRingBand + (hash(seed * 12.4) - 0.5) * 0.34;
@@ -92,7 +92,7 @@ export const particleVertexShader = /* glsl */ `
       float tiltedRingZ = serviceRingZ * cos(serviceRingTilt);
       vec3 serviceRing = vec3(
         serviceRingX - 24.70,
-        tiltedRingY + serviceRingLift, // lifted to surround the planet more naturally
+        tiltedRingY + serviceRingLift, // lifted further so the ring surrounds the planet more naturally
         tiltedRingZ - 10.9
       );
       serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
