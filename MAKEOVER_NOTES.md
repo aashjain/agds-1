@@ -134,3 +134,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Reversed only the service-ring particle flow so the ring reads clockwise.
 - Kept the rear arc lifted and the front crossing in its approved position, creating a motion path from the upper backside of the planet towards the lower front side.
 - No changes made to planet size, planet placement, service cards, particle colours or layout.
+
+
+## V21 Revision
+- Increased the particle source resolution to make the service planet visibly denser.
+- Shifted a larger percentage of the service-stage particles into the planet body while preserving the approved ring direction, size and angle.
+- Slightly strengthened point opacity and minimum point size so the planet reads as a fuller sphere without changing the service-card layout.

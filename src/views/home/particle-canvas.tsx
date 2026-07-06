@@ -71,7 +71,7 @@ export const ParticleCanvas = () => {
     bgScene.add(bgQuad);
 
     // Dense source geometry remapped in the shader into solar, planet, signal and galaxy forms.
-    const geometry = new THREE.SphereGeometry(4.2, 200, 600);
+    const geometry = new THREE.SphereGeometry(4.2, 260, 780);
     const material = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },

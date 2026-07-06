@@ -99,7 +99,7 @@ export const particleVertexShader = /* glsl */ `
       serviceRing.xy = rotate2d(-0.28) * serviceRing.xy;
       serviceRing.y -= 0.04;
 
-      float serviceRingMix = step(0.78, r5);
+      float serviceRingMix = step(0.84, r5);
       vec3 constellationPos = mix(serviceSphere, serviceRing, serviceRingMix);
       constellationPos += vec3(0.0, sin(uTime * 0.35 + r1 * 6.0) * 0.025, 0.0);
 
@@ -142,7 +142,7 @@ export const particleVertexShader = /* glsl */ `
       float galaxyGlow = mix(1.0, 0.72, toGalaxy);
 
       vEdgeFade = smoothstep(0.0, 0.2, uIntro) * planetGlow * focusGlow * streamGlow * galaxyGlow;
-      vEdgeFade *= 0.45 + 0.35 * smoothstep(0.0, 1.0, r6);
+      vEdgeFade *= 0.50 + 0.38 * smoothstep(0.0, 1.0, r6);
 
       float colorKey = mix(r1, gRadius / 42.0, toGalaxy);
       vColor = palette(colorKey);
@@ -152,7 +152,7 @@ export const particleVertexShader = /* glsl */ `
       pointBase = mix(pointBase, 2.4, toStream * (1.0 - toGalaxy));
       pointBase = mix(pointBase, mix(2.2, 6.2, step(0.992, r6)), toGalaxy);
       gl_PointSize = pointBase * (10.0 / max(0.1, -mvPosition.z));
-      gl_PointSize = max(gl_PointSize, 0.9);
+      gl_PointSize = max(gl_PointSize, 1.0);
 
       gl_Position = projectionMatrix * mvPosition;
     }
