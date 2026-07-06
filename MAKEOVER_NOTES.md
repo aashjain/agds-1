@@ -72,3 +72,9 @@ These pages are intentionally minimal placeholders so the homepage direction can
 - Enlarged the service planet while keeping the same spherical aspect ratio.
 - Rebuilt the service cards as a controlled 3-column / 2-row masonry composition with staggered vertical offsets.
 - Removed fixed-height/cropping behaviour from the service cards so each card expands naturally around its content.
+
+## V8 refinement
+- Shifted the service-stage planet back towards the left so it reads as an oversized celestial body with most of the sphere visible and a controlled portion outside the viewport.
+- Rebalanced the service camera look target to support the 80% visible / 20% cropped-left composition.
+- Rebuilt the services overlay into a three-column masonry structure with two cards per column, preserving the requested top/bottom service order while avoiding content cropping.
+- Removed negative masonry offsets and fixed card heights so all six cards can expand naturally around their copy.

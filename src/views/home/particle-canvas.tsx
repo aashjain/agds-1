@@ -161,7 +161,7 @@ export const ParticleCanvas = () => {
       const galaxy = ease(Math.min(Math.max((currentScroll - 0.78) / 0.2, 0), 1));
 
       camera.position.x = THREE.MathUtils.lerp(0.0, 1.8, focus);
-      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.55, constellation);
+      camera.position.x = THREE.MathUtils.lerp(camera.position.x, -0.95, constellation);
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0.0, galaxy);
 
       camera.position.y = THREE.MathUtils.lerp(4.0, 0.8, focus);
@@ -178,7 +178,7 @@ export const ParticleCanvas = () => {
       camera.position.z += introZoom;
 
       const lookTarget = new THREE.Vector3(
-        THREE.MathUtils.lerp(0.0, -0.75, constellation),
+        THREE.MathUtils.lerp(0.0, -4.85, constellation),
         THREE.MathUtils.lerp(-0.02, -0.5, stream),
         THREE.MathUtils.lerp(-9.5, -82.0, galaxy),
       );
