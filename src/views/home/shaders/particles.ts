@@ -5,8 +5,22 @@ export const particleVertexShader = /* glsl */ `
     varying float vEdgeFade;
     varying vec3 vColor;
 
-    float hash(float n) { return fract(sin(n) * 43758.5453123); }
-    float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453123); }
+    // Mobile-safe hashes (no sin of large arguments). Desktop GPUs tolerate
+    // sin(x) for huge x, but most mobile GPUs return garbage there — which
+    // collapsed every per-particle random to the same value and left the
+    // canvas empty on phones. These fract-multiply hashes are precision-safe
+    // on every GPU.
+    float hash(float n) {
+      n = fract(n * 0.1031);
+      n *= n + 33.33;
+      n *= n + n;
+      return fract(n);
+    }
+    float hash(vec3 p) {
+      p = fract(p * 0.1031);
+      p += dot(p, p.zyx + 31.32);
+      return fract((p.x + p.y) * p.z);
+    }
 
     vec3 spatialParticlePalette(float axis, float grain) {
       // Directional reference palette, not random colour assignment.

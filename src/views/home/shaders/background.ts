@@ -21,8 +21,20 @@ export const backgroundFragmentShader = /* glsl */ `
     varying vec2 vUv;
 
     // Morgan McGuire noise
-    float hash(float n) { return fract(sin(n) * 1e4); }
-    float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
+    // Mobile-safe hashes — the fBm octaves push coordinates into the hundreds,
+    // where sin-based hashes lose all precision on mobile GPUs and flatten the
+    // nebula. Fract-multiply hashes are stable on every GPU.
+    float hash(float n) {
+      n = fract(n * 0.1031);
+      n *= n + 33.33;
+      n *= n + n;
+      return fract(n);
+    }
+    float hash(vec2 p) {
+      vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.x + p3.y) * p3.z);
+    }
     float noise(vec2 x) {
         vec2 i = floor(x);
         vec2 f = fract(x);

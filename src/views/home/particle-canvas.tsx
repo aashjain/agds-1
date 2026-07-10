@@ -43,9 +43,27 @@ export const ParticleCanvas = () => {
     );
     camera.position.z = 8;
 
+    // Portrait phones have a much narrower horizontal FOV at the same vertical
+    // FOV, which crops the wide orbital compositions out of frame. Widen the
+    // vertical FOV as the aspect drops below 1 so the forms stay in view.
+    const applyViewport = () => {
+      const aspect = window.innerWidth / window.innerHeight;
+      camera.aspect = aspect;
+      camera.fov =
+        aspect < 1 ? Math.min(92, 60 / Math.pow(aspect, 0.55)) : 60;
+      camera.updateProjectionMatrix();
+    };
+    applyViewport();
+
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Cap the pixel ratio lower on small screens — full-res bloom at DPR 2-3
+    // is the difference between 60fps and a stalled canvas on mid-range phones.
+    const applyPixelRatio = () =>
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio, window.innerWidth < 820 ? 1.5 : 2),
+      );
+    applyPixelRatio();
     renderer.autoClear = false;
     container.appendChild(renderer.domElement);
 
@@ -123,8 +141,8 @@ export const ParticleCanvas = () => {
     let introStart = 0;
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+      applyViewport();
+      applyPixelRatio();
       renderer.setSize(window.innerWidth, window.innerHeight);
       composer.setSize(window.innerWidth, window.innerHeight);
       bgMaterial.uniforms.uResolution.value.set(
